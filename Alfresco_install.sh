@@ -164,41 +164,7 @@ if [ "$accordInstallation" = "y" ]
         
         
         
-        #####################################
-        #####  Création des clés SSL    #####
-        #####################################
-        
-        charlenght6=6
-        keypass=
-        trustpass=
-        
-        cd $SsltoolName
-        
-        echogreen "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
  
-        while [ ${#keypass} -lt $charlenght6 ]
-            read keypass
-            
-            if [ ${#keypass} -ge $charlenth6 ]
-                then
-                     echoblue "Le mot de passe choisis est : $keypass"
-                     echoblue "êtes vous sûr d'utiliser ce mot de passe ? Y(es)/n(o) :"
-                     while [ "$reponse" != "Y" || "y" || "N" || "n" ]
-                         do  
-                             read reponse
-                             echo 
-                                 "Veuillez répondre par Y ou par N
-                             if [ "$reponse" = "Y" || "y" ]
-                                 then 
-                                     done
-                             else 
-                                 keypas=
-                             fi
-                         done
-            else
-            fi              
-            do echored "Veuillez re-saisir un mot de passe de 6 caracètres : "
-        done
         
     else
         echo "opération annulée"
