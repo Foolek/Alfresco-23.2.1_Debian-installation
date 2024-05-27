@@ -174,12 +174,12 @@ if [ "$accordInstallation" = "y" ]
         keypass=
         trustpass=
         
-        while [ ${#keypass} < $charlenght6 ]
+        while [ ${#keypass} -lt $charlenght6 ]
             do echo "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
             read keypass
             done 
         
-        while [ -n ${#trustpass} < $charlenght6 ]
+        while [ ${#trustpass} -lt $charlenght6 ]
             do echo "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
             read trustpass
             done
