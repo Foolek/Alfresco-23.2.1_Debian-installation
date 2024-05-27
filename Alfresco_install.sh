@@ -181,6 +181,7 @@ if [ "$accordInstallation" = "y" ]
             then
                 echored "Votre mot de passe est trop court"
             fi
+            keypass=""
         done
         
         echogreen "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
@@ -191,6 +192,7 @@ if [ "$accordInstallation" = "y" ]
             if [ ${#trustpass} -lt ${#charlen} ]
             then
                 echored "Votre mot de passe est trop court"
+                trustpass=""
             fi
         done
         
