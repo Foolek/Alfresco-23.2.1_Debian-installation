@@ -101,7 +101,7 @@ then
     echoblue "Voulez-vous les installer ? Y/N : " read response
     
     if [ $reponse -eq ] = "y" || "Y"
-        then 
+        then
           sudo apt update -y
           sudo apt upgrade -y
           sudo apt install git curl mariadb-server openjdk-17-jdk-headless nginx -y"
