@@ -174,17 +174,7 @@ if [ "$accordInstallation" = "y" ]
         
         echogreen "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
         
- 
-        while [ ${#keypass} -lt $charlenght6 ]
-          do read keypass
-            if [ ${#keypass} -ge $charlenth6 ]
-              then 
-                echoblue "Le mot de passe choisis est : $keypass"
-                done
-            elif [ ${#keypass} -lt $charlenth6 ]    
-              echored "Veuillez re-saisir un mot de passe de 6 caracètres : "         
-            fi
-        done   
+
     else
         echo "opération annulée"
         exit
