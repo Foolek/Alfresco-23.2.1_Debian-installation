@@ -189,7 +189,7 @@ if [ "$accordInstallation" = "y" ]
                 keypass=""
                 echo
                 read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-                    if [$keypass -eq $keypassverif]
+                    if ["$keypass" -eq "$keypassverif"]
                     then echogreen "Le mot de passe correspond !"
                     else echored "Le mot de passe ne correspond pas.."
                          keypass=""               
@@ -213,7 +213,7 @@ if [ "$accordInstallation" = "y" ]
                 keypass=""
                 echo
                 read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-                    if [$keypass -eq $trustpassverif]
+                    if [ "$keypass" -eq "$trustpassverif"]
                     then echogreen "Le mot de passe correspond !"
                     else echored "Le mot de passe ne correspond pas.."
                          keypass=""               
