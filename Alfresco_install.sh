@@ -166,7 +166,7 @@ if [ "$accordInstallation" = "y" ]
         #####  Création des clés SSL    #####
         #####################################
         
-        charlenght6=
+        charlenght6=6
         keypass=
         trustpass=
         
