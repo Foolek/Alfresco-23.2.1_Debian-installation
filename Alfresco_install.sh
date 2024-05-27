@@ -174,14 +174,14 @@ if [ "$accordInstallation" = "y" ]
         
         echogreen "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
         
-        while [ $keypass -lt $charlenght]
+        while [ ${#keypass} -lt $charlenght]
           do read keypass 
           echored "Votre mot de passe est trop court"
           done
         
         echogreen "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
         
-        while [ $trustpass -lt $charlenght]
+        while [ ${#trustpass} -lt $charlenght]
           do read trustpass 
           echored "Votre mot de passe est trop court"
           done
