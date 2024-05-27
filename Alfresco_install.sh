@@ -135,8 +135,9 @@ if [ "$accordInstallation" = "y" ]
         wget $AlfSearchServiceUrl
         wget $ActiveMqUrl
         wget $ApacheTomcatUrl
-        unzip * 
-        rm $AlfContentServiceUrl $AlfSearchServiceUrl $ActiveMqUrl $ApacheTomcatUrl
+        unzip *.zip
+        tar -xzf *.gz
+        rm *.zip *.gz
         
 
         
