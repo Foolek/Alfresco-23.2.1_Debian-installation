@@ -98,7 +98,7 @@ if [ "$accordInstallation" = "y" ]
         
         echoblue "les paquets suivants vont être installés : git, curl, mariadb-server, openjdk-17-jdk-headless nginx ainsi que les répertoires d'Alfresco, ActiveMQ, Apache Tomcat etc.."
         echoblue "Voulez-vous les installer ? Y/N : " 
-        read response
+        read reponse
         
         if [ "$reponse" = "y" ]
             then
