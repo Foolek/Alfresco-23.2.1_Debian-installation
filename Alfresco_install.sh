@@ -89,6 +89,8 @@ if [ "$accordInstallation" = "y" ]
         
         #####  Solr variables  #####
         export SOLR_HOME=$ALF_SEARCH/solrhome"
+        
+        source /etc/profile.d/alfresco_env.sh
     
     
     
@@ -103,7 +105,7 @@ if [ "$accordInstallation" = "y" ]
         if [ "$reponse" = "y" ]
             then
               apt update -y && sudo apt upgrade -y
-              apt install git curl mariadb-server openjdk-17-jdk-headless nginx -y
+              apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip -y
         else
           echo "Annulation de l'installation"
             rm /etc/profile.d/alfresco_env.sh
@@ -119,6 +121,26 @@ if [ "$accordInstallation" = "y" ]
         ActiveMqUrl=https://dlcdn.apache.org//activemq/6.1.2/apache-activemq-6.1.2-bin.tar.gz
         
         ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
+
+
+
+        #####################################
+        #####  structuration d'alfresco #####
+        #####################################
+        
+        sudo mkdir $ALF_HOME
+        sudo chown $USER:$USER $ALF_HOME
+        cd $ALF_HOME
+        wget $AlfContentServiceUrl
+        wget $AlfSearchServiceUrl
+        wget $ActiveMqUrl
+        wget $ApacheTomcatUrl
+        unzip * 
+        rm $AlfContentServiceUrl $AlfSearchServiceUrl $ActiveMqUrl $ApacheTomcatUrl
+        
+
+        
+        
         
     else
         echo "opération annulée"
