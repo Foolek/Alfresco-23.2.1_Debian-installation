@@ -166,7 +166,7 @@ if [ "$accordInstallation" = "y" ]
         #####  Création des clés SSL    #####
         #####################################
         
-        charlenght6=6
+        charlenght6=
         keypass=
         trustpass=
         
@@ -174,7 +174,11 @@ if [ "$accordInstallation" = "y" ]
         
         echogreen "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
         
-
+        while [ $keypass -lt $charlenght]
+          do read keypass 
+          echored "Votre mot de passe est trop court"
+        done
+ 
     else
         echo "opération annulée"
         exit
