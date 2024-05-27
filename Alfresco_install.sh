@@ -58,7 +58,7 @@ echoblue   "Voulez-vous continuer et lancer l'installation ? Y/N : "
 read accordInstallationScript
 echo
 
-if [ $accordInstallationScript -eq "y" || -eq "Y" 
+if [ $accordInstallationScript -eq "y" || -eq "Y" ] 
 then 
 
           ##################################################################
@@ -70,7 +70,7 @@ then
         
     #####  Java variables  #####
     export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-    export PATH=$JAVA_HOME/bin:$PATH"
+    export PATH=$JAVA_HOME/bin:$PATH
     
     #####  Alfresco variables  #####
     export ALF_HOME=/opt/alfresco
@@ -101,12 +101,12 @@ then
     echoblue "Voulez-vous les installer ? Y/N : " 
     read response
     
-    if [ $reponse -eq ] = "y" || "Y"
+    if [ $reponse -eq "y" || "Y" ]
         then
-          sudo apt update -y
-          sudo apt upgrade -y
-          sudo apt install git curl mariadb-server openjdk-17-jdk-headless nginx -y"
-    else 
+          sudo apt update -y && sudo apt upgrade -y
+          sudo apt install git curl mariadb-server openjdk-17-jdk-headless nginx -y
+    else
+      echo "Annulation de l'installation"
       sudo rm /etc/profile.d/alfresco_env.sh
     fi
     
