@@ -58,7 +58,7 @@ echoblue   "Voulez-vous continuer et lancer l'installation ? Y/N : "
 read accordInstallation
 echo
 
-if [ $accordInstallation = "y" || $accordInstallation "Y" ] 
+if [ "$accordInstallation" = "y" || "$accordInstallation" = "Y" ] 
 then 
 
           ##################################################################
@@ -101,7 +101,7 @@ then
     echoblue "Voulez-vous les installer ? Y/N : " 
     read response
     
-    if [ $reponse = "y" || $reponse = "Y" ]
+    if [ "$reponse" = "y" || "$reponse" = "Y" ]
         then
           sudo apt update -y && sudo apt upgrade -y
           sudo apt install git curl mariadb-server openjdk-17-jdk-headless nginx -y
