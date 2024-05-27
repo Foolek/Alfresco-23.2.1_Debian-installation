@@ -190,8 +190,8 @@ if [ "$accordInstallation" = "y" ]
                 echo
                 read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
                     if [ "$keypass" = "$keypassverif" ]
-                    then echogreen "Le mot de passe correspond !"
-                    done
+                    then echogreen "Le mot de passe correspond !" done
+                    
                     else echored "Le mot de passe ne correspond pas.."
                          keypass=""               
                     fi
