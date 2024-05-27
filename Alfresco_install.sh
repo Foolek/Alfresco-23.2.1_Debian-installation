@@ -174,7 +174,7 @@ if [ "$accordInstallation" = "y" ]
         
         cd $SsltoolName
         
-        echogreen "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
+        echogreen "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
         
         while [ ${#keypass} -lt ${#charlen} ]
           do
@@ -198,28 +198,26 @@ if [ "$accordInstallation" = "y" ]
             fi
         done
         
-        echogreen "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
-        
-        while [ ${#trustpass} -lt ${#charlen} ]
+        while [ ${#keypass} -lt ${#charlen} ]
           do
-            read -s -p "Veuillez saisir un mot de passe de 6 caractères : " keypass
+            read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
           
-            if [ ${#trustpass} -lt ${#charlen} ]
+            if [ ${#keypass} -lt ${#charlen} ]
                 then
                     echo
                         echored "Votre mot de passe est trop court"
             else
-                trustpassverif=$keypass
-                keypass=""
+                trustpassverif=$trustpass
+                trustpass=""
                 echo
-                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-                    if [ "$keypass" -eq "$trustpassverif"]
+                read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
+                    if [ "$trustpass" = "$trustpassverif" ]
                     then echogreen "Le mot de passe correspond !"
+                    
                     else echored "Le mot de passe ne correspond pas.."
-                         keypass=""               
+                         trustpass=""               
                     fi
             fi
-            keypass=""
         done
         
         bash $SsltoolName/run.sh -keystorepass $keypass -truststorepass $trustpass
