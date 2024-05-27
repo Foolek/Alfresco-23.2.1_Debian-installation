@@ -178,7 +178,7 @@ if [ "$accordInstallation" = "y" ]
         
         while [ ${#keypass} -lt ${#charlen} ]
           do
-             read -s -p  keypass
+             echo "mot de passe :" read -s keypass
             if [ ${#keypass} -lt ${#charlen} ]
                 then
                     echo
