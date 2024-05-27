@@ -166,7 +166,7 @@ if [ "$accordInstallation" = "y" ]
         #####  Création des clés SSL    #####
         #####################################
         
-        charlenght6=6
+        charlen="psswrd"
         keypass=""
         trustpass=""
         
@@ -174,10 +174,10 @@ if [ "$accordInstallation" = "y" ]
         
         echogreen "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
         
-        while [ ${#keypass} -lt 6 ]
+        while [ ${#keypass} -lt ${#charlen} ]
           do
             read -s -p "Veuillez saisir un mot de passe de $charlenght caractères : " keypass
-            if [ ${#keypass} -lt 6 ]
+            if [ ${#keypass} -lt ${#charlen} ]
             then
                 echored "Votre mot de passe est trop court"
             fi
@@ -185,10 +185,10 @@ if [ "$accordInstallation" = "y" ]
         
         echogreen "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
         
-        while [ ${#trustpass} -lt 6 ]
+        while [ ${#trustpass} -lt ${#charlen} ]
           do
             read -s -p "Veuillez saisir un mot de passe de $charlenght caractères : " trustpass
-            if [ ${#trustpass} -lt 6 ]
+            if [ ${#trustpass} -lt ${#charlen} ]
             then
                 echored "Votre mot de passe est trop court"
             fi
