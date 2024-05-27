@@ -181,7 +181,8 @@ if [ "$accordInstallation" = "y" ]
               then 
                 echoblue "Le mot de passe choisis est : $keypass"
                 echoblue "êtes vous sûr d'utiliser ce mot de passe ? Y(es)/n(o) :"
-                while [ "$reponse" != "Y" || "y" || "N" || "n" ]
+                while [[ "$reponse" != "Y" && "$reponse" != "y" && "$reponse" != "N" && "$reponse" != "n" ]]
+
                   do  
                     read reponse
                     echo "Veuillez répondre par Y ou par N
