@@ -66,8 +66,6 @@ if [ "$accordInstallation" = "y" ]
     
         sudo rm /etc/profile.d/alfresco_env.sh
         sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
-        
-            
         #####  Java variables  #####
         export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
         export PATH=$JAVA_HOME/bin:$PATH
@@ -129,7 +127,10 @@ if [ "$accordInstallation" = "y" ]
         ApacheTomcatName=$ALF_HOME/apache-tomcat-10.1.24
         ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
         ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
-
+        
+        SslToolsName=alfresco-ssl-generator
+        SslToolsUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
+        
 
         #####################################
         #####  structuration d'alfresco #####
@@ -146,13 +147,17 @@ if [ "$accordInstallation" = "y" ]
         wget $AlfSearchServiceUrl
         wget $ActiveMQUrl
         wget $ApacheTomcatUrl
+        git clone $SslToolsUrl
         
         #####  Décompréssion
-        
         unzip $AlfContentZip
         unzip $AlfSearchZip
         tar zxf $ActiveMQZip
         unzip $ApacheTomcatZip
+        
+        #####  Renommage
+        mv $ActiveMQName $ALF_HOME/activemq
+        mv $ApacheTomcatName $ALF_HOME/tomcat
         
         ##### Nettoyage
         rm *.zip *.tar.gz
