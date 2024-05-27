@@ -78,19 +78,19 @@ if [ "$accordInstallation" = "y" ]
         export ALF_GROUP=alfresco
         
         #####  Alfresco search services variables  #####
-        export ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
+        export ALF_SEARCH_HOME=/opt/alfresco/alfresco-search-services
         
         #####  ActiveMQ variables  #####
-        export ACTIVEMQ_HOME=$ALF_HOME/activemq
+        export ACTIVEMQ_HOME=/opt/alfresco/activemq
         
         #####  Tomcat variables  #####
-        export CATALINA_HOME=$ALF_HOME/tomcat
+        export CATALINA_HOME=/opt/alfresco/tomcat
         export CATALINA_BASE=$CATALINA_HOME
         
         #####  Solr variables  #####
         export SOLR_HOME=$ALF_SEARCH/solrhome"
         
-        source /etc/profile.d/alfresco_env.sh
+        /etc/profile.d/alfresco_env.sh
     
     
     
@@ -159,29 +159,41 @@ if [ "$accordInstallation" = "y" ]
         wget $ApacheTomcatUrl
         git clone $SsltoolUrl
         
+        
         #####  Décompréssion
         unzip $AlfContentZip
         unzip $AlfSearchZip
         tar zxf $ActiveMQZip
         unzip $ApacheTomcatZip
         
+        
+        
         #####  Restructuration des repo
         mv $ActiveMQName $ALF_HOME/activemq
         mv $ApacheTomcatName $ALF_HOME/tomcat
         mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
         
+        # regroupement de lib dans share [alfresco]
         mv $ALF_HOME/web-server/lib $ALF_HOME/web-server/share/.
         mv $ALF_HOME/web-server/conf/* $ALF_HOME/tomcat/conf/.
+        
+        # renommage du webapps par défaut [tomcat]
         mv $CATALINA_HOME/webapps $CATALINA_HOME/default_webapps
+        
+        #déplacement des webapps [alfresco} vers [tomcat]
         mv $ALF_HOME/web-server/webapps $CATALINA_HOME/.
+        
+        # création répertoire data [tomcat]
         mkdir $CATALINA_HOME/data
         mv $ALF_HOME/keystore $CATALINA_HOME/data/keystore
         mkdir$CATALINA_BASE/logs/alf_logs
         
         
+        
         ##### Création des commandes
         ln -s $CATALINA_HOME/bin/catalina.sh /usr/local/bin/tomcat 
         ln -s $ALF_HOME/activemq/bin/activemq /usr/local/bin/activemq
+        
         
         
         ##### Nettoyage
