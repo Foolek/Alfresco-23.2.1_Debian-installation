@@ -58,7 +58,7 @@ echoblue   "Voulez-vous continuer et lancer l'installation ? Y/N : "
 read accordInstallation
 echo
 
-if [ "$accordInstallation" = "y"] 
+if [ "$accordInstallation" = "y" ] 
     then
         ##################################################################
         ##### Déclaration des variables d'environnement nécessaires  #####
