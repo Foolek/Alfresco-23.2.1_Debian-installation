@@ -78,21 +78,54 @@ if [ "$accordInstallation" = "y" ]
         export ALF_GROUP=alfresco
         
         #####  Alfresco search services variables  #####
-        export ALF_SEARCH_HOME=/opt/alfresco/alfresco-search-services
+        export ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
         
         #####  ActiveMQ variables  #####
-        export ACTIVEMQ_HOME=/opt/alfresco/activemq
+        export ACTIVEMQ_HOME=$ALF_HOME/activemq
         
         #####  Tomcat variables  #####
-        export CATALINA_HOME=/opt/alfresco/tomcat
+        export CATALINA_HOME=$ALF_HOME/tomcat
         export CATALINA_BASE=$CATALINA_HOME
         
         #####  Solr variables  #####
         export SOLR_HOME=$ALF_SEARCH/solrhome"
         
-        /etc/profile.d/alfresco_env.sh
+        source /etc/profile.d/alfresco_env.sh
+
+
+
+
+
+
+
+
+        ##################################################################
+        #####  Déclaration des variables nécessaires  pour le script #####
+        ##################################################################
     
-    
+        sudo rm /etc/profile.d/alfresco_env.sh
+        
+        #####  Java variables  #####
+        JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+                
+        #####  Alfresco variables  #####
+        ALF_HOME=/opt/alfresco
+        ALF_DATA_HOME=/opt/alfresco/tomcat/data
+        ALF_USER=alfresco
+        ALF_GROUP=alfresco
+        
+        #####  Alfresco search services variables  #####
+        ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
+        
+        #####  ActiveMQ variables  #####
+        ACTIVEMQ_HOME=$ALF_HOME/activemq
+        
+        #####  Tomcat variables  #####
+        CATALINA_HOME=$ALF_HOME/tomcat
+        CATALINA_BASE=$CATALINA_HOME
+        
+        #####  Solr variables  #####
+        SOLR_HOME=$ALF_SEARCH/solrhome
     
     
     
@@ -166,7 +199,7 @@ if [ "$accordInstallation" = "y" ]
         tar zxf $ActiveMQZip
         unzip $ApacheTomcatZip
         
-        
+
         
         #####  Restructuration des repo
         mv $ActiveMQName $ALF_HOME/activemq
