@@ -185,13 +185,13 @@ if [ "$accordInstallation" = "y" ]
                     echo
                         echored "Votre mot de passe est trop court"
             else
-                $keypassverif=$keypass
+                keypassverif=$keypass
                 keypass=""
                 read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
                     if [$keypass -eq $keypassverif]
                     then echogreen "Le mot de passe correspond !"
                     else echored "Le mot de passe ne correspond pas.."
-                            keypass=""               
+                         keypass=""               
                     fi
             fi
             keypass=""
