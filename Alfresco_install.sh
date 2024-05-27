@@ -65,7 +65,7 @@ then
           ##### Déclaration des variables d'environnement nécessaires  #####
           ##################################################################
 
-        sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
+    sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
     
         
     #####  Java variables  #####
