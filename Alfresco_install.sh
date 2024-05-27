@@ -167,8 +167,8 @@ if [ "$accordInstallation" = "y" ]
         #####################################
         
         charlenght6=6
-        keypass=
-        trustpass=
+        keypass=""
+        trustpass=""
         
         cd $SsltoolName
         
