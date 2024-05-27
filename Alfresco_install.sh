@@ -98,7 +98,8 @@ then
           ###################################################################
     
     echoblue "les paquets suivants vont être installés : git, curl, mariadb-server, openjdk-17-jdk-headless nginx ainsi que les répertoires d'Alfresco, ActiveMQ, Apache Tomcat etc.."
-    echoblue "Voulez-vous les installer ? Y/N : " read response
+    echoblue "Voulez-vous les installer ? Y/N : " 
+    read response
     
     if [ $reponse -eq ] = "y" || "Y"
         then
