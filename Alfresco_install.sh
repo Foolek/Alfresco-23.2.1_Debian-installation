@@ -201,12 +201,23 @@ if [ "$accordInstallation" = "y" ]
         
         while [ ${#trustpass} -lt ${#charlen} ]
           do
-            read -s -p "Veuillez saisir un mot de passe de $charlenght caractères : " trustpass
+            read -s -p "Veuillez saisir un mot de passe de 6 caractères : " keypass
+          
             if [ ${#trustpass} -lt ${#charlen} ]
-            then
-                echored "Votre mot de passe est trop court"
-                trustpass=""
+                then
+                    echo
+                        echored "Votre mot de passe est trop court"
+            else
+                trustpassverif=$keypass
+                keypass=""
+                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
+                    if [$keypass -eq $trustpassverif]
+                    then echogreen "Le mot de passe correspond !"
+                    else echored "Le mot de passe ne correspond pas.."
+                         keypass=""               
+                    fi
             fi
+            keypass=""
         done
         
         bash $SsltoolName/run.sh -keystorepass $keypass -truststorepass $trustpass
