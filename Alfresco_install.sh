@@ -128,8 +128,8 @@ if [ "$accordInstallation" = "y" ]
         ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
         ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
         
-        SslToolsName=alfresco-ssl-generator
-        SslToolsUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
+        SsltoolName=$ALF_HOME/alfresco-ssl-generator
+        SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
         
 
         #####################################
@@ -147,7 +147,7 @@ if [ "$accordInstallation" = "y" ]
         wget $AlfSearchServiceUrl
         wget $ActiveMQUrl
         wget $ApacheTomcatUrl
-        git clone $SslToolsUrl
+        git clone $SsltoolUrl
         
         #####  Décompréssion
         unzip $AlfContentZip
@@ -158,9 +158,37 @@ if [ "$accordInstallation" = "y" ]
         #####  Renommage
         mv $ActiveMQName $ALF_HOME/activemq
         mv $ApacheTomcatName $ALF_HOME/tomcat
+        mv $SsltoolName/ssl-tool ..
+        rm -rf $SslToolsName
+        SsltoolName=$ALF_HOME/ssl-tool
         
         ##### Nettoyage
         rm *.zip *.tar.gz
+        
+        #####################################
+        #####  Création des clés SSL    #####
+        #####################################
+        
+        echo "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
+        charlenght6=6
+        keypass=
+        trustpass=
+        
+        while [ -n $keypass < $charlenght6 ]
+            do echo "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
+            read keypass
+            done 
+        
+        while [ -n $trustpass < $charlenght6 ]
+            do echo "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
+            read trustpass
+            done
+            
+        
+        bash $Ssltoolname/run.sh -keystorepass $keypass -truststorepass $trustpass
+        
+        
+        
         
     else
         echo "opération annulée"
