@@ -180,20 +180,10 @@ if [ "$accordInstallation" = "y" ]
             if [ ${#keypass} -ge $charlenth6 ]
               then 
                 echoblue "Le mot de passe choisis est : $keypass"
+                done
+            elif [ ${#keypass} -lt $charlenth6 ]    
+              echored "Veuillez re-saisir un mot de passe de 6 caracètres : "         
             fi
-                echoblue "êtes vous sûr d'utiliser ce mot de passe ? Y(es)/n(o) :"
-                while [[ "$reponse" != "Y" && "$reponse" != "y" && "$reponse" != "N" && "$reponse" != "n" ]]
-                  do  
-                    read reponse
-                    echo "Veuillez répondre par Y ou par N
-                    if [ "$reponse" = "Y" || "y" ]
-                      then 
-                        done
-                    else
-                      keypas=
-                      done
-            fi              
-          echored "Veuillez re-saisir un mot de passe de 6 caracètres : "
         done   
     else
         echo "opération annulée"
