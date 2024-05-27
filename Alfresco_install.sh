@@ -157,13 +157,12 @@ if [ "$accordInstallation" = "y" ]
         mv $ApacheTomcatName $ALF_HOME/tomcat
         mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
         rm -rf $SslToolsName
-        ssltool=$ALF_HOME/ssl-tool
         
         ##### Nettoyage
         rm *.zip *.tar.gz
         
-               #####################################
-        #####  Création des clés SSL    #####
+        #####################################
+        #####  Génération des clés SSL  #####
         #####################################
         
         charlen="psswrd"
@@ -172,7 +171,9 @@ if [ "$accordInstallation" = "y" ]
         trustpass=""
         trustpassverif=
         
-        cd $ssltool
+        
+        
+        #####  Mot de passe du keystore  #####
         
         echogreen "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
         
@@ -198,6 +199,10 @@ if [ "$accordInstallation" = "y" ]
             fi
         done
         
+        echored $keypass
+        
+        #####  Mot de passe du truststore  #####
+        
         while [ ${#keypass} -lt ${#charlen} ]
           do
             read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
@@ -220,7 +225,10 @@ if [ "$accordInstallation" = "y" ]
             fi
         done
         
-        bash ./run.sh -keystorepass $keypass -truststorepass $trustpass
+        echored $trustpass
+        
+        cd $ALF_HOME/ssl-tool
+        bash run.sh -keystorepass $keypass -truststorepass $trustpass
  
     else
         echo "opération annulée"
