@@ -189,23 +189,18 @@ if [ "$accordInstallation" = "y" ]
                      while [ "$reponse" != "Y" || "y" || "N" || "n" ]
                          do  
                              read reponse
-                             echo "Veuillez répondre par Y ou par N
+                             echo 
+                                 "Veuillez répondre par Y ou par N
                              if [ "$reponse" = "Y" || "y" ]
-                             then done
-                             else keypas=
-                             done
-                          
+                                 then 
+                                     done fi
+                             else 
+                                 keypas=
+                                 done fi
+            fi              
             do echored "Veuillez re-saisir un mot de passe de 6 caracètres : "
             done 
         
-        while [ ${#trustpass} -lt $charlenght6 ]
-            do echo "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
-            read trustpass
-            do echo "Le mot de passe saisis fais moins de caractères, veuillez en saisir un nouveau : "
-            done
-                   
-        bash $SsltoolName/run.sh -keystorepass $keypass -truststorepass $trustpass
- 
     else
         echo "opération annulée"
         exit
