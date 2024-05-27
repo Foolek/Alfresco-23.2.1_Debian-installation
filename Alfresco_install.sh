@@ -155,9 +155,9 @@ if [ "$accordInstallation" = "y" ]
         #####  Renommage
         mv $ActiveMQName $ALF_HOME/activemq
         mv $ApacheTomcatName $ALF_HOME/tomcat
-        mv $SsltoolName/ssl-tool $ALF_HOME/.
+        mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
         rm -rf $SslToolsName
-        SsltoolName=$ALF_HOME/ssl-tool
+        ssltool=$ALF_HOME/ssl-tool
         
         ##### Nettoyage
         rm *.zip *.tar.gz
@@ -172,7 +172,7 @@ if [ "$accordInstallation" = "y" ]
         trustpass=""
         trustpassverif=
         
-        cd $SsltoolName
+        cd $ssltool
         
         echogreen "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
         
@@ -220,7 +220,7 @@ if [ "$accordInstallation" = "y" ]
             fi
         done
         
-        bash $SsltoolName/run.sh -keystorepass $keypass -truststorepass $trustpass
+        bash ./run.sh -keystorepass $keypass -truststorepass $trustpass
  
     else
         echo "opération annulée"
