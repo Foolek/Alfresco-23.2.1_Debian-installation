@@ -92,6 +92,7 @@ if [ "$accordInstallation" = "y" ]
         source /etc/profile.d/alfresco_env.sh
     
     
+    
         ###################################################################
         #####  Installation et téléchargement des paquets nécessaires #####
         ###################################################################
@@ -132,6 +133,7 @@ if [ "$accordInstallation" = "y" ]
         SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
         
 
+
         #####################################
         #####  structuration d'alfresco #####
         #####################################
@@ -165,23 +167,43 @@ if [ "$accordInstallation" = "y" ]
         ##### Nettoyage
         rm *.zip *.tar.gz
         
+        
+        
         #####################################
         #####  Création des clés SSL    #####
         #####################################
         
-        echo "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
         charlenght6=6
         keypass=
         trustpass=
         
+        cd $SsltoolName
+        
+        echogreen "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
+ 
         while [ ${#keypass} -lt $charlenght6 ]
-            do echo "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
             read keypass
+            if [ ${#keypass} -ge $charlenth6 ]
+                then 
+                     echoblue "Le mot de passe choisis est : "$keypass"
+                     echoblue "êtes vous sûr d'utiliser ce mot de passe ? Y(es)/n(o) :"
+                     
+                     while [ "$reponse" != "Y" || "y" || "N" || "n" ]
+                         do  
+                             read reponse
+                             echo "Veuillez répondre par Y ou par N
+                             if [ "$reponse" -eq "Y" || "y" ]
+                             then done
+                             else keypas=
+                             done
+                          
+            do echored "Veuillez re-saisir un mot de passe de 6 caracètres : "
             done 
         
         while [ ${#trustpass} -lt $charlenght6 ]
             do echo "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
             read trustpass
+            do echo "Le mot de passe saisis fais moins de caractères, veuillez en saisir un nouveau : "
             done
             
         
