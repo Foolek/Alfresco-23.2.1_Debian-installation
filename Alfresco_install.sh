@@ -158,7 +158,7 @@ if [ "$accordInstallation" = "y" ]
         #####  Renommage
         mv $ActiveMQName $ALF_HOME/activemq
         mv $ApacheTomcatName $ALF_HOME/tomcat
-        mv $SsltoolName/ssl-tool ..
+        mv $SsltoolName/ssl-tool $ALF_HOME/.
         rm -rf $SslToolsName
         SsltoolName=$ALF_HOME/ssl-tool
         
