@@ -174,18 +174,18 @@ if [ "$accordInstallation" = "y" ]
         keypass=
         trustpass=
         
-        while [ -n $keypass < $charlenght6 ]
+        while [ ${#keypass} < $charlenght6 ]
             do echo "Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
             read keypass
             done 
         
-        while [ -n $trustpass < $charlenght6 ]
+        while [ -n ${#trustpass} < $charlenght6 ]
             do echo "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
             read trustpass
             done
             
         
-        bash $Ssltoolname/run.sh -keystorepass $keypass -truststorepass $trustpass
+        bash $SsltoolName/run.sh -keystorepass $keypass -truststorepass $trustpass
         
         
         
