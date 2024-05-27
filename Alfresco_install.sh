@@ -64,6 +64,7 @@ if [ "$accordInstallation" = "y" ]
         ##### Déclaration des variables d'environnement nécessaires  #####
         ##################################################################
     
+        sudo rm /etc/profile.d/alfresco_env.sh
         sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
         
             
@@ -134,8 +135,9 @@ if [ "$accordInstallation" = "y" ]
         #####  structuration d'alfresco #####
         #####################################
         
-        sudo mkdir $ALF_HOME
-        sudo chown $USER:$USER $ALF_HOME
+        cd 
+        mkdir alfresco
+        sudo mv alfresco /opt/.
         cd $ALF_HOME
         rm -rf *
         
