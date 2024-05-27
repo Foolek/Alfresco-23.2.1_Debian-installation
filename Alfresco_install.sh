@@ -178,8 +178,7 @@ if [ "$accordInstallation" = "y" ]
         
         while [ ${#keypass} -lt ${#charlen} ]
           do
-            read -s -p "Veuillez saisir un mot de passe de 6 caractères : " keypass
-          
+             read -s -p  keypass
             if [ ${#keypass} -lt ${#charlen} ]
                 then
                     echo
@@ -190,13 +189,13 @@ if [ "$accordInstallation" = "y" ]
                 echo
                 read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
                     if [ "$keypass" = "$keypassverif" ]
-                    then echogreen "Le mot de passe correspond !" done
+                    then echogreen "Le mot de passe correspond !" 
                     
                     else echored "Le mot de passe ne correspond pas.."
+                         echoblue "Veuillez saisir à nouveau un mot de passe de 6 caractères : "
                          keypass=""               
                     fi
             fi
-            keypass=""
         done
         
         echogreen "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
