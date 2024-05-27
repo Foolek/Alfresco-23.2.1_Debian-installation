@@ -136,8 +136,8 @@ if [ "$accordInstallation" = "y" ]
         #####################################
         
         cd 
-        mkdir alfresco
-        sudo mv alfresco /opt/.
+        mkdir $ALF_HOME
+        sudo chown $USER:$USER $ALF_HOME -R
         cd $ALF_HOME
         rm -rf *
         
