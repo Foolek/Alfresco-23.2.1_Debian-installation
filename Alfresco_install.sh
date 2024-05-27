@@ -203,9 +203,7 @@ if [ "$accordInstallation" = "y" ]
     else
         echo "opération annulée"
         exit
-    fi    
-      
-        
+    fi  
         
     
     
