@@ -53,8 +53,14 @@ echoblue   "Voulez-vous continuer et lancer l'installation ? Y/N : "
 read accordInstallation
 echo
 
+
+
+
+
 if [ "$accordInstallation" = "y" ] 
     then
+    
+   
         ##################################################################
         ##### Déclaration des variables d'environnement nécessaires  #####
         ##################################################################
@@ -85,6 +91,10 @@ if [ "$accordInstallation" = "y" ]
         export SOLR_HOME=$ALF_SEARCH/solrhome"
         
         source /etc/profile.d/alfresco_env.sh
+    
+    
+    
+    
     
     
     
@@ -124,9 +134,12 @@ if [ "$accordInstallation" = "y" ]
         ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
         ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
         
-        SsltoolName=$ALF_HOME/alfresco-ssl-generator
         SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
         
+
+
+
+
 
 
         #####################################
@@ -152,14 +165,38 @@ if [ "$accordInstallation" = "y" ]
         tar zxf $ActiveMQZip
         unzip $ApacheTomcatZip
         
-        #####  Renommage
+        #####  Restructuration des repo
         mv $ActiveMQName $ALF_HOME/activemq
         mv $ApacheTomcatName $ALF_HOME/tomcat
         mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
-        rm -rf $SslToolsName
+        
+        mv $ALF_HOME/web-server/lib $ALF_HOME/web-server/share/.
+        mv $ALF_HOME/web-server/conf/* $ALF_HOME/tomcat/conf/.
+        mv $CATALINA_HOME/webapps $CATALINA_HOME/default_webapps
+        mv $ALF_HOME/web-server/webapps $CATALINA_HOME/.
+        mkdir $CATALINA_HOME/data
+        mv $ALF_HOME/keystore $CATALINA_HOME/data/keystore
+        mkdir$CATALINA_BASE/logs/alf_logs
+        
+        
+        ##### Création des commandes
+        ln -s $CATALINA_HOME/bin/catalina.sh /usr/local/bin/tomcat 
+        ln -s $ALF_HOME/activemq/bin/activemq /usr/local/bin/activemq
+        
         
         ##### Nettoyage
         rm *.zip *.tar.gz
+        rm -rf $ALF_HOME/alfresco-ssl-generator
+        rm $ALF_HOME/*
+        rmdir $ALF_HOME/web-server
+        rm -rf $ALF_HOME/licences
+        rm $CATALINA_HOME/*
+        rm -rf 
+                
+        
+        
+                
+                
         
         #####################################
         #####  Génération des clés SSL  #####
@@ -175,11 +212,11 @@ if [ "$accordInstallation" = "y" ]
         
         #####  Mot de passe du keystore  #####
         
-        echogreen "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour le keystore : " 
+        echogreen "----------KEYSTORE----------" 
         
         while [ ${#keypass} -lt ${#charlen} ]
           do
-            read -s -p "Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
+            read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
           
             if [ ${#keypass} -lt ${#charlen} ]
                 then
@@ -199,9 +236,11 @@ if [ "$accordInstallation" = "y" ]
             fi
         done
         
-        echored $keypass
+      
         
         #####  Mot de passe du truststore  #####
+        
+        echogreen "----------TRUSTSTORE----------"
         
         while [ ${#trustpass} -lt ${#charlen} ]
           do
@@ -225,16 +264,28 @@ if [ "$accordInstallation" = "y" ]
             fi
         done
         
-        echored $trustpass
+        
+        
+        #####  Lancement du script de génération des clés SSL  #####
         
         cd $ALF_HOME/ssl-tool
-       
         bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
+        
+        ##### déplacement du répertoire des clés #####
+        mv $ALF_HOME/ssl-tool/keystores/* $CATALINA_HOME/data/keystore/.
+        mv $ALF_HOME/ssl-tool/certificates $CATALINA_HOME/data/keystore/.
+        mv $ALF_HOME/ssl-tool/ca $CATALINA_HOME/data/keystore/.
+        
+        ##### Suppression du répertoire SSL-TOOL
+        rm -rf $ALF_HOME/ssl-tool
+
+
+
  
-    else
-        echo "opération annulée"
-        exit
-    fi  
+else
+    echo "opération annulée"
+    exit
+fi  
         
     
     
