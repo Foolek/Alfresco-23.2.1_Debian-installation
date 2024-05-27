@@ -93,7 +93,6 @@ if [ "$accordInstallation" = "y" ]
         source /etc/profile.d/alfresco_env.sh
     
     
-    
         ###################################################################
         #####  Installation et téléchargement des paquets nécessaires #####
         ###################################################################
@@ -112,16 +111,23 @@ if [ "$accordInstallation" = "y" ]
         fi
         
         
-        #####  Variables des liens de téléchargements
+        #####  Variables des liens de téléchargements et noms des répertoires zip
         
+        AlfContentName=alfresco-content-services-community-distribution-23.2.1
+        AlfContentZip=alfresco-content-services-community-distribution-23.2.1.zip
         AlfContentServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-content-services-community-distribution/23.2.1/alfresco-content-services-community-distribution-23.2.1.zip
-        
+    
+        AlfSearchName=alfresco-search-services-2.0.9.1
+        AlfSearchZip=alfresco-search-services-2.0.9.1.zip   
         AlfSearchServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-search-services/2.0.9.1/alfresco-search-services-2.0.9.1.zip
         
-        ActiveMqUrl=https://dlcdn.apache.org//activemq/6.1.2/apache-activemq-6.1.2-bin.tar.gz
+        ActiveMQName=apache-activemq-6.1.2
+        ActiveMQZip=apache-activemq-6.1.2-bin.tar.gz
+        ActiveMQUrl=https://dlcdn.apache.org//activemq/6.1.2/apache-activemq-6.1.2-bin.tar.gz
         
+        ApacheTomcatName=apache-tomcat-10.1.24
+        ApacheTomcatZip=apache-tomcat-10.1.24.zip
         ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
-
 
 
         #####################################
@@ -132,17 +138,22 @@ if [ "$accordInstallation" = "y" ]
         sudo chown $USER:$USER $ALF_HOME
         cd $ALF_HOME
         rm -rf *
+        
+        #####  Téléchargement
         wget $AlfContentServiceUrl
         wget $AlfSearchServiceUrl
         wget $ActiveMqUrl
         wget $ApacheTomcatUrl
-        unzip *.zip
-        tar -xzf *.gz
+        
+        #####  Décompréssion
+        unzip *
+        #unzip $AlfContentZip
+        #unzip $AlfSearchZip
+        tar -zxf $ActiveMQZip
+        #unzip $ApacheTomcatZip
+        
+        ##### Nettoyage
         rm *.zip *.gz
-        
-
-        
-        
         
     else
         echo "opération annulée"
