@@ -151,7 +151,7 @@ if [ "$accordInstallation" = "y" ]
         
         unzip $AlfContentZip
         unzip $AlfSearchZip
-        tar -zxf $ActiveMQZip
+        tar zxf $ActiveMQZip
         unzip $ApacheTomcatZip
         
         ##### Nettoyage
