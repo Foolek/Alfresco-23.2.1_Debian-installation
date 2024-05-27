@@ -44,8 +44,8 @@ cd ./alfrescoinstall
   ls
 fi
 
-
-echobgreen "-----------------------------------------------------"
+echo
+echogreen "-----------------------------------------------------"
 echoblue   "Bienvenue sur l'installeur d'Alfresco par Adil BOUZIT"
 echogreen  "-----------------------------------------------------"
 echo
@@ -102,11 +102,11 @@ if [ "$accordInstallation" = "y" ]
         
         if [ "$reponse" = "y" ]
             then
-              sudo apt update -y && sudo apt upgrade -y
-              sudo apt install git curl mariadb-server openjdk-17-jdk-headless nginx -y
+              apt update -y && sudo apt upgrade -y
+              apt install git curl mariadb-server openjdk-17-jdk-headless nginx -y
         else
           echo "Annulation de l'installation"
-          sudo rm /etc/profile.d/alfresco_env.sh
+            rm /etc/profile.d/alfresco_env.sh
         fi
         
         
