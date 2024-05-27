@@ -144,7 +144,7 @@ if [ "$accordInstallation" = "y" ]
         #####  Téléchargement
         wget $AlfContentServiceUrl
         wget $AlfSearchServiceUrl
-        wget $ActiveMqUrl
+        wget $ActiveMQUrl
         wget $ApacheTomcatUrl
         
         #####  Décompréssion
