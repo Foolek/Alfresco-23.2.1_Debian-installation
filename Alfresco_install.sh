@@ -121,6 +121,7 @@ if [ "$accordInstallation" = "y" ]
         ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
         
     else
+        echo "opération annulée"
         exit
     fi    
         
