@@ -228,7 +228,12 @@ if [ "$accordInstallation" = "y" ]
         echored $trustpass
         
         cd $ALF_HOME/ssl-tool
-        bash run.sh -keystorepass $keypass -truststorepass $trustpass
+        
+        export keystorepass=$keypass
+        export truststorepass=$trustpass
+        echo $keystorepass
+        echo $truststoprepass
+        bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
  
     else
         echo "opération annulée"
