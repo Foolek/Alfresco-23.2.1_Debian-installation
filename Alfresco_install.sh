@@ -178,6 +178,15 @@ if [ "$accordInstallation" = "y" ]
           do read keypass 
           echored "Votre mot de passe est trop court"
         done
+        
+        echogreen "Veuillez saisir un mot de passe de 6 caractères pour le truststore : " 
+        
+        while [ $trustpass -lt $charlenght]
+          do read trustpass 
+          echored "Votre mot de passe est trop court"
+        done
+        
+        bash $SsltoolName/run.sh -keystorepass $keypass -truststorepass $trustpass
  
     else
         echo "opération annulée"
