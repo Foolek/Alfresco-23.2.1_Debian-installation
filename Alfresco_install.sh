@@ -36,13 +36,8 @@ echored () {
 echogreen () {
   echo "${bldgre}$1${txtrst}"
 }
-cd /tmp
-if [ -d "alfrescoinstall" ]; then
-	#rm -rf alfrescoinstall
-  mkdir alfrescoinstall
-cd ./alfrescoinstall
-  ls
-fi
+
+
 
 echo
 echogreen "-----------------------------------------------------"
@@ -183,6 +178,7 @@ if [ "$accordInstallation" = "y" ]
  
         while [ ${#keypass} -lt $charlenght6 ]
             read keypass
+            
             if [ ${#keypass} -ge $charlenth6 ]
                 then
                      echoblue "Le mot de passe choisis est : $keypass"
@@ -199,6 +195,7 @@ if [ "$accordInstallation" = "y" ]
                                  keypas=
                              fi
                          done
+            else
             fi              
             do echored "Veuillez re-saisir un mot de passe de 6 caracètres : "
         done
@@ -207,8 +204,7 @@ if [ "$accordInstallation" = "y" ]
         echo "opération annulée"
         exit
     fi    
-        
-        
+      
         
         
     
