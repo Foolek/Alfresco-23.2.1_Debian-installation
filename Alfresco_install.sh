@@ -131,6 +131,7 @@ if [ "$accordInstallation" = "y" ]
         sudo mkdir $ALF_HOME
         sudo chown $USER:$USER $ALF_HOME
         cd $ALF_HOME
+        rm -rf *
         wget $AlfContentServiceUrl
         wget $AlfSearchServiceUrl
         wget $ActiveMqUrl
