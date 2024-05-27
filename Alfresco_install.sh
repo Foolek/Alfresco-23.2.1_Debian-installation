@@ -203,11 +203,11 @@ if [ "$accordInstallation" = "y" ]
         
         #####  Mot de passe du truststore  #####
         
-        while [ ${#keypass} -lt ${#charlen} ]
+        while [ ${#trustpass} -lt ${#charlen} ]
           do
             read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
           
-            if [ ${#keypass} -lt ${#charlen} ]
+            if [ ${#trustpass} -lt ${#charlen} ]
                 then
                     echo
                         echored "Votre mot de passe est trop court"
@@ -228,11 +228,7 @@ if [ "$accordInstallation" = "y" ]
         echored $trustpass
         
         cd $ALF_HOME/ssl-tool
-        
-        export keystorepass=$keypass
-        export truststorepass=$trustpass
-        echo $keystorepass
-        echo $truststoprepass
+       
         bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
  
     else
