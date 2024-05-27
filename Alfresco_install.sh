@@ -168,7 +168,9 @@ if [ "$accordInstallation" = "y" ]
         
         charlen="psswrd"
         keypass=""
+        keypassverif=
         trustpass=""
+        trustpassverif=
         
         cd $SsltoolName
         
@@ -176,10 +178,21 @@ if [ "$accordInstallation" = "y" ]
         
         while [ ${#keypass} -lt ${#charlen} ]
           do
-            read -s -p "Veuillez saisir un mot de passe de $charlenght caractères : " keypass
+            read -s -p "Veuillez saisir un mot de passe de 6 caractères : " keypass
+          
             if [ ${#keypass} -lt ${#charlen} ]
-            then
-                echored "Votre mot de passe est trop court"
+                then
+                    echo
+                        echored "Votre mot de passe est trop court"
+            else
+                $keypassverif=$keypass
+                keypass=""
+                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
+                    if [$keypass -eq $keypassverif]
+                    then echogreen "Le mot de passe correspond !"
+                    else echored "Le mot de passe ne correspond pas.."
+                            keypass=""               
+                    fi
             fi
             keypass=""
         done
