@@ -362,6 +362,12 @@ if [ "$accordInstallation" = "y" ]
         # Changement propriétaire d'$ALF_HOME
         chown $ALF_USER:$ALF_USER $ALF_HOME -R 
         usermod $ALF_USER -m -d /opt/alfresco
+
+
+        # Configuration du fichier $CATALINA_HOME/conf/catalina.properties
+
+        sed -r "shared.loader" -i  "shared.loader=${catalina.base}/shared/classes,${catalina.base}/shared/lib/*.jar" tomcat/conf/catalina.properties
+
 else
     echo "opération annulée"
     exit
