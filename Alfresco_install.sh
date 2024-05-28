@@ -368,18 +368,57 @@ if [ "$accordInstallation" = "y" ]
 
         echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
         
+        
+        # Configuration DB max connections
+        sed -i "s/^#max_connections=100.*/max_connections=275/" /etc/mysql/mariadb.conf.d/50-server.cnf
+
+
         # Changement propriétaire d'$ALF_HOME
         chown $ALF_USER:$ALF_USER $ALF_HOME -R 
         usermod $ALF_USER -m -d /opt/alfresco
 
 
         # Configuration du fichier $CATALINA_HOME/conf/catalina.properties
-        sed -r "shared.loader" -i  "shared.loader=${catalina.base}/shared/classes,${catalina.base}/shared/lib/*.jar" tomcat/conf/catalina.properties
+        sed -i "s/^shared.loader=.*/shared.loader=\${catalina.base}\/shared\/classes,\${catalina.base}\/shared\/lib\/*.jar/" /opt/alfresco/tomcat/conf/catalina.properties
+        
 
-        # Configuration du fichier $CATALINA_HOME/conf/catalina.properties
+        # Création du fichier alfresco.global.properties
+        echo $CATALINA_HOME/shared/classes/alfresco.global.properties >> "\
+        dir.root=$CATALINA_HOME/data
+        dir.keystore=$CATALINA_HOME/data/keystore
 
+        db.name=$Alf_db
+        db.username=$Alf_db_user
+        db.password=$Alf_db_user_password
+        db.port=3306
+        db.host=127.0.0.1
+        db.pool.max=275
+        db.driver=org.mariadb.jdbc.Driver
+        db.url=jdbc:mariadb://localhost:3306/alfresco_db?useUnicode=yes&characterEncoding=UTF-8
 
+        alfresco.context=alfresco
+        alfresco.host=localhost
+        alfresco.port=8080
+        alfresco.protocol=http
 
+        share.context=share
+        share.host=localhost
+        share.port=8080
+        share.protocol=http
+
+        user.name.caseSensitive=true
+        domain.name.caseSensitive=false
+        domain.separator=
+
+        imap.server.enabled=false
+        alfresco.rmi.services.host=0.0.0.0
+
+        smart.folders.enabled=true
+        smart.folders.model=alfresco/model/smartfolder.xml
+        smart.folders.model.labels=alfresco/messages/smartfolder-model"
+
+        sed -i '299s/^.$/export JAVA_TOOL_OPTIONS="-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede\/CBC\/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=\$CATALINA_HOME\/data\/keystore\/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede"/ $CATALINA_HOME/bin/catalina.sh
+        
 else
     echo "opération annulée"
     exit
