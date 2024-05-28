@@ -342,7 +342,8 @@
         read -p "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " Alf_db_user
         read -p "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " Alf_db_user_password
 
-
+        mariadb <<< "DROP DATABSE alfresco_db;"
+        mariadb <<< "DOP USER alfresco_user;"
         mariadb <<< "DROP DATABASE $Alf_db;"
         mariadb <<< "DROP USER $Alf_db_user@localhost;"        
         mariadb <<< "CREATE DATABASE alfresco_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
