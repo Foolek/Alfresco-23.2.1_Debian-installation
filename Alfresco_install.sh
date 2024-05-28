@@ -338,9 +338,9 @@
         
 #         # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
 
-        read -p "Choisissez un nom pour la base de donnée d'Alfresco" $Alf_db
-        read -p "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco" $Alf_db_user
-        read -p "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco" $Alf_db_user_password
+        read -p "Choisissez un nom pour la base de donnée d'Alfresco : " Alf_db
+        read -p "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " Alf_db_user
+        read -p "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " Alf_db_user_password
 
 
         mariadb <<< "DROP DATABASE $Alf_db;"
