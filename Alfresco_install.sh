@@ -215,7 +215,7 @@ if [ "$accordInstallation" = "y" ]
         mv $ALF_HOME/web-server/lib $ALF_HOME/web-server/shared/.
         mv $ALF_HOME/web-server/conf/* $ALF_HOME/tomcat/conf/.
         mv $ALF_HOME/web-server/shared $ALF_HOME/tomcat/.
-        mv $JDBCname $ALF_HOME/shared/lib/.
+        mv $JDBCname $CATALINA_HOME/shared/lib/.
         
         # renommage du webapps par défaut [tomcat]
         mv $CATALINA_HOME/webapps $CATALINA_HOME/default_webapps
