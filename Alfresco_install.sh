@@ -172,6 +172,9 @@ if [ "$accordInstallation" = "y" ]
         SsltoolName=$ALF_HOME/alfresco-ssl-generator
         SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
         
+        JDBCurl=https://dlm.mariadb.com/3752064/Connectors/java/connector-java-2.7.12/mariadb-java-client-2.7.12.jar
+        JDBCname=$ALF_HOME/mariadb-java-client-2.7.12.jar
+        
 
 
 
@@ -192,6 +195,7 @@ if [ "$accordInstallation" = "y" ]
         wget $AlfSearchServiceUrl
         wget $ActiveMQUrl
         wget $ApacheTomcatUrl
+        wget $JDBCurl
         git clone $SsltoolUrl
         
         
@@ -208,9 +212,11 @@ if [ "$accordInstallation" = "y" ]
         mv $ApacheTomcatName $ALF_HOME/tomcat
         mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
         
-        # regroupement de lib dans share [alfresco]
-        mv $ALF_HOME/web-server/lib $ALF_HOME/web-server/share/.
+        # regroupement de lib dans shared [alfresco] et shared vers [tomcat]
+        mv $ALF_HOME/web-server/lib $ALF_HOME/web-server/shared/.
         mv $ALF_HOME/web-server/conf/* $ALF_HOME/tomcat/conf/.
+        mv $ALF_HOME/web-server/shared $ALF_HOME/tomcat/.
+        mv $JDBCname $ALF_HOME/shared/lib/.
         
         # renommage du webapps par défaut [tomcat]
         mv $CATALINA_HOME/webapps $CATALINA_HOME/default_webapps
@@ -235,9 +241,9 @@ if [ "$accordInstallation" = "y" ]
         rm *.zip *.tar.gz
         
         # nettoyages des répertoires/fichiers non nécessaires
-        rm -rf $ALF_HOME/alfresco-ssl-generator
+        rm -rf $ALF_HOME/*.zip $ALF_HOME/*.gz
         rm $ALF_HOME/*
-        rmdir $ALF_HOME/web-server
+        rm -rf $ALF_HOME/web-server
         rm -rf $ALF_HOME/licences
         rm $CATALINA_HOME/*
         
