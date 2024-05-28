@@ -334,7 +334,7 @@ if [ "$accordInstallation" = "y" ]
         # Suppression du répertoire SSL-TOOL
         rm -rf $ALF_HOME/ssl-tool
         
-        mariadb <<< "DROP DATABASE alfresco_db.*;"
+        mariadb <<< "DROP DATABASE alfresco_db;"
         mariadb <<< "DROP USER alfresco_user@localhost;"        
         mariadb <<< "CREATE DATABASE alfresco_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
         mariadb <<< "CREATE USER alfresco_user@localhost IDENTIFIED BY 'alfresco_password';"
