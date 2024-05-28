@@ -337,7 +337,7 @@ if [ "$accordInstallation" = "y" ]
         
         mariadb <<< "CREATE DATABASE alfresco_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
         mariadb <<< "CREATE USER alfresco_user@localhost IDENTIFIED BY 'alfresco_password;"
-        mariadb <<< "GRANT ALL ON alfresco_db.* TO alfresco_user@localhost IDENTIFIED BY 'alfresco_password'"
+        mariadb <<< "GRANT ALL ON alfresco_db.* TO alfresco_user@localhost IDENTIFIED BY 'alfresco_password';"
         mariadb <<< "FLUSH PRIVILEGES;"
         
         
