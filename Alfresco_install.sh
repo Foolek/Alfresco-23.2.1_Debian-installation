@@ -341,10 +341,10 @@
         ALF_USER="alfresco"
         ALF_GROUP="alfresco"
         ALF_USER_PASS="alfresco"
-        
+
          userdel $ALF_USER
          groupdel $ALF_GROUP
-         useradd $ALF_USER -s /bin/bash:
+         useradd $ALF_USER -s /bin/bash
 
          passwd "$ALF_USER" <<< "$ALF_USER_PASS" 
          chown alfresco:alfresco $ALF_HOME -R 
