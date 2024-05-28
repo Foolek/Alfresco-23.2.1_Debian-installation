@@ -76,8 +76,6 @@ if [ "$accordInstallation" = "y" ]
         export ALF_HOME=/opt/alfresco
         export ALF_DATA_HOME=$ALF_HOME/tomcat/data
         
-        export ALF_USER=alfresco
-        export ALF_GROUP=alfresco
         
         # Alfresco search services variables 
         export ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
@@ -337,8 +335,9 @@ if [ "$accordInstallation" = "y" ]
         rm -rf $ALF_HOME/ssl-tool
 
 
-        useradd alfresco
-        passwd alfresco << alfresco
+        useradd $ALF_USER
+        groupadd $ALF_GROUP
+        passwd "$ALF_USER" << "$ALF_USER_PASS"
         usermod alfresco:alfresco $ALF_HOME -r 
 else
     echo "opération annulée"
