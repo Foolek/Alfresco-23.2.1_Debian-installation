@@ -338,14 +338,11 @@
         
 #         # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
 
-        read -p "Choisissez un nom pour la base de donnée d'Alfresco : " Alf_db
-        read -p "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " Alf_db_user
-        read -p "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " Alf_db_user_password
+        read -p echoblue "Choisissez un nom pour la base de donnée d'Alfresco : " Alf_db
+        read -p echoblue "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " Alf_db_user
+        read -p echoblue "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " Alf_db_user_password
 
-        # mariadb <<< "DROP DATABSE alfresco_db;"
-        # mariadb <<< "DOP USER alfresco_user;"
-        # mariadb <<< "DROP DATABASE $Alf_db;"
-        # mariadb <<< "DROP USER $Alf_db_user@localhost;"        
+     
         mariadb <<< "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
         mariadb <<< "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
         mariadb <<< "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
