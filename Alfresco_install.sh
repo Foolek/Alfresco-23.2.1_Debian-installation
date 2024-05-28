@@ -232,6 +232,9 @@
 #         ln -s /opt/alfresco/activemq/bin/activemq /usr/local/bin/activemq -f
 #         ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/bin/tomcat -f
 #         ln -s /opt/alfresco/activemq/bin/activemq /usr/bin/activemq -f
+#         
+#         chmod 775 $CATALINA_HOME/bin/*.sh
+#         chmod 775 $ACTIVEMQ_HOME/bin/*.sh
         
         
 #         # Nettoyage des zip
@@ -342,11 +345,11 @@
         ALF_GROUP="alfresco"
         ALF_USER_PASS="alfresco"
 
-         userdel $ALF_USER
-         groupdel $ALF_GROUP
-         useradd $ALF_USER -s /bin/bash
+        userdel $ALF_USER
+        groupdel $ALF_GROUP
+        useradd $ALF_USER -s /bin/bash
 
-         echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
+        echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
 
         chown alfresco:alfresco $ALF_HOME -R 
 # else
