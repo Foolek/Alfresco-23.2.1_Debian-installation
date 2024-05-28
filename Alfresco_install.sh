@@ -360,8 +360,8 @@ if [ "$accordInstallation" = "y" ]
         echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
         
         # Changement propriétaire d'$ALF_HOME
-        chown alfresco:alfresco $ALF_HOME -R 
-        usermod alfresco -m /opt/alfresco
+        chown $ALF_USER:$ALF_USER $ALF_HOME -R 
+        usermod $ALF_USER -m -d /opt/alfresco
 else
     echo "opération annulée"
     exit
