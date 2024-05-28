@@ -340,13 +340,13 @@ if [ "$accordInstallation" = "y" ]
 
 ### !!!!! Créer une boucle permettant de vérifier s'il existe déjà une BDD/utilisateur et agir en conséquence
         
-        mkdir $ALF_HOME/temp
-        mariadb -e "SHOW DATABASES;" >> $ALF_HOME/temp
-        mariadb -e "SHOW DATABASES; SELECT mysql; SELECT user FROM user;" >> $ALF_HOME/temp
+        #mkdir $ALF_HOME/temp
+        #mariadb -e "SHOW DATABASES;" >> $ALF_HOME/temp
+        #mariadb -e "SHOW DATABASES; SELECT mysql; SELECT user FROM user;" >> $ALF_HOME/temp
 
-        echogreen -n "Choisissez un nom pour la base de donnée d'Alfresco : " && read Alf_db
-        echogreen -n "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " && read Alf_db_user
-        echogreen -n "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " && read Alf_db_user_password
+        echogreen "Choisissez un nom pour la base de donnée d'Alfresco : " && read Alf_db
+        echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " && read Alf_db_user
+        echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " && read Alf_db_user_password
 
         echogreen "Nom de la base de donnée : $Alf_db"
         echogreen "Nom de son utilisateur : $Alf_db_user"
