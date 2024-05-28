@@ -346,8 +346,7 @@
          groupdel $ALF_GROUP
          useradd $ALF_USER -s /bin/bash
 
-         passwd "$ALF_USER" 
-         <<< "$ALF_USER_PASS"  
+         passwd "$ALF_USER" <<< "$ALF_USER_PASS"  
          <<< "$ALF_USER_PASS"
          chown alfresco:alfresco $ALF_HOME -R 
 # else
