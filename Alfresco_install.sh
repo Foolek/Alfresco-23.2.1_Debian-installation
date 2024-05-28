@@ -333,7 +333,13 @@ if [ "$accordInstallation" = "y" ]
         
         # Suppression du répertoire SSL-TOOL
         rm -rf $ALF_HOME/ssl-tool
-
+        
+        
+        sudo mariadb <<< "CREATE DATABASE alfresco_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
+        sudo mariadb <<< "GRANT ALL PRIVILEGES ON alfresco_db.* TO alfresco_user@localhost IDENTIFIED BY 'alfresco_password;"
+        sudo mariadb <<< "FLUSH PRIVILEGES;"
+        
+        
         userdel $ALF_USER
         groupdel $ALF_GROUP
         useradd $ALF_USER
