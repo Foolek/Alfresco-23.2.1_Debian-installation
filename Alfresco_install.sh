@@ -61,33 +61,35 @@ if [ "$accordInstallation" = "y" ]
     then
     
    
-        ##################################################################
-        ##### Déclaration des variables d'environnement nécessaires  #####
-        ##################################################################
+        #----------------------------------------------------------------#
+        #     Déclaration des variables d'environnement nécessaires      #
+        #----------------------------------------------------------------#
     
         sudo rm /etc/profile.d/alfresco_env.sh
         sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
-        #####  Java variables  #####
+        
+        # Java variables  
         export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
         export PATH=$JAVA_HOME/bin:$PATH
         
-        #####  Alfresco variables  #####
+        # Alfresco variables  
         export ALF_HOME=/opt/alfresco
-        export ALF_DATA_HOME=/opt/alfresco/tomcat/data
+        export ALF_DATA_HOME=$ALF_HOME/tomcat/data
+        
         export ALF_USER=alfresco
         export ALF_GROUP=alfresco
         
-        #####  Alfresco search services variables  #####
+        # Alfresco search services variables 
         export ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
         
-        #####  ActiveMQ variables  #####
+        # ActiveMQ variables  
         export ACTIVEMQ_HOME=$ALF_HOME/activemq
-        
-        #####  Tomcat variables  #####
+    
+        # Tomcat variables 
         export CATALINA_HOME=$ALF_HOME/tomcat
         export CATALINA_BASE=$CATALINA_HOME
         
-        #####  Solr variables  #####
+        # Solr variables
         export SOLR_HOME=$ALF_SEARCH/solrhome"
         
         source /etc/profile.d/alfresco_env.sh
@@ -99,9 +101,9 @@ if [ "$accordInstallation" = "y" ]
 
 
 
-        ##################################################################
-        #####  Déclaration des variables nécessaires  pour le script #####
-        ##################################################################
+        #----------------------------------------------------------------#
+        #      Déclaration des variables nécessaires  pour le script     #
+        #----------------------------------------------------------------#
     
         sudo rm /etc/profile.d/alfresco_env.sh
         
@@ -131,9 +133,9 @@ if [ "$accordInstallation" = "y" ]
     
     
     
-        ###################################################################
-        #####  Installation et téléchargement des paquets nécessaires #####
-        ###################################################################
+        #-----------------------------------------------------------------#
+        #      Installation et téléchargement des paquets nécessaires     #
+        #-----------------------------------------------------------------#
         
         echoblue "les paquets suivants vont être installés : git, curl, mariadb-server, openjdk-17-jdk-headless nginx ainsi que les répertoires d'Alfresco, ActiveMQ, Apache Tomcat etc.."
         echoblue "Voulez-vous les installer ? Y/N : " 
@@ -141,6 +143,7 @@ if [ "$accordInstallation" = "y" ]
         
         if [ "$reponse" = "y" ]
             then
+              apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip -y
               apt update -y && sudo apt upgrade -y
               apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip -y
         else
@@ -149,7 +152,7 @@ if [ "$accordInstallation" = "y" ]
         fi
         
         
-        #####  Variables des liens de téléchargements et noms des répertoires zip
+        #  Variables des liens de téléchargements et noms des répertoires zip
         
         AlfContentName=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1
         AlfContentZip=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1.zip
@@ -166,7 +169,7 @@ if [ "$accordInstallation" = "y" ]
         ApacheTomcatName=$ALF_HOME/apache-tomcat-10.1.24
         ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
         ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
-        
+        SsltoolName=$ALF_HOME/alfresco-ssl-generator
         SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
         
 
@@ -175,17 +178,16 @@ if [ "$accordInstallation" = "y" ]
 
 
 
-        #####################################
-        #####  structuration d'alfresco #####
-        #####################################
+        #-----------------------------------#
+        #      structuration d'alfresco     #
+        #-----------------------------------#
         
-        cd 
+        rm -rf $ALF_HOME
         mkdir $ALF_HOME
-        sudo chown $USER:$USER $ALF_HOME -R
         cd $ALF_HOME
-        rm -rf *
         
-        #####  Téléchargement
+        
+        # Téléchargement
         wget $AlfContentServiceUrl
         wget $AlfSearchServiceUrl
         wget $ActiveMQUrl
@@ -193,7 +195,7 @@ if [ "$accordInstallation" = "y" ]
         git clone $SsltoolUrl
         
         
-        #####  Décompréssion
+        # Décompréssion
         unzip $AlfContentZip
         unzip $AlfSearchZip
         tar zxf $ActiveMQZip
@@ -201,7 +203,7 @@ if [ "$accordInstallation" = "y" ]
         
 
         
-        #####  Restructuration des repo
+        # Restructuration des repo
         mv $ActiveMQName $ALF_HOME/activemq
         mv $ApacheTomcatName $ALF_HOME/tomcat
         mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
@@ -222,43 +224,48 @@ if [ "$accordInstallation" = "y" ]
         mkdir$CATALINA_BASE/logs/alf_logs
         
         
+        # Création des commandes tomcat/activemq/solr
+        ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/local/bin/tomcat -f
+        ln -s /opt/alfresco/activemq/bin/activemq /usr/local/bin/activemq -f
+        ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/bin/tomcat -f
+        ln -s /opt/alfresco/activemq/bin/activemq /usr/bin/activemq -f
         
-        ##### Création des commandes
-        ln -s $CATALINA_HOME/bin/catalina.sh /usr/local/bin/tomcat 
-        ln -s $ALF_HOME/activemq/bin/activemq /usr/local/bin/activemq
         
-        
-        
-        ##### Nettoyage
+        # Nettoyage des zip
         rm *.zip *.tar.gz
+        
+        # nettoyages des répertoires/fichiers non nécessaires
         rm -rf $ALF_HOME/alfresco-ssl-generator
         rm $ALF_HOME/*
         rmdir $ALF_HOME/web-server
         rm -rf $ALF_HOME/licences
         rm $CATALINA_HOME/*
-        rm -rf 
-                
-        
         
                 
+        
+        
+                
                 
         
-        #####################################
-        #####  Génération des clés SSL  #####
-        #####################################
+        #-----------------------------------#
+        #      Génération des clés SSL      #
+        #-----------------------------------#
         
+        #pattern minimum
         charlen="psswrd"
+        
+        #mdp keystore/truststopre
         keypass=""
-        keypassverif=
         trustpass=""
+        
+        #verification mdp
+        keypassverif=
         trustpassverif=
         
         
-        
-        #####  Mot de passe du keystore  #####
-        
+        # Saisie de mot de passe du KESYTORE     
+         
         echogreen "----------KEYSTORE----------" 
-        
         while [ ${#keypass} -lt ${#charlen} ]
           do
             read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
@@ -281,12 +288,9 @@ if [ "$accordInstallation" = "y" ]
             fi
         done
         
-      
-        
-        #####  Mot de passe du truststore  #####
+        # Saisie de mot de passe du TRUSTSTORE
         
         echogreen "----------TRUSTSTORE----------"
-        
         while [ ${#trustpass} -lt ${#charlen} ]
           do
             read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
@@ -310,18 +314,17 @@ if [ "$accordInstallation" = "y" ]
         done
         
         
-        
-        #####  Lancement du script de génération des clés SSL  #####
+        # Lancement du script de génération des clés SSL 
         
         cd $ALF_HOME/ssl-tool
         bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
         
-        ##### déplacement du répertoire des clés #####
+        # déplacement du répertoire des clés #####
         mv $ALF_HOME/ssl-tool/keystores/* $CATALINA_HOME/data/keystore/.
         mv $ALF_HOME/ssl-tool/certificates $CATALINA_HOME/data/keystore/.
         mv $ALF_HOME/ssl-tool/ca $CATALINA_HOME/data/keystore/.
         
-        ##### Suppression du répertoire SSL-TOOL
+        # Suppression du répertoire SSL-TOOL
         rm -rf $ALF_HOME/ssl-tool
 
 
