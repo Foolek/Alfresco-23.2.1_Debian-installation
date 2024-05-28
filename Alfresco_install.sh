@@ -206,7 +206,7 @@ if [ "$accordInstallation" = "y" ]
         
 
         
-        # Restructuration des repo
+        # Restructuration des répertoires
         mv $ActiveMQName $ALF_HOME/activemq
         mv $ApacheTomcatName $ALF_HOME/tomcat
         mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
@@ -334,7 +334,8 @@ if [ "$accordInstallation" = "y" ]
         # Suppression du répertoire SSL-TOOL
         rm -rf $ALF_HOME/ssl-tool
 
-
+        userdel $ALF_USER
+        groupdel $ALF_GROUP
         useradd $ALF_USER
         groupadd $ALF_GROUP
         passwd "$ALF_USER" <<< "$ALF_USER_PASS"
