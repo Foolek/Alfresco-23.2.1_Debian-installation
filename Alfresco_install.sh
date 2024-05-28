@@ -338,11 +338,11 @@
         
 #         # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
 
-        echogreen "Choisissez un nom pour la base de donnée d'Alfresco : " && read Alf_db
+        echo "Choisissez un nom pour la base de donnée d'Alfresco : " && read Alf_db
        
-        echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " && read Alf_db_user
+        echo "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " && read Alf_db_user
         
-        echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " && read Alf_db_user_password
+        echo "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " && read Alf_db_user_password
        
      
         mariadb <<< "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
