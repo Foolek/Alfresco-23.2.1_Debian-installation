@@ -115,6 +115,7 @@ if [ "$accordInstallation" = "y" ]
         ALF_DATA_HOME=/opt/alfresco/tomcat/data
         ALF_USER=alfresco
         ALF_GROUP=alfresco
+        ALF_USER_PASS=alfresco
         
         #####  Alfresco search services variables  #####
         ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
@@ -227,7 +228,7 @@ if [ "$accordInstallation" = "y" ]
         # création répertoire data [tomcat]
         mkdir $CATALINA_HOME/data
         mv $ALF_HOME/keystore $CATALINA_HOME/data/keystore
-        mkdir$CATALINA_BASE/logs/alf_logs
+        mkdir $CATALINA_BASE/logs/alf_logs
         
         
         # Création des commandes tomcat/activemq/solr
@@ -247,6 +248,7 @@ if [ "$accordInstallation" = "y" ]
         rm -rf $ALF_HOME/licences
         rm -rf $SsltoolName
         rm $CATALINA_HOME/*
+        rm $CATALINA_HOME/keystore/*
         
                 
         
@@ -335,8 +337,9 @@ if [ "$accordInstallation" = "y" ]
         rm -rf $ALF_HOME/ssl-tool
 
 
-
- 
+        useradd alfresco
+        passwd alfresco << alfresco
+        usermod alfresco:alfresco $ALF_HOME -r 
 else
     echo "opération annulée"
     exit
