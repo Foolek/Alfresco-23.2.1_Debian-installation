@@ -143,9 +143,9 @@ if [ "$accordInstallation" = "y" ]
         
         if [ "$reponse" = "y" ]
             then
-              apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip -y
+              apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y
               apt update -y && sudo apt upgrade -y
-              apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip -y
+              apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y
         else
           echo "Annulation de l'installation"
             rm /etc/profile.d/alfresco_env.sh
