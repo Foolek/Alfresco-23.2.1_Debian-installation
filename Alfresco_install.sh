@@ -346,8 +346,9 @@
          groupdel $ALF_GROUP
          useradd $ALF_USER -s /bin/bash
 
-         chpasswd $ALF_USER <<< $ALF_USER_PASS 
-                  chown alfresco:alfresco $ALF_HOME -R 
+         echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
+
+        chown alfresco:alfresco $ALF_HOME -R 
 # else
 #     echo "opération annulée"
 #     exit
