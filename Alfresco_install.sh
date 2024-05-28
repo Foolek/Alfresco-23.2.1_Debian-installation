@@ -334,6 +334,13 @@ if [ "$accordInstallation" = "y" ]
         rm -rf $ALF_HOME/ssl-tool
         
      
+
+
+        #--------------------------------------------------#
+        #      Création base de donnée et utilisateur      #
+        #--------------------------------------------------#
+        
+        # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
         mariadb <<< "DROP DATABASE alfresco_db;"
         mariadb <<< "DROP USER alfresco_user@localhost;"        
         mariadb <<< "CREATE DATABASE alfresco_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
@@ -341,6 +348,7 @@ if [ "$accordInstallation" = "y" ]
         mariadb <<< "GRANT ALL ON alfresco_db.* TO alfresco_user@localhost IDENTIFIED BY 'alfresco_password';"
         mariadb <<< "FLUSH PRIVILEGES;"
         
+        # Création utilisateur Alfresco
         ALF_USER="alfresco"
         ALF_GROUP="alfresco"
         ALF_USER_PASS="alfresco"
@@ -350,8 +358,10 @@ if [ "$accordInstallation" = "y" ]
         useradd $ALF_USER -s /bin/bash
 
         echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
-
+        
+        # Changement propriétaire d'$ALF_HOME
         chown alfresco:alfresco $ALF_HOME -R 
+        usermod alfresco -m /opt/alfresco
 else
     echo "opération annulée"
     exit
