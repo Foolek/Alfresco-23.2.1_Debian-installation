@@ -245,6 +245,7 @@ if [ "$accordInstallation" = "y" ]
         rm $ALF_HOME/*
         rm -rf $ALF_HOME/web-server
         rm -rf $ALF_HOME/licences
+        rm -rf $SsltoolName
         rm $CATALINA_HOME/*
         
                 
