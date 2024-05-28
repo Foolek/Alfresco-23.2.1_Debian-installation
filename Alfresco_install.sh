@@ -138,7 +138,7 @@ if [ "$accordInstallation" = "y" ]
         
         if [ "$reponse" = "y" ]
             then
-              apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y
+              apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential  
               apt update -y && sudo apt upgrade -y
               apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y
         else
@@ -370,7 +370,8 @@ if [ "$accordInstallation" = "y" ]
         
         
         # Configuration DB max connections
-        sed -i "s/^#max_connections=100.*/max_connections=275/" /etc/mysql/mariadb.conf.d/50-server.cnf
+        max_co_mariadb="max_connections   =   275"
+        sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
 
 
         # Changement propriétaire d'$ALF_HOME
