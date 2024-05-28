@@ -342,9 +342,7 @@
         echo "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " && read Alf_db_user
         echo "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " && read Alf_db_user_password
 
-        echo "Nom de la base de donnée : $Alf_db \
-                   Nom de son utilisateur : $Alf_db_user \
-                   Mot de passe utilisateur : $Alf_db_password"
+        echo "Nom de la base de donnée : $Alf_db \Nom de son utilisateur : $Alf_db_user \Mot de passe utilisateur : $Alf_db_password"
        
      
         mariadb <<< "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
