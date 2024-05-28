@@ -338,7 +338,7 @@ if [ "$accordInstallation" = "y" ]
         groupdel $ALF_GROUP
         useradd $ALF_USER
         groupadd $ALF_GROUP
-        passwd "$ALF_USER" <<< "$ALF_USER_PASS"
+        passwd $ALF_USER << $ALF_USER_PASS
         chown alfresco:alfresco $ALF_HOME -r 
 else
     echo "opération annulée"
