@@ -383,7 +383,7 @@ if [ "$accordInstallation" = "y" ]
         
 
         # Création du fichier alfresco.global.properties
-        echo $CATALINA_HOME/shared/classes/alfresco.global.properties >> "\
+        echo >> $CATALINA_HOME/shared/classes/alfresco.global.properties "
         dir.root=$CATALINA_HOME/data
         dir.keystore=$CATALINA_HOME/data/keystore
 
