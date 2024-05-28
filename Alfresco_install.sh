@@ -223,6 +223,7 @@ if [ "$accordInstallation" = "y" ]
         mkdir $CATALINA_BASE/logs/alf_logs
         mkdir $CATALINA_HOME/modules
         mkdir $CATALINA_HOME/modules/platform
+        mkdir $CATALINA_HOME/modules/share
         
         # Création des commandes tomcat/activemq/solr
         ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/local/bin/tomcat -f
@@ -420,8 +421,8 @@ if [ "$accordInstallation" = "y" ]
         smart.folders.model.labels=alfresco/messages/smartfolder-model"
 
         #modification alfresco.xml et share.xml
-        sed -i "s/\${catalina.base}\/..\/modules\/platform/\${catalina.base}\/modules\/platform/" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
-        sed -i "s/\${catalina.base}\/..\/modules\/platform/\${catalina.base}\/modules\/platform/" $CATALINA_HOME/conf/Catalina/localhost/share.xml
+        sed -i "s/base=\"\${catalina.base}\/..\/modules\/platform\"/\${catalina.base}\/modules\/platform/"\" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
+        sed -i "s/base=\"\${catalina.base}\/..\/modules\/platform\"/\${catalina.base}\/modules\/share/" $CATALINA_HOME/conf/Catalina/localhost/share.xml
 
 
 
