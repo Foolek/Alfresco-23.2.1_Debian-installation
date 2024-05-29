@@ -138,6 +138,9 @@ if [ "$accordInstallation" = "y" ]
         
         if [ "$reponse" = "y" ]
             then
+              sudo apt-get install software-properties-common
+              sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main'
+              sudo apt update
               apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential  
               apt update -y && sudo apt upgrade -y
               apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y
@@ -413,7 +416,7 @@ if [ "$accordInstallation" = "y" ]
         db.host=127.0.0.1
         db.pool.max=275
         db.driver=org.mariadb.jdbc.Driver
-        db.url=jdbc:mariadb://127.0.0.1:3306/alfresco_db?useUnicode=yes&characterEncoding=UTF-8
+        db.url=jdbc:mariadb://127.0.0.1 :3306/alfresco_db?useUnicode=yes&characterEncoding=UTF-8
 
         alfresco.context=alfresco
         alfresco.host=localhost
