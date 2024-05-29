@@ -383,7 +383,7 @@ if [ "$accordInstallation" = "y" ]
         ##### Fichier /etc/mysql/mariadb.conf.d/50-server.cnf  -- Ajout max connections
         max_co_mariadb="max_connections         =        275"
         sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
-        sudo systemctl restart mariadb-server 
+        sudo systemctl restart mariadb
 
 
 
@@ -413,7 +413,7 @@ if [ "$accordInstallation" = "y" ]
         db.host=127.0.0.1
         db.pool.max=275
         db.driver=org.mariadb.jdbc.Driver
-        db.url=jdbc:mariadb://localhost:3306/alfresco_db?useUnicode=yes&characterEncoding=UTF-8
+        db.url=jdbc:mariadb://127.0.0.1:3306/alfresco_db?useUnicode=yes&characterEncoding=UTF-8
 
         alfresco.context=alfresco
         alfresco.host=localhost
