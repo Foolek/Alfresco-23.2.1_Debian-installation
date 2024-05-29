@@ -422,11 +422,11 @@
 
         #modification alfresco.xml et share.xml
 
-        alfrescoxmlpattern="<PostResources base=\"${catalina.base}/../modules/platform\""
-        alfrescoxmlreplacement="<PostResources base=\"${catalina.base}/modules/platform\""
+        alfrescoxmlpattern="<PostResources base=\"\${catalina.base}/../modules/platform\""
+        alfrescoxmlreplacement="<PostResources base=\"\${catalina.base}/modules/platform\""
 
-        sharexmlpattern="<PostResources base=\"${catalina.base}/../modules/share\""
-        sharexmlreplacement="<PostResources base=\"${catalina.base}/modules/share\""
+        sharexmlpattern="<PostResources base=\"\${catalina.base}/../modules/share\""
+        sharexmlreplacement="<PostResources base=\"\${catalina.base}/modules/share\""
 
         CATALINA_HOME=/opt/alfresco/tomcat 
 
