@@ -384,7 +384,7 @@ if [ "$accordInstallation" = "y" ]
         #------MariaDB------#
         
         ##### Fichier /etc/mysql/mariadb.conf.d/50-server.cnf  -- Ajout max connections
-        max_co_mariadb="max_connections         =        275"
+        max_co_mariadb="max_connections         = 275"
         sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
         sudo systemctl restart mariadb
 
@@ -395,7 +395,7 @@ if [ "$accordInstallation" = "y" ]
         ##### Configuration du fichier $CATALINA_HOME/conf/catalina.properties
 
         
-        sed -i "s/^shared.loader=$/shared.loader=\${catalina.base}\/shared\/classes,\${catalina.base}\/shared\/lib\/*.jar/" $CATALINA_HOME/conf/catalina.properties
+        sed -i "s/^shared.loader=/shared.loader=\${catalina.base}\/shared\/classes,\${catalina.base}\/shared\/lib\/*.jar/" $CATALINA_HOME/conf/catalina.properties
 
         #modification alfresco.xml et share.xml
         sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
@@ -408,38 +408,37 @@ if [ "$accordInstallation" = "y" ]
 
         # Création du fichier alfresco.global.properties
         echo >> $CATALINA_HOME/shared/classes/alfresco-global.properties "
-        dir.root=$CATALINA_HOME/data
-        dir.keystore=$CATALINA_HOME/data/keystore
+dir.root=$CATALINA_HOME/data
+dir.keystore=$CATALINA_HOME/data/keystore
 
-        db.name=$Alf_db
-        db.username=$Alf_db_user
-        db.password=$Alf_db_user_password
-        db.port=3306
-        db.host=127.0.0.1
-        db.pool.max=275
-        db.driver=org.mariadb.jdbc.Driver
-        db.url=jdbc:mariadb://127.0.0.1 :3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
+db.name=$Alf_db
+db.username=$Alf_db_user
+db.password=$Alf_db_user_password
+db.port=3306
+db.host=127.0.0.1
+db.pool.max=275
+db.driver=org.mariadb.jdbc.Driver
+db.url=jdbc:mariadb://127.0.0.1:3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
 
-        alfresco.context=alfresco
-        alfresco.host=localhost
-        alfresco.port=8080
-        alfresco.protocol=http
+alfresco.context=alfresco
+alfresco.host=localhost
+alfresco.port=8080
+alfresco.protocol=http
 
-        share.context=share
-        share.host=localhost
-        share.port=8080
-        share.protocol=http
+share.context=share
+share.host=localhost
+share.port=8080
+share.protocol=http
 
-        user.name.caseSensitive=true
-        domain.name.caseSensitive=false
-        domain.separator=
+user.name.caseSensitive=true
+domain.name.caseSensitive=false
+domain.separator=
 
-        imap.server.enabled=false
-        alfresco.rmi.services.host=0.0.0.0
-
-        smart.folders.enabled=true
-        smart.folders.model=alfresco/model/smartfolder.xml
-        smart.folders.model.labels=alfresco/messages/smartfolder-model"
+imap.server.enabled=false
+alfresco.rmi.services.host=0.0.0.0
+smart.folders.enabled=true
+smart.folders.model=alfresco/model/smartfolder.xml
+smart.folders.model.labels=alfresco/messages/smartfolder-model"
 
 
         ##### Changement propriétaire d'$ALF_HOME
