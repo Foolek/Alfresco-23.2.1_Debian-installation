@@ -395,7 +395,7 @@
         ##### Configuration du fichier $CATALINA_HOME/conf/catalina.properties
 
         
-        sed -i "s/^shared.loader=/shared.loader=${catalina.base}\/shared\/classes,${catalina.base}\/shared\/lib\/*.jar/" $CATALINA_HOME/conf/catalina.properties
+        sed -i "s/^shared.loader=/shared.loader=\${catalina.base}\/shared\/classes,\${catalina.base}\/shared\/lib\/*.jar/" $CATALINA_HOME/conf/catalina.properties
 
         #modification alfresco.xml et share.xml
         sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
