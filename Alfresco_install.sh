@@ -428,8 +428,8 @@ if [ "$accordInstallation" = "y" ]
         sharexmlpattern="${catalina.base}/../modules/share/"
         sharexmlreplacement="${catalina.base}/modules/share/"
 
-        sed -i "s/$alfrescoxmlpattern/$alfrescoxmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
-        sed -i "s/$sharexmlpattern/$sharexùmreplacement" $CATALINA_HOME/conf/Catalina/localhost/share.xml
+        sed -i "s/^$alfrescoxmlpattern$/$alfrescoxmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
+        sed -i "s/^$sharexmlpattern$/$sharexùmreplacement" $CATALINA_HOME/conf/Catalina/localhost/share.xml
 
 
 
