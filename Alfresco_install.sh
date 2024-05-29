@@ -421,8 +421,15 @@ if [ "$accordInstallation" = "y" ]
         smart.folders.model.labels=alfresco/messages/smartfolder-model"
 
         #modification alfresco.xml et share.xml
-        sed -i "s/base=\"\${catalina.base}\/..\/modules\/platform\"/\${catalina.base}\/modules\/platform\"/" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
-        sed -i "s/base=\"\${catalina.base}\/..\/modules\/platform\"/\${catalina.base}\/modules\/share\"/" $CATALINA_HOME/conf/Catalina/localhost/share.xml
+
+        alfrescoxmlpattern="${catalina.base}/../modules/platform/"
+        alfrescoxmlreplacement="${catalina.base}/modules/platform/"
+
+        sharexmlpattern="${catalina.base}/../modules/share/"
+        sharexmlreplacement="${catalina.base}/modules/share/"
+
+        sed -i "s/$alfrescoxmlpattern/$alfrescoxmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
+        sed -i "s/$sharexmlpattern/$sharexùmreplacement" $CATALINA_HOME/conf/Catalina/localhost/share.xml
 
 
 
