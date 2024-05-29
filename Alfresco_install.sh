@@ -428,6 +428,8 @@
         sharexmlpattern="base=\${catalina.base}/../modules/share/"
         sharexmlreplacement="base=\${catalina.base}/modules/share/"
 
+        CATALINA_HOME=/opt/alfresco/tomcat
+
         sed -i "s/^$alfrescoxmlpattern$/$alfrescoxmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
         sed -i "s/^$sharexmlpattern$/$sharexùmreplacement" $CATALINA_HOME/conf/Catalina/localhost/share.xml
 
