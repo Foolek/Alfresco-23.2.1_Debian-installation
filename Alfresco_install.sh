@@ -138,9 +138,9 @@ if [ "$accordInstallation" = "y" ]
         
         if [ "$reponse" = "y" ]
             then
-              sudo apt-get install software-properties-common
-              sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main'
-              sudo apt update
+              sudo apt-get install software-properties-common -y
+              sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y
+              sudo apt update -y
               apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential  
               apt update -y && sudo apt upgrade -y
               apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y
@@ -355,7 +355,7 @@ if [ "$accordInstallation" = "y" ]
 
         echogreen "Nom de la base de donnée : $Alf_db"
         echogreen "Nom de son utilisateur : $Alf_db_user"
-        echogreen "Mot de passe utilisateur : $Alf_db_password"mariadb
+        echogreen "Mot de passe utilisateur : $Alf_db_password"
      
         mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
         mariadb -e "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
@@ -416,7 +416,7 @@ if [ "$accordInstallation" = "y" ]
         db.host=127.0.0.1
         db.pool.max=275
         db.driver=org.mariadb.jdbc.Driver
-        db.url=jdbc:mariadb://127.0.0.1 :3306/alfresco_db?useUnicode=yes&characterEncoding=UTF-8
+        db.url=jdbc:mariadb://127.0.0.1 :3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
 
         alfresco.context=alfresco
         alfresco.host=localhost
