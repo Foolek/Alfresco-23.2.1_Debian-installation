@@ -63,7 +63,7 @@ if [ "$accordInstallation" = "y" ]
         #----------------------------------------------------------------#
         #     Déclaration des variables d'environnement nécessaires      #
         #----------------------------------------------------------------#
-    
+        
         sudo rm /etc/profile.d/alfresco_env.sh
         sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
         
@@ -393,7 +393,8 @@ if [ "$accordInstallation" = "y" ]
         #------Alfresco/Tomcat------#
 
         ##### Configuration du fichier $CATALINA_HOME/conf/catalina.properties
-        sed -i "s/^shared.loader=.*/shared.loader=\${catalina.base}\/shared\/classes,\${catalina.base}\/shared\/lib\/*.jar/" /opt/alfresco/tomcat/conf/catalina.properties
+        sharedloaderpat="shared.loader=${catalina.base}/shared/classes,${catalina.base}/shared/lib/*.jar"
+        sed -i "s/^shared\.loader=/$sharedloaderpat/" $CATALINA_HOME/conf/catalina.properties
 
         #modification alfresco.xml et share.xml
         sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
