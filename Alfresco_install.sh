@@ -369,21 +369,37 @@ if [ "$accordInstallation" = "y" ]
         useradd $ALF_USER -s /bin/bash
 
         echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
+
+
+
+
+        #------------------------------------------------------------#
+        #      Modification/Ajout des fichiers de configuration      #
+        #------------------------------------------------------------#
+
+
+        #------MariaDB------#
         
-        
-        # Configuration DB max connections
-        max_co_mariadb="max_connections   =   275"
+        ##### Fichier /etc/mysql/mariadb.conf.d/50-server.cnf  -- Ajout max connections
+        max_co_mariadb="max_connections         =        275"
         sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
+        sudo systemctl restart mariadb-server 
 
 
-        # Changement propriétaire d'$ALF_HOME
-        chown $ALF_USER:$ALF_USER $ALF_HOME -R 
-        usermod $ALF_USER -m -d /opt/alfresco
 
+        #------Alfresco/Tomcat------#
 
-        # Configuration du fichier $CATALINA_HOME/conf/catalina.properties
+        ##### Configuration du fichier $CATALINA_HOME/conf/catalina.properties
         sed -i "s/^shared.loader=.*/shared.loader=\${catalina.base}\/shared\/classes,\${catalina.base}\/shared\/lib\/*.jar/" /opt/alfresco/tomcat/conf/catalina.properties
+
+        #modification alfresco.xml et share.xml
+        sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
+        sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/share.xml  
         
+
+        # Configuration du fichier $CATALINA_HOME/bin/catalina.sh - ajout d'options de lancement JVM
+        JAVA_TOOL_OPTIONS_STRING="export JAVA_TOOL_OPTIONS=\"-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/opt/alfresco/tomcat/data/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede\""
+        sed -i "299i $JAVA_TOOL_OPTIONS_STRING" $CATALINA_HOME/bin/catalina.sh
 
         # Création du fichier alfresco.global.properties
         echo >> $CATALINA_HOME/shared/classes/alfresco.global.properties "
@@ -420,16 +436,10 @@ if [ "$accordInstallation" = "y" ]
         smart.folders.model=alfresco/model/smartfolder.xml
         smart.folders.model.labels=alfresco/messages/smartfolder-model"
 
-        modification alfresco.xml et share.xml
 
-        sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
-        sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/share.xml  
-
-
-        JAVA_TOOL_OPTIONS_STRING="export JAVA_TOOL_OPTIONS=\"-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/opt/alfresco/tomcat/data/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede\""
-        sed -i "299i $JAVA_TOOL_OPTIONS_STRING" $CATALINA_HOME/bin/catalina.sh
-     
-         
+        ##### Changement propriétaire d'$ALF_HOME
+        chown $ALF_USER:$ALF_USER $ALF_HOME -R 
+        usermod $ALF_USER -m -d /opt/alfresco
 else 
     echo "opération annulée"
     exit
