@@ -428,9 +428,9 @@
         sharexmlpattern="base=\${catalina.base}/../modules/share/"
         sharexmlreplacement="base=\${catalina.base}/modules/share/"
 
-        CATALINA_HOME=/opt/alfresco/tomcat
+        CATALINA_HOME=/opt/alfresco/tomcat 
 
-grep $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml -w "$alfrescoxmlpattern" | sed -i "s/$alfrescoxmlpattern/$alfrescoxmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
+grep -w "$alfrescoxmlpattern" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml | sed -i "s/^$alfrescoxmlpattern$/$alfrescoxmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
 # sed -i "s/$sharexmlpattern/$sharexmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/share.xml
 
 
