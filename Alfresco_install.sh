@@ -422,16 +422,16 @@
 
         #modification alfresco.xml et share.xml
 
-        alfrescoxmlpattern="base=\${catalina.base}/../modules/platform/"
-        alfrescoxmlreplacement="base=\${catalina.base}/modules/platform/"
+        alfrescoxmlpattern="<PostResources base=\"${catalina.base}/../modules/platform\""
+        alfrescoxmlreplacement="<PostResources base=\"${catalina.base}/modules/platform\""
 
-        sharexmlpattern="base=\${catalina.base}/../modules/share/"
-        sharexmlreplacement="base=\${catalina.base}/modules/share/"
+        sharexmlpattern="<PostResources base=\"${catalina.base}/../modules/share\""
+        sharexmlreplacement="<PostResources base=\"${catalina.base}/modules/share\""
 
         CATALINA_HOME=/opt/alfresco/tomcat 
 
-grep -w "$alfrescoxmlpattern" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml | sed -i "s/^$alfrescoxmlpattern$/$alfrescoxmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
-# sed -i "s/$sharexmlpattern/$sharexmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/share.xml
+        sed -i "s/^$alfrescoxmlpattern$/$alfrescoxmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
+        sed -i "s/$sharexmlpattern/$sharexmlreplacement" $CATALINA_HOME/conf/Catalina/localhost/share.xml 
 
 
         # JAVA_TOOL_OPTIONS_STRING="export JAVA_TOOL_OPTIONS=\"-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/opt/alfresco/tomcat/data/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede\""
