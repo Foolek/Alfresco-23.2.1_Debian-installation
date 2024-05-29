@@ -435,7 +435,7 @@
 
 
         JAVA_TOOL_OPTIONS_STRING="export JAVA_TOOL_OPTIONS=\"-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/opt/alfresco/tomcat/data/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede\""
-        sed -i "299i $JAVA_TOOL_OPTIONS_STRING" $CATALINA_HOME/bin/catalina.sh
+        sed -i "299i $JAVA_TOOL_OPTIONS_STRING" $CATALINA_HOME/bin/catalina.sh  
         
 # else
 #     echo "opération annulée"
