@@ -54,6 +54,32 @@ echoblue   "Voulez-vous continuer et lancer l'installation ? Y/N : "
 read accordInstallation
 echo
 
+
+
+
+
+#------------------------------------------#
+#     Création des fonctions utilisées     #
+#------------------------------------------#
+
+
+# Fonction pour trouver le numéro de ligne contenant un texte recherché
+find_line_number() {
+    local file="$1"
+    local search_text="$2"
+        
+    # Utiliser grep et cut pour obtenir les numéros de ligne
+    grep -n "$search_text" "$file" | cut -d: -f1
+}
+
+
+find_file() {
+    local file="$1"
+    local folder="$2"
+
+    find "$folder" -name "$file" 
+}
+
 if [ "$accordInstallation" = "y" ]
 
 then
@@ -62,6 +88,7 @@ then
     #----------------------------------------------------------------#
     
     sudo rm /etc/profile.d/alfresco_env.sh
+
     sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
 
         # Java variables
@@ -85,13 +112,12 @@ then
 
         # Solr variables
     export SOLR_HOME=$ALF_SEARCH/solrhome"
-    
+
+    # Actualisation des variables d'environnement
     source /etc/profile.d/alfresco_env.sh
     
     
-    
-    
-    
+
     #----------------------------------------------------------------#
     #      Déclaration des variables nécessaires  pour le script     #
     #----------------------------------------------------------------#
@@ -121,38 +147,31 @@ then
     #####  Solr variables  #####
     SOLR_HOME=$ALF_SEARCH/solrhome
     
-    # Création utilisateur Alfresco
-    ALF_USER="alfresco"
-    ALF_GROUP="alfresco"
-    ALF_USER_PASS="alfresco"
+    
 
     #---------------------------------------------#
     #      Création de l'utilisateur Alfresco     #
     #---------------------------------------------#
     
-    userdel $ALF_USER
-    groupdel $ALF_GROUP
-    useradd $ALF_USER -s /bin/bash
+    ALF_USER="alfresco"
+    ALF_GROUP="alfresco"
+    ALF_USER_PASS="alfresco"
+
+    alfresco_found=$(find_line_number alfresco /etc/passwd)
     
-    echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
-    
-    
-    
-    # Fonction pour trouver le numéro de ligne contenant un texte recherché
-    find_line_number() {
-        local file="$1"
-        local search_text="$2"
+    if [ "$alfresco_found" -eq "$ALF_USER"]
+        then
+            echored "L'utilisateur Alfresco a été trouvé et supprimé pour être recréé."
+            # Suppression de l'utilisateur alfresco
+            groupdel $ALF_GROUP
+            userdel $ALF_USER
         
-        # Utiliser grep et cut pour obtenir les numéros de ligne
-        grep -n "$search_text" "$file" | cut -d: -f1
-    }
+    fi
     
-    # Appel de la fonction avec les arguments fournis
-    ## find_line_number "alfresco.sh" "# Color variables"
-    
-    
-    
-    
+    # Création utilisateur Alfresco avec mot de passe
+    useradd $ALF_USER -s /bin/bash
+    echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
+        
     
     #-----------------------------------------------------------------#
     #      Installation et téléchargement des paquets nécessaires     #
