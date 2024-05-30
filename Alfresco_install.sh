@@ -311,7 +311,7 @@ if [ "$accordInstallation" = "y" ]
         # Afficher la valeur de la variable genkeypass
         echo "Mot de passe généré : $genkeypass"
 
-        
+
         echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
         read reponse
         while [ "$reponse" != "Y" || "$reponse" != "y" || "$reponse" != "N" || "$reponse" != "n" || -lt ${#charlen} ]
@@ -322,8 +322,8 @@ if [ "$accordInstallation" = "y" ]
             if [ "$reponse" -eq "Y" || "$reponse" -eq "y" ]
                 then
                     echo
-                        echored "Votre mot de passe est trop court"
-            else
+                        genkeypass=$(generate_password)
+            else if [ "$reponse" -eq "N" || "$reponse" -eq "n" ]
                 keypassverif=$keypass
                 keypass=""
                 echo
