@@ -448,8 +448,7 @@ smart.folders.model.labels=alfresco/messages/smartfolder-model"
 #Script de lancement
 echo >> startserver.sh "#!/bin/bash
 activemq start
-tomcat start
-"
+tomcat start"
 
   
       ##### Changement propriétaire d'$ALF_HOME
