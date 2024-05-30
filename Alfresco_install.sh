@@ -286,10 +286,10 @@ if [ "$accordInstallation" = "y" ]
         read reponse
         while [ "$reponse" != "Y" || "$reponse" != "y" || "$reponse" != "N" || "$reponse" != "n" || -lt ${#charlen} ]
           do
-            echored "Veuillez répondre par Y(es) ou par N(o) : 
-            read -s -p "Veuillez répondre par Y(es) ou par N(o) : " keypass
+            echored "Veuillez répondre par Y(es) ou par N(o) : "
+            read reponse
           
-            if [ ${#keypass} -lt ${#charlen} ]
+            if [ "$reponse" -eq "Y" || "$reponse" -eq "y" ]
                 then
                     echo
                         echored "Votre mot de passe est trop court"
