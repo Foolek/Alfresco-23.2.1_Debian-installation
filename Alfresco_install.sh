@@ -281,11 +281,14 @@ if [ "$accordInstallation" = "y" ]
         #      Génération des clés SSL      #
         #-----------------------------------#
 
+
+        echogreen "Voulez-vous générer un mot de passe aléatoire ? Y/n :"
+        read reponse
+
         
         # Fonction génerer un mot de passe aléatoire
         generate_password(){
         # Définir la longueur minimale et maximale du mot de passe
-        PASSWORD=$1
         MIN_LENGTH=6
         MAX_LENGTH=15
 
@@ -301,11 +304,17 @@ if [ "$accordInstallation" = "y" ]
             PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1)}"
         done
 
-        # Afficher le mot de passe généré
-        echo "Mot de passe généré : $PASSWORD"
+        # Renvoie la valeur de la variable PASSWORD en tant que sortie de la fonction
+        echo $PASSWORD
         }
-        
-        genkeypass=""
+
+        # Définir la variable genkeypass en utilisant la fonction generate_password
+        genkeypass=$(generate_password)
+
+        # Afficher la valeur de la variable genkeypass
+        echo "Mot de passe généré : $genkeypass"
+
+
         gentrustpass=""
 
         
