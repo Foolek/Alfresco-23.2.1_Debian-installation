@@ -331,6 +331,8 @@ if [ "$accordInstallation" = "y" ]
                     echo
                         genkeypass=$(generate_password)
                         gentrustpass=$(generate_password)
+                        cd $ALF_HOME/ssl-tool
+                        bash run.sh -keystorepass $genkeypass -truststorepass $gentrustpass
             
             else if [ "$reponse" -eq "N" || "$reponse" -eq "n" ]
                 
@@ -383,10 +385,12 @@ if [ "$accordInstallation" = "y" ]
                             fi
                     fi
                 done
+                cd $ALF_HOME/ssl-tool
+                bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
             fi
         done
 
-        echo 
+        echo "keystore = $genkeypass et truststore= $gentrustpass "  
         
 
         
