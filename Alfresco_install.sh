@@ -305,7 +305,6 @@ if [ "$accordInstallation" = "y" ]
         echo $PASSWORD
         }
 
-
         #pattern minimum
         charlen="psswrd"
         
