@@ -386,7 +386,7 @@ if [ "$accordInstallation" = "y" ]
             fi
         done
 
-        echo "keystore = $genkeypass et truststore= $gentrustpass "  
+        echored "keystore = $genkeypass et truststore= $gentrustpass "  
         
 
         
