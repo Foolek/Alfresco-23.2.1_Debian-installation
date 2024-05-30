@@ -39,10 +39,10 @@ echogreen () {
 
 
 
-echo
-echogreen "-----------------------------------------------------"
-echoblue   "Bienvenue sur l'installeur d'Alfresco par Adil BOUZIT"
-echogreen  "-----------------------------------------------------"
+
+echogreen "-----------------------------------------------------
+Bienvenue sur l'installeur d'Alfresco par S-Zilean
+-----------------------------------------------------"
 echo
 echoblue   "Ce script utilise le paquet "sudo" veuillez installer le paquet pour éviter les erreurs."
 echored    "L'installation via ce script requiert des privilèges administrateurs "
@@ -67,7 +67,7 @@ echo
 find_line_number() {
     local file="$1"
     local search_text="$2"
-        
+    
     # Utiliser grep et cut pour obtenir les numéros de ligne
     grep -n "$search_text" "$file" | cut -d: -f1
 }
@@ -76,8 +76,8 @@ find_line_number() {
 find_file() {
     local file="$1"
     local folder="$2"
-
-    find "$folder" -name "$file" 
+    
+    find "$folder" -name "$file"
 }
 
 if [ "$accordInstallation" = "y" ]
@@ -88,7 +88,7 @@ then
     #----------------------------------------------------------------#
     
     sudo rm /etc/profile.d/alfresco_env.sh
-
+    
     sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
 
         # Java variables
@@ -112,12 +112,12 @@ then
 
         # Solr variables
     export SOLR_HOME=$ALF_SEARCH/solrhome"
-
+    
     # Actualisation des variables d'environnement
     source /etc/profile.d/alfresco_env.sh
     
     
-
+    
     #----------------------------------------------------------------#
     #      Déclaration des variables nécessaires  pour le script     #
     #----------------------------------------------------------------#
@@ -148,7 +148,7 @@ then
     SOLR_HOME=$ALF_SEARCH/solrhome
     
     
-
+    
     #---------------------------------------------#
     #      Création de l'utilisateur Alfresco     #
     #---------------------------------------------#
@@ -156,43 +156,70 @@ then
     ALF_USER="alfresco"
     ALF_GROUP="alfresco"
     ALF_USER_PASS="alfresco"
-
+    
     alfresco_found=$(find_line_number alfresco /etc/passwd)
     
     if [ "$alfresco_found" -eq "$ALF_USER"]
-        then
-            echored "L'utilisateur Alfresco a été trouvé et supprimé pour être recréé."
-            # Suppression de l'utilisateur alfresco
-            groupdel $ALF_GROUP
-            userdel $ALF_USER
-        
+    then
+        echored "L'utilisateur Alfresco a été trouvé et supprimé pour être recréé."
+        # Suppression de l'utilisateur alfresco
+        groupdel $ALF_GROUP
+        userdel $ALF_USER
     fi
     
     # Création utilisateur Alfresco avec mot de passe
     useradd $ALF_USER -s /bin/bash
     echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
-        
+    
+    
     
     #-----------------------------------------------------------------#
     #      Installation et téléchargement des paquets nécessaires     #
     #-----------------------------------------------------------------#
+
     
-    echoblue "les paquets suivants vont être installés : git, curl, mariadb-server, openjdk-17-jdk-headless nginx ainsi que les répertoires d'Alfresco, ActiveMQ, Apache Tomcat etc.."
-    echoblue "Voulez-vous les installer ? Y/N : "
-    read reponse
+    # Disclaimer
+    echored "PLEASE READ CAREFULLY!
+    This script contains lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
+    echogreen "The following packages will be installed :\n
+        *git
+        *curl
+        *mariadb-server
+        *openjdk-17-jdk-headless
+        *nginx
+        alfresco and its dependencies will be installed in /opt/alfresco
+    A brief summary file will be created at the end of the script."
+
+
+    # Asking for installation
+    echoblue "Wish you continue the installation ?"
+    read answer
     
-    if [ "$reponse" = "y" ]
-    then
-        sudo apt-get install software-properties-common -y
-        sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y
-        sudo apt update -y
-        apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential
-        apt update -y && sudo apt upgrade -y
-        apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y
-    else
-        echo "Annulation de l'installation"
-        rm /etc/profile.d/alfresco_env.sh
-    fi
+    answeryes = "y"
+    
+    while [ "$answer" -ne "y" || -ne "n"]
+    do
+        echo "pelase answer by "y" (yes) or "n" (no) :"
+        if [ "$answer" -eq "$answeryes" ]
+        then
+            # Installation
+            sudo apt-get install software-properties-common -y
+            sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y
+            sudo apt update -y
+            apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential
+            apt update -y && sudo apt upgrade -y
+            apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y
+            if [ "$answer" -n   ]
+            echo "Annulation de l'installation"
+            rm /etc/profile.d/alfresco_env.sh
+        if [ "$answer" -eq "n" ]
+        then
+            # Exit installation 
+            exit
+        else
+        fi
+    done
+    
     
     
     #  Variables des liens de téléchargements et noms des répertoires zip
