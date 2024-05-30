@@ -134,6 +134,18 @@ if [ "$accordInstallation" = "y" ]
         echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
         
                 
+
+        # Fonction pour trouver le numéro de ligne contenant un texte recherché
+        find_line_number() {
+            local file="$1"
+            local search_text="$2"
+
+            # Utiliser grep et cut pour obtenir les numéros de ligne
+            grep -n "$search_text" "$file" | cut -d: -f1
+        }
+
+        # Appel de la fonction avec les arguments fournis
+        find_line_number "alfresco.sh" "# Color variables"
         
         
                 
@@ -393,8 +405,6 @@ if [ "$accordInstallation" = "y" ]
         #------Alfresco/Tomcat------#
 
         ##### Configuration du fichier $CATALINA_HOME/conf/catalina.properties
-
-        
         sed -i "s/^shared.loader=/shared.loader=\${catalina.base}\/shared\/classes,\${catalina.base}\/shared\/lib\/*.jar/" $CATALINA_HOME/conf/catalina.properties
 
         #modification alfresco.xml et share.xml
