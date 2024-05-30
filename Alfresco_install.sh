@@ -334,7 +334,7 @@ if [ "$accordInstallation" = "y" ]
                         cd $ALF_HOME/ssl-tool
                         bash run.sh -keystorepass $genkeypass -truststorepass $gentrustpass
             elif [ "$reponse" -eq "N" || "$reponse" -eq "n" ]
-                
+                then
                 # Saisie de mot de passe du KESYTORE     
                   echogreen "----------KEYSTORE----------" 
                 while [ ${#keypass} -lt ${#charlen} ]
