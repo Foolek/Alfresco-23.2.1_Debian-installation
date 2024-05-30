@@ -331,6 +331,8 @@ if [ "$accordInstallation" = "y" ]
             
             else if [ "$reponse" -eq "N" || "$reponse" -eq "n" ]
                 
+                # Saisie de mot de passe du KESYTORE     
+
                   echogreen "----------KEYSTORE----------" 
                 while [ ${#keypass} -lt ${#charlen} ]
                   do
@@ -383,7 +385,7 @@ if [ "$accordInstallation" = "y" ]
         
 
         
-        # Saisie de mot de passe du KESYTORE     
+        
          
         
         
