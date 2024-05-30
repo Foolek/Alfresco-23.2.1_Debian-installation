@@ -411,6 +411,7 @@ if [ "$accordInstallation" = "y" ]
 dir.root=$CATALINA_HOME/data
 dir.keystore=$CATALINA_HOME/data/keystore
 
+# MariaDB setup
 db.name=$Alf_db
 db.username=$Alf_db_user
 db.password=$Alf_db_user_password
@@ -424,6 +425,9 @@ alfresco.context=alfresco
 alfresco.host=localhost
 alfresco.port=8080
 alfresco.protocol=http
+
+#ActiveMQ setup
+messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
 
 share.context=share
 share.host=localhost
