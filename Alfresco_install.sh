@@ -145,7 +145,7 @@ if [ "$accordInstallation" = "y" ]
         }
 
         # Appel de la fonction avec les arguments fournis
-        find_line_number "alfresco.sh" "# Color variables"
+        ## find_line_number "alfresco.sh" "# Color variables"
         
         
                 
