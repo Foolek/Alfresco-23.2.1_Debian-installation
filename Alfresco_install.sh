@@ -441,8 +441,6 @@ smart.folders.model=alfresco/model/smartfolder.xml
 smart.folders.model.labels=alfresco/messages/smartfolder-model"
 
 
-
-
         ##### Changement propriétaire d'$ALF_HOME
         chown $ALF_USER:$ALF_USER $ALF_HOME -R 
         usermod $ALF_USER -m -d /opt/alfresco
