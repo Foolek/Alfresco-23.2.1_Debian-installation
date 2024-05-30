@@ -440,15 +440,14 @@ smart.folders.enabled=true
 smart.folders.model=alfresco/model/smartfolder.xml
 smart.folders.model.labels=alfresco/messages/smartfolder-model"
   
-
-        ##### Changement propriétaire d'$ALF_HOME
+##### Changement propriétaire d'$ALF_HOME
         chown $ALF_USER:$ALF_USER $ALF_HOME -R 
         usermod $ALF_USER -m -d /opt/alfresco
 
         echogreen "Nom d'utilisateur : alfresco"
         echogreen "Mot de passe : alfresco"
-        echogreen "Pour vous connecter lancez la commande : su alfresco "
-        echogreen "INSTALLATION TERMINÉE"
+        echogreen "Pour vous connecter lancez la commande : su alfresco"
+        echogreen "INSTALLATION TERMINÉE"        
 
 else 
     echo "opération annulée"
