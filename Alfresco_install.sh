@@ -305,12 +305,18 @@ if [ "$accordInstallation" = "y" ]
         echo $PASSWORD
         }
 
-        # Définir la variable genkeypass en utilisant la fonction generate_password
-        genkeypass=$(generate_password)
 
-        # Afficher la valeur de la variable genkeypass
-        echo "Mot de passe généré : $genkeypass"
-
+        #pattern minimum
+        charlen="psswrd"
+        
+        #mdp keystore/truststopre
+        keypass=""
+        trustpass=""
+        
+        #verification mdp
+        keypassverif=
+        trustpassverif=
+        
 
         echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
         read reponse
@@ -323,88 +329,64 @@ if [ "$accordInstallation" = "y" ]
                 then
                     echo
                         genkeypass=$(generate_password)
+            
             else if [ "$reponse" -eq "N" || "$reponse" -eq "n" ]
-                keypassverif=$keypass
-                keypass=""
-                echo
-                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-                    if [ "$keypass" = "$keypassverif" ]
-                    then echogreen "Le mot de passe correspond !"
-                    
-                    else echored "Le mot de passe ne correspond pas.."
-                         keypass=""               
+                
+                  echogreen "----------KEYSTORE----------" 
+                while [ ${#keypass} -lt ${#charlen} ]
+                  do
+                    read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
+                  
+                    if [ ${#keypass} -lt ${#charlen} ]
+                        then
+                            echo
+                                echored "Votre mot de passe est trop court"
+                    else
+                        keypassverif=$keypass
+                        keypass=""
+                        echo
+                        read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
+                            if [ "$keypass" = "$keypassverif" ]
+                            then echogreen "Le mot de passe correspond !"
+                            
+                            else echored "Le mot de passe ne correspond pas.."
+                                keypass=""               
+                            fi
                     fi
+                done
+                
+                # Saisie de mot de passe du TRUSTSTORE
+                
+                echogreen "----------TRUSTSTORE----------"
+                while [ ${#trustpass} -lt ${#charlen} ]
+                  do
+                    read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
+                  
+                    if [ ${#trustpass} -lt ${#charlen} ]
+                        then
+                            echo
+                                echored "Votre mot de passe est trop court"
+                    else
+                        trustpassverif=$trustpass
+                        trustpass=""
+                        echo
+                        read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
+                            if [ "$trustpass" = "$trustpassverif" ]
+                            then echogreen "Le mot de passe correspond !"
+                            
+                            else echored "Le mot de passe ne correspond pas.."
+                                trustpass=""               
+                            fi
+                    fi
+                done
             fi
         done
-
-        
         
 
-
-        gentrustpass=""
-
-        
-        #pattern minimum
-        charlen="psswrd"
-        
-        #mdp keystore/truststopre
-        keypass=""
-        trustpass=""
-        
-        #verification mdp
-        keypassverif=
-        trustpassverif=
-        
         
         # Saisie de mot de passe du KESYTORE     
          
-        echogreen "----------KEYSTORE----------" 
-        while [ ${#keypass} -lt ${#charlen} ]
-          do
-            read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
-          
-            if [ ${#keypass} -lt ${#charlen} ]
-                then
-                    echo
-                        echored "Votre mot de passe est trop court"
-            else
-                keypassverif=$keypass
-                keypass=""
-                echo
-                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-                    if [ "$keypass" = "$keypassverif" ]
-                    then echogreen "Le mot de passe correspond !"
-                    
-                    else echored "Le mot de passe ne correspond pas.."
-                         keypass=""               
-                    fi
-            fi
-        done
         
-        # Saisie de mot de passe du TRUSTSTORE
-        
-        echogreen "----------TRUSTSTORE----------"
-        while [ ${#trustpass} -lt ${#charlen} ]
-          do
-            read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
-          
-            if [ ${#trustpass} -lt ${#charlen} ]
-                then
-                    echo
-                        echored "Votre mot de passe est trop court"
-            else
-                trustpassverif=$trustpass
-                trustpass=""
-                echo
-                read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
-                    if [ "$trustpass" = "$trustpassverif" ]
-                    then echogreen "Le mot de passe correspond !"
-                    
-                    else echored "Le mot de passe ne correspond pas.."
-                         trustpass=""               
-                    fi
-            fi
-        done
         
         
         # Lancement du script de génération des clés SSL 
