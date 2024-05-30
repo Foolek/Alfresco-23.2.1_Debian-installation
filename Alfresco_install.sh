@@ -281,11 +281,11 @@ if [ "$accordInstallation" = "y" ]
         #      Génération des clés SSL      #
         #-----------------------------------#
 
-
-
+        
         # Fonction génerer un mot de passe aléatoire
         generate_password(){
         # Définir la longueur minimale et maximale du mot de passe
+        PASSWORD=$1
         MIN_LENGTH=6
         MAX_LENGTH=15
 
@@ -301,10 +301,12 @@ if [ "$accordInstallation" = "y" ]
             PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1)}"
         done
 
-        # Renvoie la valeur de la variable PASSWORD en tant que sortie de la fonction
-        echo $PASSWORD
+        # Afficher le mot de passe généré
+        echo "Mot de passe généré : $PASSWORD"
         }
+        
 
+        
         #pattern minimum
         charlen="psswrd"
         
@@ -315,84 +317,57 @@ if [ "$accordInstallation" = "y" ]
         #verification mdp
         keypassverif=
         trustpassverif=
-
-        genkeypass=""
-        gentrustpass=""
-
-        echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
-        read reponse
-        while [ "$reponse" != "Y" || "$reponse" != "y" || "$reponse" != "N" || "$reponse" != "n" || -lt ${#charlen} ]
+        
+        
+        # Saisie de mot de passe du KESYTORE     
+         
+        echogreen "----------KEYSTORE----------" 
+        while [ ${#keypass} -lt ${#charlen} ]
           do
-            echored "Veuillez répondre par Y(es) ou par N(o) : "
-            read reponse
+            read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
           
-            if [ "$reponse" -eq "Y" || "$reponse" -eq "y" ]
+            if [ ${#keypass} -lt ${#charlen} ]
                 then
                     echo
-                        genkeypass=$(generate_password)
-                        gentrustpass=$(generate_password)
-                        cd $ALF_HOME/ssl-tool
-                        bash run.sh -keystorepass $genkeypass -truststorepass $gentrustpass
-            elif [ "$reponse" -eq "N" || "$reponse" -eq "n" ]
-                then
-                    # Saisie de mot de passe du KESYTORE     
-                      echogreen "----------KEYSTORE----------" 
-                    while [ ${#keypass} -lt ${#charlen} ]
-                      do
-                        read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
-                      
-                        if [ ${#keypass} -lt ${#charlen} ]
-                            then
-                                echo
-                                    echored "Votre mot de passe est trop court"
-                        else
-                            keypassverif=$keypass
-                            keypass=""
-                            echo
-                            read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-                                if [ "$keypass" = "$keypassverif" ]
-                                then echogreen "Le mot de passe correspond !"
-                                
-                                else echored "Le mot de passe ne correspond pas.."
-                                    keypass=""               
-                                fi
-                        fi
-                    done
-                    # Saisie de mot de passe du TRUSTSTORE                
-                    echogreen "----------TRUSTSTORE----------"
-                    while [ ${#trustpass} -lt ${#charlen} ]
-                      do
-                        read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
-                      
-                        if [ ${#trustpass} -lt ${#charlen} ]
-                            then
-                                echo
-                                    echored "Votre mot de passe est trop court"
-                        else
-                            trustpassverif=$trustpass
-                            trustpass=""
-                            echo
-                            read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
-                                if [ "$trustpass" = "$trustpassverif" ]
-                                then echogreen "Le mot de passe correspond !"
-                                
-                                else echored "Le mot de passe ne correspond pas.."
-                                    trustpass=""               
-                                fi
-                        fi
-                    done
-                    cd $ALF_HOME/ssl-tool
-                    bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
+                        echored "Votre mot de passe est trop court"
+            else
+                keypassverif=$keypass
+                keypass=""
+                echo
+                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
+                    if [ "$keypass" = "$keypassverif" ]
+                    then echogreen "Le mot de passe correspond !"
+                    
+                    else echored "Le mot de passe ne correspond pas.."
+                         keypass=""               
+                    fi
             fi
         done
-
-        echored "keystore = $genkeypass et truststore= $gentrustpass "  
         
-
+        # Saisie de mot de passe du TRUSTSTORE
         
-        
-         
-        
+        echogreen "----------TRUSTSTORE----------"
+        while [ ${#trustpass} -lt ${#charlen} ]
+          do
+            read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
+          
+            if [ ${#trustpass} -lt ${#charlen} ]
+                then
+                    echo
+                        echored "Votre mot de passe est trop court"
+            else
+                trustpassverif=$trustpass
+                trustpass=""
+                echo
+                read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
+                    if [ "$trustpass" = "$trustpassverif" ]
+                    then echogreen "Le mot de passe correspond !"
+                    
+                    else echored "Le mot de passe ne correspond pas.."
+                         trustpass=""               
+                    fi
+            fi
+        done
         
         
         # Lancement du script de génération des clés SSL 
