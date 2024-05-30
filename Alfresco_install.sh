@@ -315,7 +315,9 @@ if [ "$accordInstallation" = "y" ]
         #verification mdp
         keypassverif=
         trustpassverif=
-        
+
+        genkeypass=""
+        gentrustpass=""
 
         echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
         read reponse
@@ -328,6 +330,7 @@ if [ "$accordInstallation" = "y" ]
                 then
                     echo
                         genkeypass=$(generate_password)
+                        gentrustpass=$(generate_password)
             
             else if [ "$reponse" -eq "N" || "$reponse" -eq "n" ]
                 
@@ -382,6 +385,8 @@ if [ "$accordInstallation" = "y" ]
                 done
             fi
         done
+
+        echo 
         
 
         
