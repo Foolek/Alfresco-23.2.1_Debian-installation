@@ -58,9 +58,6 @@ if [ "$accordInstallation" = "y" ]
     then
         
                 
-        
-        
-                
         #----------------------------------------------------------------#
         #     Déclaration des variables d'environnement nécessaires      #
         #----------------------------------------------------------------#
