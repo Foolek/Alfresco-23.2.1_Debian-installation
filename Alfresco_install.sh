@@ -44,7 +44,8 @@ echogreen "-----------------------------------------------------"
 echoblue   "Bienvenue sur l'installeur d'Alfresco par Adil BOUZIT"
 echogreen  "-----------------------------------------------------"
 echo
-echoblue   "L'installation via ce script requiert des privilèges administrateurs"
+echoblue   "Ce script utilise le paquet "sudo" veuillez installer le paquet pour éviter les erreurs."
+echored    "L'installation via ce script requiert des privilèges administrateurs "
 echoblue   "Tous les paquets seront installés dans /opt/. , des liens symboliques seront créés dans /usr/local/bin"
 echo
 echored    "-----------------------------------------------------"
