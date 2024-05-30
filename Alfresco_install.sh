@@ -151,6 +151,7 @@ if [ "$accordInstallation" = "y" ]
         # Fonction génerer un mot de passe aléatoire
         generate_password(){
         # Définir la longueur minimale et maximale du mot de passe
+        PASSWORD=$1
         MIN_LENGTH=6
         MAX_LENGTH=15
 
