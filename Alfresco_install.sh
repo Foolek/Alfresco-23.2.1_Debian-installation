@@ -146,6 +146,31 @@ if [ "$accordInstallation" = "y" ]
 
         # Appel de la fonction avec les arguments fournis
         ## find_line_number "alfresco.sh" "# Color variables"
+
+
+        # Fonction génerer un mot de passe aléatoire
+        generate_password(){
+        # Définir la longueur minimale et maximale du mot de passe
+        MIN_LENGTH=6
+        MAX_LENGTH=15
+
+        # Définir les caractères autorisés dans le mot de passe
+        CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+        # Générer une longueur aléatoire pour le mot de passe
+        LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
+
+        # Générer le mot de passe en utilisant une boucle
+        PASSWORD=""
+        for (( i = 0; i < $LENGTH; i++ )); do
+            PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1)}"
+        done
+
+        # Afficher le mot de passe généré
+        echo "Mot de passe généré : $PASSWORD"
+        }
+        
+
         
         
                 
