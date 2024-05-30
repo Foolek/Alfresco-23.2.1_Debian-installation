@@ -282,32 +282,7 @@ if [ "$accordInstallation" = "y" ]
         #-----------------------------------#
 
 
-        echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
-        read reponse
-        while [ "$reponse" != "Y" || "$reponse" != "y" || "$reponse" != "N" || "$reponse" != "n" || -lt ${#charlen} ]
-          do
-            echored "Veuillez répondre par Y(es) ou par N(o) : "
-            read reponse
-          
-            if [ "$reponse" -eq "Y" || "$reponse" -eq "y" ]
-                then
-                    echo
-                        echored "Votre mot de passe est trop court"
-            else
-                keypassverif=$keypass
-                keypass=""
-                echo
-                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-                    if [ "$keypass" = "$keypassverif" ]
-                    then echogreen "Le mot de passe correspond !"
-                    
-                    else echored "Le mot de passe ne correspond pas.."
-                         keypass=""               
-                    fi
-            fi
-        done
 
-        
         # Fonction génerer un mot de passe aléatoire
         generate_password(){
         # Définir la longueur minimale et maximale du mot de passe
@@ -335,6 +310,35 @@ if [ "$accordInstallation" = "y" ]
 
         # Afficher la valeur de la variable genkeypass
         echo "Mot de passe généré : $genkeypass"
+
+        
+        echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
+        read reponse
+        while [ "$reponse" != "Y" || "$reponse" != "y" || "$reponse" != "N" || "$reponse" != "n" || -lt ${#charlen} ]
+          do
+            echored "Veuillez répondre par Y(es) ou par N(o) : "
+            read reponse
+          
+            if [ "$reponse" -eq "Y" || "$reponse" -eq "y" ]
+                then
+                    echo
+                        echored "Votre mot de passe est trop court"
+            else
+                keypassverif=$keypass
+                keypass=""
+                echo
+                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
+                    if [ "$keypass" = "$keypassverif" ]
+                    then echogreen "Le mot de passe correspond !"
+                    
+                    else echored "Le mot de passe ne correspond pas.."
+                         keypass=""               
+                    fi
+            fi
+        done
+
+        
+        
 
 
         gentrustpass=""
