@@ -123,6 +123,17 @@ if [ "$accordInstallation" = "y" ]
         
         #####  Solr variables  #####
         SOLR_HOME=$ALF_SEARCH/solrhome
+
+        # Création utilisateur Alfresco
+        ALF_USER="alfresco"
+        ALF_GROUP="alfresco"
+        ALF_USER_PASS="alfresco"
+
+        userdel $ALF_USER
+        groupdel $ALF_GROUP
+        useradd $ALF_USER -s /bin/bash
+
+        echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
         
                 
         
@@ -362,16 +373,7 @@ if [ "$accordInstallation" = "y" ]
         mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
         mariadb -e "FLUSH PRIVILEGES;"
         
-        # Création utilisateur Alfresco
-        ALF_USER="alfresco"
-        ALF_GROUP="alfresco"
-        ALF_USER_PASS="alfresco"
-
-        userdel $ALF_USER
-        groupdel $ALF_GROUP
-        useradd $ALF_USER -s /bin/bash
-
-        echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
+        
 
 
 
@@ -439,11 +441,15 @@ alfresco.rmi.services.host=0.0.0.0
 smart.folders.enabled=true
 smart.folders.model=alfresco/model/smartfolder.xml
 smart.folders.model.labels=alfresco/messages/smartfolder-model"
-
+  
 
         ##### Changement propriétaire d'$ALF_HOME
         chown $ALF_USER:$ALF_USER $ALF_HOME -R 
         usermod $ALF_USER -m -d /opt/alfresco
+
+        echogreen "Nom d'utilisateur : alfresco"
+        echogreen "Mot de passe : alfresco"
+        echogreen "Pour vous connecter faites lancer "su alfresco""
 else 
     echo "opération annulée"
     exit
