@@ -448,6 +448,7 @@ smart.folders.model.labels=alfresco/messages/smartfolder-model"
         echogreen "Nom d'utilisateur : alfresco"
         echogreen "Mot de passe : alfresco"
         echogreen "Pour vous connecter faites lancer "su alfresco""
+        echogreen "INSTALLATION TERMINÉE"
 else 
     echo "opération annulée"
     exit
