@@ -14,6 +14,7 @@
 #  Copyleft 2024 - Adminsysop - Adil BOUZIT
 
 
+
 # Color variables
 txtund=$(tput sgr 0 1)          # Underline
 txtbld=$(tput bold)             # Bold
@@ -39,7 +40,6 @@ echogreen () {
 
 
 
-
 echogreen "-----------------------------------------------------
 Bienvenue sur l'installeur d'Alfresco par S-Zilean
 -----------------------------------------------------"
@@ -53,8 +53,6 @@ echo
 echoblue   "Voulez-vous continuer et lancer l'installation ? Y/N : "
 read accordInstallation
 echo
-
-
 
 
 
@@ -80,41 +78,43 @@ find_file() {
     find "$folder" -name "$file"
 }
 
-if [ "$accordInstallation" = "y" ]
+exist = true
 
+
+if [ "$accordInstallation" = "y" ]
 then
     #----------------------------------------------------------------#
     #     Déclaration des variables d'environnement nécessaires      #
     #----------------------------------------------------------------#
     
-    sudo rm /etc/profile.d/alfresco_env.sh
-    
-    sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
+        sudo rm /etc/profile.d/alfresco_env.sh
+        
+        sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
 
-        # Java variables
-        export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-        export PATH=$JAVA_HOME/bin:$PATH
+            # Java variables
+            export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+            export PATH=$JAVA_HOME/bin:$PATH
 
-        # Alfresco variables
-        export ALF_HOME=/opt/alfresco
-        export ALF_DATA_HOME=$ALF_HOME/tomcat/data
+            # Alfresco variables
+            export ALF_HOME=/opt/alfresco
+            export ALF_DATA_HOME=$ALF_HOME/tomcat/data
 
 
-        # Alfresco search services variables
-        export ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
+            # Alfresco search services variables
+            export ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
 
-        # ActiveMQ variables
-        export ACTIVEMQ_HOME=$ALF_HOME/activemq
+            # ActiveMQ variables
+            export ACTIVEMQ_HOME=$ALF_HOME/activemq
 
-        # Tomcat variables
-        export CATALINA_HOME=$ALF_HOME/tomcat
-        export CATALINA_BASE=$CATALINA_HOME
+            # Tomcat variables
+            export CATALINA_HOME=$ALF_HOME/tomcat
+            export CATALINA_BASE=$CATALINA_HOME
 
-        # Solr variables
-    export SOLR_HOME=$ALF_SEARCH/solrhome"
-    
-    # Actualisation des variables d'environnement
-    source /etc/profile.d/alfresco_env.sh
+            # Solr variables
+        export SOLR_HOME=$ALF_SEARCH/solrhome"
+        
+        # Actualisation des variables d'environnement
+        source /etc/profile.d/alfresco_env.sh
     
     
     
@@ -122,30 +122,30 @@ then
     #      Déclaration des variables nécessaires  pour le script     #
     #----------------------------------------------------------------#
     
-    sudo rm /etc/profile.d/alfresco_env.sh
-    
-    #####  Java variables  #####
-    JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-    
-    #####  Alfresco variables  #####
-    ALF_HOME=/opt/alfresco
-    ALF_DATA_HOME=/opt/alfresco/tomcat/data
-    ALF_USER=alfresco
-    ALF_GROUP=alfresco
-    ALF_USER_PASS=alfresco
-    
-    #####  Alfresco search services variables  #####
-    ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
-    
-    #####  ActiveMQ variables  #####
-    ACTIVEMQ_HOME=$ALF_HOME/activemq
-    
-    #####  Tomcat variables  #####
-    CATALINA_HOME=$ALF_HOME/tomcat
-    CATALINA_BASE=$CATALINA_HOME
-    
-    #####  Solr variables  #####
-    SOLR_HOME=$ALF_SEARCH/solrhome
+        sudo rm /etc/profile.d/alfresco_env.sh
+        
+        #####  Java variables  #####
+        JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+        
+        #####  Alfresco variables  #####
+        ALF_HOME=/opt/alfresco
+        ALF_DATA_HOME=/opt/alfresco/tomcat/data
+        ALF_USER=alfresco
+        ALF_GROUP=alfresco
+        ALF_USER_PASS=alfresco
+        
+        #####  Alfresco search services variables  #####
+        ALF_SEARCH_HOME=$ALF_HOME/alfresco-search-services
+        
+        #####  ActiveMQ variables  #####
+        ACTIVEMQ_HOME=$ALF_HOME/activemq
+        
+        #####  Tomcat variables  #####
+        CATALINA_HOME=$ALF_HOME/tomcat
+        CATALINA_BASE=$CATALINA_HOME
+        
+        #####  Solr variables  #####
+        SOLR_HOME=$ALF_SEARCH/solrhome
     
     
     
@@ -153,23 +153,26 @@ then
     #      Création de l'utilisateur Alfresco     #
     #---------------------------------------------#
     
-    ALF_USER="alfresco"
-    ALF_GROUP="alfresco"
-    ALF_USER_PASS="alfresco"
-    
-    alfresco_found=$(find_line_number alfresco /etc/passwd)
-    
-    if [ "$alfresco_found" -eq "$ALF_USER"]
-    then
-        echored "L'utilisateur Alfresco a été trouvé et supprimé pour être recréé."
-        # Suppression de l'utilisateur alfresco
-        groupdel $ALF_GROUP
-        userdel $ALF_USER
-    fi
-    
-    # Création utilisateur Alfresco avec mot de passe
-    useradd $ALF_USER -s /bin/bash
-    echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
+
+        ALF_USER="alfresco"
+        ALF_GROUP="alfresco"
+        ALF_USER_PASS="alfresco"
+        
+        alfresco_found=$(find_line_number alfresco /etc/passwd)
+        
+        if [ "$alfresco_found" -eq "$ALF_USER"]
+        then
+            echored "L'utilisateur Alfresco a été trouvé et supprimé pour être recréé."
+            # Suppression de l'utilisateur alfresco
+            groupdel $ALF_GROUP
+            userdel $ALF_USER
+        fi
+        
+
+        # Création utilisateur Alfresco avec mot de passe
+
+        useradd $ALF_USER -s /bin/bash
+        echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
     
     
     
@@ -177,88 +180,92 @@ then
     #      Installation et téléchargement des paquets nécessaires     #
     #-----------------------------------------------------------------#
 
-    
-    # Disclaimer
-    echored "PLEASE READ CAREFULLY!
-    This script contains lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
-    echogreen "The following packages will be installed :\n
-        *git
-        *curl
-        *mariadb-server
-        *openjdk-17-jdk-headless
-        *nginx
-        alfresco and its dependencies will be installed in /opt/alfresco
-    A brief summary file will be created at the end of the script."
+
+        # Disclaimer
+
+        echored "PLEASE READ CAREFULLY!
+        This script contains lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
+        echogreen "The following packages will be installed :\n
+            *git
+            *curl
+            *mariadb-server
+            *openjdk-17-jdk-headless
+            *nginx
+            alfresco and its dependencies will be installed in /opt/alfresco
+        A brief summary file will be created at the end of the script."
 
 
-    # Asking for installation
-    echoblue "Wish you continue the installation ?"
-    read answer
+        # Asking for installation
+
+        echoblue "Wish you continue the installation ?"
+        read answer
+        
+        answeryes = "y"
+        
+        while [ "$answer" -ne "y" || -ne "n"]
+        do
+            echo "pelase answer by "y" (yes) or "n" (no) :"
+            if [ "$answer" -eq "$answeryes" ]
+            then
+                # Installation
+                sudo apt-get install -qq software-properties-common -y
+                sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y
+                sudo apt update -y -qq
+                apt --purge -qq autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential
+                apt update -y -qq && sudo apt upgrade -y -qq
+                apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y -qq
+                if [ "$answer" -n   ]
+                echo "Annulation de l'installation"
+                rm /etc/profile.d/alfresco_env.sh
+            if [ "$answer" -eq "n" ]
+            then
+                # Exit installation 
+                exit
+            else
+            fi
+        done
+        
+        
+        #  Variables des liens de téléchargements et noms des répertoires zip
+        
+        AlfContentName=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1
+        AlfContentZip=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1.zip
+        AlfContentServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-content-services-community-distribution/23.2.1/alfresco-content-services-community-distribution-23.2.1.zip
+        
+        AlfSearchName=$ALF_HOME/alfresco-search-services-2.0.9.1
+        AlfSearchZip=$ALF_HOME/alfresco-search-services-2.0.9.1.zip
+        AlfSearchServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-search-services/2.0.9.1/alfresco-search-services-2.0.9.1.zip
+        
+        ActiveMQName=$ALF_HOME/apache-activemq-6.1.2
+        ActiveMQZip=$ALF_HOME/apache-activemq-6.1.2-bin.tar.gz
+        ActiveMQUrl=https://dlcdn.apache.org//activemq/6.1.2/apache-activemq-6.1.2-bin.tar.gz
+        
+        ApacheTomcatName=$ALF_HOME/apache-tomcat-10.1.24
+        ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
+        ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
+        SsltoolName=$ALF_HOME/alfresco-ssl-generator
+        SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
+        
+        JDBCurl=https://dlm.mariadb.com/3752064/Connectors/java/connector-java-2.7.12/mariadb-java-client-2.7.12.jar
+        JDBCname=$ALF_HOME/mariadb-java-client-2.7.12.jar
+        
     
-    answeryes = "y"
-    
-    while [ "$answer" -ne "y" || -ne "n"]
-    do
-        echo "pelase answer by "y" (yes) or "n" (no) :"
-        if [ "$answer" -eq "$answeryes" ]
-        then
-            # Installation
-            sudo apt-get install software-properties-common -y
-            sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y
-            sudo apt update -y
-            apt --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential
-            apt update -y && sudo apt upgrade -y
-            apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y
-            if [ "$answer" -n   ]
-            echo "Annulation de l'installation"
-            rm /etc/profile.d/alfresco_env.sh
-        if [ "$answer" -eq "n" ]
-        then
-            # Exit installation 
-            exit
-        else
-        fi
-    done
-    
-    
-    
-    #  Variables des liens de téléchargements et noms des répertoires zip
-    
-    AlfContentName=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1
-    AlfContentZip=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1.zip
-    AlfContentServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-content-services-community-distribution/23.2.1/alfresco-content-services-community-distribution-23.2.1.zip
-    
-    AlfSearchName=$ALF_HOME/alfresco-search-services-2.0.9.1
-    AlfSearchZip=$ALF_HOME/alfresco-search-services-2.0.9.1.zip
-    AlfSearchServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-search-services/2.0.9.1/alfresco-search-services-2.0.9.1.zip
-    
-    ActiveMQName=$ALF_HOME/apache-activemq-6.1.2
-    ActiveMQZip=$ALF_HOME/apache-activemq-6.1.2-bin.tar.gz
-    ActiveMQUrl=https://dlcdn.apache.org//activemq/6.1.2/apache-activemq-6.1.2-bin.tar.gz
-    
-    ApacheTomcatName=$ALF_HOME/apache-tomcat-10.1.24
-    ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
-    ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
-    SsltoolName=$ALF_HOME/alfresco-ssl-generator
-    SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
-    
-    JDBCurl=https://dlm.mariadb.com/3752064/Connectors/java/connector-java-2.7.12/mariadb-java-client-2.7.12.jar
-    JDBCname=$ALF_HOME/mariadb-java-client-2.7.12.jar
-    
-    
-    
-    
-    
+
     #-----------------------------------#
     #      structuration d'alfresco     #
     #-----------------------------------#
     
-    rm -rf $ALF_HOME
-    mkdir $ALF_HOME
-    cd $ALF_HOME
+    # Deleting old alfresco folder if it exist
+    
+    if [ $exist(find_file "alfresco" "/opt" ) -eq true ]
+    then    
+        rm -rf $ALF_HOME
+        mkdir $ALF_HOME
+        cd $ALF_HOME
     
     
     # Téléchargement
+
     wget $AlfContentServiceUrl
     wget $AlfSearchServiceUrl
     wget $ActiveMQUrl
@@ -272,7 +279,6 @@ then
     unzip $AlfSearchZip
     tar zxf $ActiveMQZip
     unzip $ApacheTomcatZip
-    
     
     
     # Restructuration des répertoires
