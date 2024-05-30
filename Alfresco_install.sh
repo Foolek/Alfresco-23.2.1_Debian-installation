@@ -354,7 +354,6 @@ then
     #      Génération des clés SSL      #
     #-----------------------------------#
 
-
     genkeypass=$(generate_password)
     keypass=$genkeypass
     
@@ -364,8 +363,6 @@ then
     trustpass=$gentrust
     
     echo "$gentrust ------------------ $trustpass"
-    
-    
     
     #pattern minimum
     charlen="psswrd"
@@ -444,111 +441,17 @@ then
         done
     fi
     
-    
-    
-    
-    
-    
-    
-    # Fonction génerer un mot de passe aléatoire
-    generate_password(){
-        # Définir la longueur minimale et maximale du mot de passe
-        PASSWORD=$1
-        MIN_LENGTH=6
-        MAX_LENGTH=15
-        
-        # Définir les caractères autorisés dans le mot de passe
-        CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        
-        # Générer une longueur aléatoire pour le mot de passe
-        LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
-        
-        # Générer le mot de passe en utilisant une boucle
-        PASSWORD=""
-        for (( i = 0; i < $LENGTH; i++ )); do
-            PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1)}"
-        done
-        
-        # Afficher le mot de passe généré
-        echo "Mot de passe généré : $PASSWORD"
-    }
-    
-    
-    
-    #pattern minimum
-    charlen="psswrd"
-    
-    #mdp keystore/truststopre
-    keypass=""
-    trustpass=""
-    
-    #verification mdp
-    keypassverif=
-    trustpassverif=
-    
-    
-    # Saisie de mot de passe du KESYTORE
-    
-    echogreen "----------KEYSTORE----------"
-    while [ ${#keypass} -lt ${#charlen} ]
-    do
-        read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
-        
-        if [ ${#keypass} -lt ${#charlen} ]
-        then
-            echo
-            echored "Votre mot de passe est trop court"
-        else
-            keypassverif=$keypass
-            keypass=""
-            echo
-            read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-            if [ "$keypass" = "$keypassverif" ]
-            then echogreen "Le mot de passe correspond !"
-                
-            else echored "Le mot de passe ne correspond pas.."
-                keypass=""
-            fi
-        fi
-    done
-    
-    # Saisie de mot de passe du TRUSTSTORE
-    
-    echogreen "----------TRUSTSTORE----------"
-    while [ ${#trustpass} -lt ${#charlen} ]
-    do
-        read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
-        
-        if [ ${#trustpass} -lt ${#charlen} ]
-        then
-            echo
-            echored "Votre mot de passe est trop court"
-        else
-            trustpassverif=$trustpass
-            trustpass=""
-            echo
-            read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
-            if [ "$trustpass" = "$trustpassverif" ]
-            then echogreen "Le mot de passe correspond !"
-                
-            else echored "Le mot de passe ne correspond pas.."
-                trustpass=""
-            fi
-        fi
-    done
-    
-    
-    # Lancement du script de génération des clés SSL
-    
+
+    # Launching the ssl-tool
     cd $ALF_HOME/ssl-tool
     bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
     
-    # déplacement du répertoire des clés #####
+    # moving the keystores sub-folder to the correct location
     mv $ALF_HOME/ssl-tool/keystores/* $CATALINA_HOME/data/keystore/.
     mv $ALF_HOME/ssl-tool/certificates $CATALINA_HOME/data/keystore/.
     mv $ALF_HOME/ssl-tool/ca $CATALINA_HOME/data/keystore/.
     
-    # Suppression du répertoire SSL-TOOL
+    # Deleting the ssl-tool repo
     rm -rf $ALF_HOME/ssl-tool
     
     
