@@ -71,6 +71,7 @@ find_line_number() {
 }
 
 
+
 find_file() {
     local file="$1"
     local folder="$2"
@@ -78,7 +79,7 @@ find_file() {
     find "$folder" -name "$file"
 }
 
-exist = true
+
 
 
 if [ "$accordInstallation" = "y" ]
@@ -254,66 +255,63 @@ then
     #-----------------------------------#
     #      structuration d'alfresco     #
     #-----------------------------------#
-    
-    # Deleting old alfresco folder if it exist
-    
-    if [ $exist(find_file "alfresco" "/opt" ) -eq true ]
-    then    
-        rm -rf $ALF_HOME
+        
+        # Deleting old alfresco folder if it exist
+        findoptalf=$(find_file "/opt" "alfresco")
+
+        if [ -n "$findoptalf"]
+        then 
+            echored "Un répertoire alfresco a été trouvé et va être supprimé"
+            rm -rf $findoptalf
+        fi
+        
         mkdir $ALF_HOME
         cd $ALF_HOME
     
     
-    # Téléchargement
-
-    wget $AlfContentServiceUrl
-    wget $AlfSearchServiceUrl
-    wget $ActiveMQUrl
-    wget $ApacheTomcatUrl
-    wget $JDBCurl
-    git clone $SsltoolUrl
+        # Téléchargement
+        wget $AlfContentServiceUrl $AlfSearchServiceUrl $ActiveMQUrl $ApacheTomcatUrl $JDBCurl 
+        git clone $SsltoolUrl
+        
+        
+        # Décompréssion
+        unzip $ALF_HOME/*.zip 
+        tar zxf $ALF_HOME/*.gz
+        
+        
+        # Restructuration des répertoires
+        mv $ActiveMQName $ALF_HOME/activemq
+        mv $ApacheTomcatName $ALF_HOME/tomcat
+        mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
     
-    
-    # Décompréssion
-    unzip $AlfContentZip
-    unzip $AlfSearchZip
-    tar zxf $ActiveMQZip
-    unzip $ApacheTomcatZip
-    
-    
-    # Restructuration des répertoires
-    mv $ActiveMQName $ALF_HOME/activemq
-    mv $ApacheTomcatName $ALF_HOME/tomcat
-    mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
-    
-    # regroupement de lib dans shared [alfresco] et shared vers [tomcat]
-    mv $ALF_HOME/web-server/lib $ALF_HOME/web-server/shared/.
-    mv $ALF_HOME/web-server/conf/* $ALF_HOME/tomcat/conf/.
-    mv $ALF_HOME/web-server/shared $ALF_HOME/tomcat/.
-    mv $JDBCname $CATALINA_HOME/shared/lib/.
-    
-    # renommage du webapps par défaut [tomcat]
-    mv $CATALINA_HOME/webapps $CATALINA_HOME/default_webapps
-    
-    #déplacement des webapps [alfresco} vers [tomcat]
-    mv $ALF_HOME/web-server/webapps $CATALINA_HOME/.
-    
-    # création répertoire data [tomcat]
-    mkdir $CATALINA_HOME/data
-    mv $ALF_HOME/keystore $CATALINA_HOME/data/keystore
-    mkdir $CATALINA_BASE/logs/alf_logs
-    mkdir $CATALINA_HOME/modules
-    mkdir $CATALINA_HOME/modules/platform
-    mkdir $CATALINA_HOME/modules/share
-    
-    # Création des commandes tomcat/activemq/solr
-    ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/local/bin/tomcat -f
-    ln -s /opt/alfresco/activemq/bin/activemq /usr/local/bin/activemq -f
-    ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/bin/tomcat -f
-    ln -s /opt/alfresco/activemq/bin/activemq /usr/bin/activemq -f
-    
-    chmod 775 $CATALINA_HOME/bin/*.sh
-    chmod 775 $ACTIVEMQ_HOME/bin/*.sh
+        # regroupement de lib dans shared [alfresco] et shared vers [tomcat]
+        mv $ALF_HOME/web-server/lib $ALF_HOME/web-server/shared/.
+        mv $ALF_HOME/web-server/conf/* $ALF_HOME/tomcat/conf/.
+        mv $ALF_HOME/web-server/shared $ALF_HOME/tomcat/.
+        mv $JDBCname $CATALINA_HOME/shared/lib/.
+        
+        # renommage du webapps par défaut [tomcat]
+        mv $CATALINA_HOME/webapps $CATALINA_HOME/default_webapps
+        
+        #déplacement des webapps [alfresco} vers [tomcat]
+        mv $ALF_HOME/web-server/webapps $CATALINA_HOME/.
+        
+        # création répertoire data [tomcat]
+        mkdir $CATALINA_HOME/data
+        mv $ALF_HOME/keystore $CATALINA_HOME/data/keystore
+        mkdir $CATALINA_BASE/logs/alf_logs
+        mkdir $CATALINA_HOME/modules
+        mkdir $CATALINA_HOME/modules/platform
+        mkdir $CATALINA_HOME/modules/share
+        
+        # Création des commandes tomcat/activemq/solr
+        ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/local/bin/tomcat -f
+        ln -s /opt/alfresco/activemq/bin/activemq /usr/local/bin/activemq -f
+        ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/bin/tomcat -f
+        ln -s /opt/alfresco/activemq/bin/activemq /usr/bin/activemq -f
+        
+        chmod 775 $CATALINA_HOME/bin/*.sh
+        chmod 775 $ACTIVEMQ_HOME/bin/*.sh
     
     
     # Nettoyage des zip
