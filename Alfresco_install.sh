@@ -282,8 +282,29 @@ if [ "$accordInstallation" = "y" ]
         #-----------------------------------#
 
 
-        echogreen "Voulez-vous générer un mot de passe aléatoire ? Y/n :"
+        echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
         read reponse
+        while [ "$reponse" != "Y" || "$reponse" != "y" || "$reponse" != "N" || "$reponse" != "n" || -lt ${#charlen} ]
+          do
+            read -s -p "Veuillez répondre par Y(es) ou par N(o) " keypass
+          
+            if [ ${#keypass} -lt ${#charlen} ]
+                then
+                    echo
+                        echored "Votre mot de passe est trop court"
+            else
+                keypassverif=$keypass
+                keypass=""
+                echo
+                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
+                    if [ "$keypass" = "$keypassverif" ]
+                    then echogreen "Le mot de passe correspond !"
+                    
+                    else echored "Le mot de passe ne correspond pas.."
+                         keypass=""               
+                    fi
+            fi
+        done
 
         
         # Fonction génerer un mot de passe aléatoire
