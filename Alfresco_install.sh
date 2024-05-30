@@ -387,7 +387,7 @@ if [ "$accordInstallation" = "y" ]
                 done
                 cd $ALF_HOME/ssl-tool
                 bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
-                fi
+              fi
             
         done
 
