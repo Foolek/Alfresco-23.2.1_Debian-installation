@@ -79,14 +79,36 @@ find_file() {
     find "$folder" -name "$file"
 }
 
+    # Fonction génerer un mot de passe aléatoire
+    generate_password(){
+        # Définir la longueur minimale et maximale du mot de passe
+        PASSWORD=$1
+        MIN_LENGTH=20
+        MAX_LENGTH=20
+        
+        # Définir les caractères autorisés dans le mot de passe
+        CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        
+        # Générer une longueur aléatoire pour le mot de passe
+        LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
+        
+        # Générer le mot de passe en utilisant une boucle
+        PASSWORD=""
+        for (( i = 0; i < $LENGTH; i++ )); do
+            PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1}"
+        done
+        
+        # Afficher le mot de passe généré
+        echo $PASSWORD
+    }
 
 
 
 if [ "$accordInstallation" = "y" ]
 then
-    #----------------------------------------------------------------#
-    #     Déclaration des variables d'environnement nécessaires      #
-    #----------------------------------------------------------------#
+    #-------------------------------------------------------------#
+    #    Déclaration des variables d'environnement nécessaires    #
+    #-------------------------------------------------------------#
     
         sudo rm /etc/profile.d/alfresco_env.sh
         
@@ -119,9 +141,9 @@ then
     
     
     
-    #----------------------------------------------------------------#
-    #      Déclaration des variables nécessaires  pour le script     #
-    #----------------------------------------------------------------#
+    #-------------------------------------------------------------#
+    #    Déclaration des variables nécessaires  pour le script    #
+    #-------------------------------------------------------------#
     
         sudo rm /etc/profile.d/alfresco_env.sh
         
@@ -150,9 +172,9 @@ then
     
     
     
-    #---------------------------------------------#
-    #      Création de l'utilisateur Alfresco     #
-    #---------------------------------------------#
+    #------------------------------------------#
+    #    Création de l'utilisateur Alfresco    #
+    #------------------------------------------#
     
 
         ALF_USER="alfresco"
@@ -177,9 +199,9 @@ then
     
     
     
-    #-----------------------------------------------------------------#
-    #      Installation et téléchargement des paquets nécessaires     #
-    #-----------------------------------------------------------------#
+    #--------------------------------------------------------------#
+    #    Installation et téléchargement des paquets nécessaires    #
+    #--------------------------------------------------------------#
 
 
         # Disclaimer
@@ -252,9 +274,9 @@ then
         
     
 
-    #-----------------------------------#
-    #      structuration d'alfresco     #
-    #-----------------------------------#
+    #-----------------------------------------#
+    #    Reorganization of Alfresco report    #
+    #-----------------------------------------#
         
         # Deleting old alfresco folder if it exist
         findoptalf=$(find_file "/opt" "alfresco")
@@ -269,62 +291,60 @@ then
         cd $ALF_HOME
     
     
-        # Téléchargement
+        # Downloading all binaries repository of our dependencies
         wget $AlfContentServiceUrl $AlfSearchServiceUrl $ActiveMQUrl $ApacheTomcatUrl $JDBCurl 
         git clone $SsltoolUrl
         
         
-        # Décompréssion
+        # Unzipping our repositories
         unzip $ALF_HOME/*.zip 
         tar zxf $ALF_HOME/*.gz
         
         
-        # Restructuration des répertoires
+        # Rename our dependency repositories
         mv $ActiveMQName $ALF_HOME/activemq
         mv $ApacheTomcatName $ALF_HOME/tomcat
         mv $SsltoolName/ssl-tool $ALF_HOME/ssl-tool
+        mv $CATALINA_HOME/webapps $CATALINA_HOME/default_webapps
     
-        # regroupement de lib dans shared [alfresco] et shared vers [tomcat]
+        # moving lib in shared [alfresco] and shared to [tomcat]
         mv $ALF_HOME/web-server/lib $ALF_HOME/web-server/shared/.
         mv $ALF_HOME/web-server/conf/* $ALF_HOME/tomcat/conf/.
         mv $ALF_HOME/web-server/shared $ALF_HOME/tomcat/.
         mv $JDBCname $CATALINA_HOME/shared/lib/.
         
-        # renommage du webapps par défaut [tomcat]
-        mv $CATALINA_HOME/webapps $CATALINA_HOME/default_webapps
-        
-        #déplacement des webapps [alfresco} vers [tomcat]
+        # moving [alfresco} webapps to [tomcat].
         mv $ALF_HOME/web-server/webapps $CATALINA_HOME/.
         
         # création répertoire data [tomcat]
-        mkdir $CATALINA_HOME/data
+        mkdir $CATALINA_HOME/data $CATALINA_BASE/logs/alf_logs $CATALINA_HOME/modules $CATALINA_HOME/modules/platform $CATALINA_HOME/modules/share
+
+        # moving the keystore folder
         mv $ALF_HOME/keystore $CATALINA_HOME/data/keystore
-        mkdir $CATALINA_BASE/logs/alf_logs
-        mkdir $CATALINA_HOME/modules
-        mkdir $CATALINA_HOME/modules/platform
-        mkdir $CATALINA_HOME/modules/share
         
-        # Création des commandes tomcat/activemq/solr
+        # Creating tomcat/activemq/solr commands
         ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/local/bin/tomcat -f
         ln -s /opt/alfresco/activemq/bin/activemq /usr/local/bin/activemq -f
         ln -s /opt/alfresco/tomcat/bin/catalina.sh /usr/bin/tomcat -f
         ln -s /opt/alfresco/activemq/bin/activemq /usr/bin/activemq -f
         
+        # Giving execution autorisation of the binaries
         chmod 775 $CATALINA_HOME/bin/*.sh
+        rm $CATALINA_HOME/bin/*.bat
         chmod 775 $ACTIVEMQ_HOME/bin/*.sh
+        rm $ACTIVEMQ_HOME/bin/*.bat
     
+        # Cleaning ALF_HOME
+        rm *.zip *.tar.gz
     
-    # Nettoyage des zip
-    rm *.zip *.tar.gz
-    
-    # nettoyages des répertoires/fichiers non nécessaires
-    rm -rf $ALF_HOME/*.zip $ALF_HOME/*.gz
-    rm $ALF_HOME/*
-    rm -rf $ALF_HOME/web-server
-    rm -rf $ALF_HOME/licences
-    rm -rf $SsltoolName
-    rm $CATALINA_HOME/*
-    rm $CATALINA_HOME/keystore/*
+        # Cleaning useless files from repositories
+        rm -rf $ALF_HOME/*.zip $ALF_HOME/*.gz
+        rm $ALF_HOME/*
+        rm -rf $ALF_HOME/web-server
+        rm -rf $ALF_HOME/licences
+        rm -rf $SsltoolName
+        rm $CATALINA_HOME/*
+        rm $CATALINA_HOME/keystore/*
     
     
     
@@ -333,32 +353,8 @@ then
     #-----------------------------------#
     #      Génération des clés SSL      #
     #-----------------------------------#
-    
-    
-    
-    # Fonction génerer un mot de passe aléatoire
-    generate_password(){
-        # Définir la longueur minimale et maximale du mot de passe
-        PASSWORD=$1
-        MIN_LENGTH=20
-        MAX_LENGTH=20
-        
-        # Définir les caractères autorisés dans le mot de passe
-        CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        
-        # Générer une longueur aléatoire pour le mot de passe
-        LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
-        
-        # Générer le mot de passe en utilisant une boucle
-        PASSWORD=""
-        for (( i = 0; i < $LENGTH; i++ )); do
-            PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1}"
-        done
-        
-        # Afficher le mot de passe généré
-        echo $PASSWORD
-    }
-    
+
+
     genkeypass=$(generate_password)
     keypass=$genkeypass
     
@@ -558,30 +554,30 @@ then
     
     
     
-    #--------------------------------------------------#
-    #      Création base de donnée et utilisateur      #
-    #--------------------------------------------------#
+    #-------------------------#
+    #    Database creation    #
+    #-------------------------#
     
-    # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
-    
-    ### !!!!! Créer une boucle permettant de vérifier s'il existe déjà une BDD/utilisateur et agir en conséquence
-    
-    #mkdir $ALF_HOME/temp
-    #mariadb -e "SHOW DATABASES;" >> $ALF_HOME/temp
-    #mariadb -e "SHOW DATABASES; SELECT mysql; SELECT user FROM user;" >> $ALF_HOME/temp
-    
-    echogreen "Choisissez un nom pour la base de donnée d'Alfresco : " && read Alf_db
-    echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " && read Alf_db_user
-    echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " && read Alf_db_user_password
-    
-    echogreen "Nom de la base de donnée : $Alf_db"
-    echogreen "Nom de son utilisateur : $Alf_db_user"
-    echogreen "Mot de passe utilisateur : $Alf_db_password"
-    
-    mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
-    mariadb -e "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
-    mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
-    mariadb -e "FLUSH PRIVILEGES;"
+        # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
+        
+        ### !!!!! Créer une boucle permettant de vérifier s'il existe déjà une BDD/utilisateur et agir en conséquence
+        
+        #mkdir $ALF_HOME/temp
+        #mariadb -e "SHOW DATABASES;" >> $ALF_HOME/temp
+        #mariadb -e "SHOW DATABASES; SELECT mysql; SELECT user FROM user;" >> $ALF_HOME/temp
+        
+        echogreen "Choisissez un nom pour la base de donnée d'Alfresco : " && read Alf_db
+        echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " && read Alf_db_user
+        echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " && read Alf_db_user_password
+        
+        echogreen "Nom de la base de donnée : $Alf_db"
+        echogreen "Nom de son utilisateur : $Alf_db_user"
+        echogreen "Mot de passe utilisateur : $Alf_db_password"
+        
+        mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
+        mariadb -e "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
+        mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
+        mariadb -e "FLUSH PRIVILEGES;"
     
     
     
@@ -591,84 +587,83 @@ then
     #------------------------------------------------------------#
     #      Modification/Ajout des fichiers de configuration      #
     #------------------------------------------------------------#
-    
-    
-    #------MariaDB------#
-    
-    ##### Fichier /etc/mysql/mariadb.conf.d/50-server.cnf  -- Ajout max connections
-    max_co_mariadb="max_connections         = 275"
-    sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
-    sudo systemctl restart mariadb
-    
-    
-    
-    #------Alfresco/Tomcat------#
-    
-    ##### Configuration du fichier $CATALINA_HOME/conf/catalina.properties
-    sed -i "s/^shared.loader=/shared.loader=\${catalina.base}\/shared\/classes,\${catalina.base}\/shared\/lib\/*.jar/" $CATALINA_HOME/conf/catalina.properties
-    
-    #modification alfresco.xml et share.xml
-    sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
-    sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/share.xml
-    
-    
-    # Configuration du fichier $CATALINA_HOME/bin/catalina.sh - ajout d'options de lancement JVM
-    JAVA_TOOL_OPTIONS_STRING="export JAVA_TOOL_OPTIONS=\"-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/opt/alfresco/tomcat/data/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede\""
-    sed -i "299i $JAVA_TOOL_OPTIONS_STRING" $CATALINA_HOME/bin/catalina.sh
-    
-    # Création du fichier alfresco.global.properties
-    echo >> $CATALINA_HOME/shared/classes/alfresco-global.properties "
-dir.root=$CATALINA_HOME/data
-dir.keystore=$CATALINA_HOME/data/keystore
+        
+        #------MariaDB------#
+        
+        ##### Fichier /etc/mysql/mariadb.conf.d/50-server.cnf  -- Ajout max connections
+        max_co_mariadb="max_connections         = 275"
+        sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
+        sudo systemctl restart mariadb
+        
+        
+        
+        #------Alfresco/Tomcat------#
+        
+        ##### Configuration du fichier $CATALINA_HOME/conf/catalina.properties
+        sed -i "s/^shared.loader=/shared.loader=\${catalina.base}\/shared\/classes,\${catalina.base}\/shared\/lib\/*.jar/" $CATALINA_HOME/conf/catalina.properties
+        
+        #modification alfresco.xml et share.xml
+        sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/alfresco.xml
+        sed -i "s/.\.\.\/modules/\/modules/" $CATALINA_HOME/conf/Catalina/localhost/share.xml
+        
+        
+        # Configuration du fichier $CATALINA_HOME/bin/catalina.sh - ajout d'options de lancement JVM
+        JAVA_TOOL_OPTIONS_STRING="export JAVA_TOOL_OPTIONS=\"-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/opt/alfresco/tomcat/data/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede\""
+        sed -i "299i $JAVA_TOOL_OPTIONS_STRING" $CATALINA_HOME/bin/catalina.sh
+        
+        # Création du fichier alfresco.global.properties
+        echo >> $CATALINA_HOME/shared/classes/alfresco-global.properties "
+        dir.root=$CATALINA_HOME/data
+        dir.keystore=$CATALINA_HOME/data/keystore
 
-# MariaDB setup
-db.name=$Alf_db
-db.username=$Alf_db_user
-db.password=$Alf_db_user_password
-db.port=3306
-db.host=127.0.0.1
-db.pool.max=275
-db.driver=org.mariadb.jdbc.Driver
-db.url=jdbc:mariadb://127.0.0.1:3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
+        # MariaDB setup
+        db.name=$Alf_db
+        db.username=$Alf_db_user
+        db.password=$Alf_db_user_password
+        db.port=3306
+        db.host=127.0.0.1
+        db.pool.max=275
+        db.driver=org.mariadb.jdbc.Driver
+        db.url=jdbc:mariadb://127.0.0.1:3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
 
-alfresco.context=alfresco
-alfresco.host=localhost
-alfresco.port=8080
-alfresco.protocol=http
+        alfresco.context=alfresco
+        alfresco.host=localhost
+        alfresco.port=8080
+        alfresco.protocol=http
 
-#ActiveMQ setup
-messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
+        #ActiveMQ setup
+        messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
 
-#
-share.context=share
-share.host=localhost
-share.port=8080
-share.protocol=http
+        #
+        share.context=share
+        share.host=localhost
+        share.port=8080
+        share.protocol=http
 
-user.name.caseSensitive=true
-domain.name.caseSensitive=false
-domain.separator=
+        user.name.caseSensitive=true
+        domain.name.caseSensitive=false
+        domain.separator=
 
-imap.server.enabled=false
-alfresco.rmi.services.host=0.0.0.0
-smart.folders.enabled=true
-smart.folders.model=alfresco/model/smartfolder.xml
-    smart.folders.model.labels=alfresco/messages/smartfolder-model"
-    
-    #Script de lancement
-    echo >> startserver.sh "#!/bin/bash
-activemq start
-    tomcat start"
-    
-    
-    ##### Changement propriétaire d'$ALF_HOME
-    chown $ALF_USER:$ALF_USER $ALF_HOME -R
-    usermod $ALF_USER -m -d /opt/alfresco
-    
-    echogreen "Nom d'utilisateur : alfresco"
-    echogreen "Mot de passe : alfresco"
-    echogreen "Pour vous connecter lancez la commande : su alfresco"
-    echogreen "INSTALLATION TERMINÉE"
+        imap.server.enabled=false
+        alfresco.rmi.services.host=0.0.0.0
+        smart.folders.enabled=true
+        smart.folders.model=alfresco/model/smartfolder.xml
+            smart.folders.model.labels=alfresco/messages/smartfolder-model"
+        
+        #Script de lancement
+        echo >> startserver.sh "#!/bin/bash
+        activemq start
+            tomcat start"
+        
+        
+        ##### Changement propriétaire d'$ALF_HOME
+        chown $ALF_USER:$ALF_USER $ALF_HOME -R
+        usermod $ALF_USER -m -d /opt/alfresco
+        
+        echogreen "Nom d'utilisateur : alfresco"
+        echogreen "Mot de passe : alfresco"
+        echogreen "Pour vous connecter lancez la commande : su alfresco"
+        echogreen "INSTALLATION TERMINÉE"
     
 else
     echo "opération annulée"
