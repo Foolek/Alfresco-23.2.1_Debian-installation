@@ -429,6 +429,7 @@ alfresco.protocol=http
 #ActiveMQ setup
 messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
 
+#
 share.context=share
 share.host=localhost
 share.port=8080
@@ -443,6 +444,10 @@ alfresco.rmi.services.host=0.0.0.0
 smart.folders.enabled=true
 smart.folders.model=alfresco/model/smartfolder.xml
 smart.folders.model.labels=alfresco/messages/smartfolder-model"
+
+#Script de lancement
+echo >> startserver.sh "#!/bin/bash
+
   
       ##### Changement propriétaire d'$ALF_HOME
       chown $ALF_USER:$ALF_USER $ALF_HOME -R 
