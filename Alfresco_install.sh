@@ -56,51 +56,51 @@ echo
 
 
 
-#------------------------------------------#
-#     Création des fonctions utilisées     #
-#------------------------------------------#
+#------------------------------------#
+#    Function to simplify my work    #
+#------------------------------------#
 
 
-# Fonction pour trouver le numéro de ligne contenant un texte recherché
-find_line_number() {
-    local file="$1"
-    local search_text="$2"
-    
-    # Utiliser grep et cut pour obtenir les numéros de ligne
-    grep -n "$search_text" "$file" | cut -d: -f1
-}
-
-
-
-find_file() {
-    local file="$1"
-    local folder="$2"
-    
-    find "$folder" -name "$file"
-}
-
-    # Fonction génerer un mot de passe aléatoire
-    generate_password(){
-        # Définir la longueur minimale et maximale du mot de passe
-        PASSWORD=$1
-        MIN_LENGTH=20
-        MAX_LENGTH=20
+    # to find a line numer using grep - to combine with sed
+    find_line_number() {
+        local file="$1"
+        local search_text="$2"
         
-        # Définir les caractères autorisés dans le mot de passe
-        CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        
-        # Générer une longueur aléatoire pour le mot de passe
-        LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
-        
-        # Générer le mot de passe en utilisant une boucle
-        PASSWORD=""
-        for (( i = 0; i < $LENGTH; i++ )); do
-            PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1}"
-        done
-        
-        # Afficher le mot de passe généré
-        echo $PASSWORD
+        # Utiliser grep et cut pour obtenir les numéros de ligne
+        grep -n "$search_text" "$file" | cut -d: -f1
     }
+
+
+    # to find a file - using "find expression -name expression"
+    find_file() {
+        local file="$1"
+        local folder="$2"
+        
+        find "$folder" -name "$file"
+    }
+
+        # Fonction génerer un mot de passe aléatoire
+    generate_password(){
+            # Définir la longueur minimale et maximale du mot de passe
+            PASSWORD=$1
+            MIN_LENGTH=20
+            MAX_LENGTH=20
+            
+            # Définir les caractères autorisés dans le mot de passe
+            CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+            
+            # Générer une longueur aléatoire pour le mot de passe
+            LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
+            
+            # Générer le mot de passe en utilisant une boucle
+            PASSWORD=""
+            for (( i = 0; i < $LENGTH; i++ )); do
+                PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1}"
+            done
+            
+            # Afficher le mot de passe généré
+            echo $PASSWORD
+        }
 
 
 
