@@ -70,6 +70,14 @@ find_line_number() {
     grep -n "$search_text" "$file" | cut -d: -f1
 }
 
+find_line_firstword() {
+    local file="$1"
+    local search_text="$2"
+    
+    # Utiliser grep et cut pour obtenir les numéros de ligne
+    grep -w "$search_text" "$file" | cut -d: -f1
+}
+
 find_file() {
     local file="$1"
     local folder="$2"
@@ -179,22 +187,26 @@ then
         ALF_GROUP="alfresco"
         ALF_USER_PASS="alfresco"
         
-        alfresco_found=$(find_line_number alfresco /etc/passwd)
+        alfresco_found=$(find_line_firstword alfresco /etc/passwd)
         
         if [ "$alfresco_found" == "$ALF_USER" ]
         then
-            echored "L'utilisateur Alfresco a été trouvé et supprimé pour être recréé."
+            echored "Alfresco user was found ! He will be removed and created back."
             # Suppression de l'utilisateur alfresco
             groupdel $ALF_GROUP
             userdel $ALF_USER
+            
+            # Création utilisateur Alfresco avec mot de passe
+            useradd $ALF_USER -s /bin/bash
+            echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
+        else    
+            # Création utilisateur Alfresco avec mot de passe
+            useradd $ALF_USER -s /bin/bash
+            echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
         fi
         
 
-        # Création utilisateur Alfresco avec mot de passe
 
-        useradd $ALF_USER -s /bin/bash
-        echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
-    
     
     
     #--------------------------------------------------------------#
@@ -218,12 +230,12 @@ then
 
         # Asking for installation
 
-        echoblue "Wish you continue the installation ?"
+        echoblue "Wish you continue the installation ? please answer by "y" (yes) or "n" (no) : "
         read answer
         
         answeryes="y"
         
-        while [ "$answer" -ne "y" || -ne "n"]
+        while [ "$answer" -ne "y" || "$answer" -ne "n"]
         do
             echogreen "pelase answer by "y" (yes) or "n" (no) :"
             if [ "$answer" -eq "$answeryes" ]
