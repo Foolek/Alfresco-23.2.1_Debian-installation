@@ -40,15 +40,15 @@ echogreen () {
 
 
 
-echogreen "-----------------------------------------------------
-Bienvenue sur l'installeur d'Alfresco par S-Zilean
------------------------------------------------------"
+echogreen "------------------------------------------------------"
+echogreen "  Bienvenue sur l'installeur d'Alfresco par S-Zilean"
+echogreen "------------------------------------------------------"
 echo
-echoblue   "Ce script utilise le paquet "sudo" veuillez installer le paquet pour éviter les erreurs."
-echored    "L'installation via ce script requiert des privilèges administrateurs "
-echoblue   "Tous les paquets seront installés dans /opt/. , des liens symboliques seront créés dans /usr/local/bin"
+echogreen  "Ce script utilise le paquet "sudo" veuillez installer le paquet pour éviter les erreurs."
+echogreen  "L'installation via ce script requiert des privilèges administrateurs "
+echogreen  "Tous les paquets seront installés dans /opt/. , des liens symboliques seront créés dans /usr/local/bin"
 echo
-echored    "-----------------------------------------------------"
+echogreen  "-----------------------------------------------------"
 echo
 echoblue   "Voulez-vous continuer et lancer l'installation ? Y/N : "
 read accordInstallation
@@ -361,95 +361,95 @@ then
     #      Génération des clés SSL      #
     #-----------------------------------#
 
-    #pattern minimum
-    charlen="psswrd"
-    
-    #mdp keystore/truststopre
-    keypass=""
-    trustpass=""
-    
-    #verification mdp
-    keypassverif=
-    trustpassverif=
-    
-    genkeypass=""
-    gentrustpass=""
-    
-    echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
-    read reponse
-    while [ "$reponse" != "Y" ] && [ "$reponse" != "y" ] && [ "$reponse" != "N" ] && [ "$reponse" != "n" ]
-    do
-        echored  "Veuillez répondre par Y(es) ou par N(o) : "
+        #pattern minimum
+        charlen="psswrd"
+        
+        #mdp keystore/truststopre
+        keypass=""
+        trustpass=""
+        
+        #verification mdp
+        keypassverif=
+        trustpassverif=
+        
+        genkeypass=""
+        gentrustpass=""
+        
+        echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
         read reponse
-    done
-    
-    if [ "$reponse" == "Y" ] || [ "$reponse" == "y" ]
-    then
-        echo
-        genkeypass=$(generate_password)
-        gentrustpass=$(generate_password)
-        cd $ALF_HOME/ssl-tool
-        bash run.sh -keystorepass $genkeypass -truststorepass $gentrustpass
-    elif [ "$reponse" == "N" ] || [ "$reponse" == "n" ]
-    then
-        # Saisie de mot de passe du KESYTORE
-        echogreen "----------KEYSTORE----------"
-        while [ ${#keypass} -lt ${#charlen} ]
+        while [ "$reponse" != "Y" ] && [ "$reponse" != "y" ] && [ "$reponse" != "N" ] && [ "$reponse" != "n" ]
         do
-            read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
-            
-            if [ ${#keypass} -lt ${#charlen} ]
-            then
-                echo
-                echored  "Votre mot de passe est trop court"
-            else
-                keypassverif=$keypass
-                keypass=""
-                echo
-                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-                if [ "$keypass" = "$keypassverif" ]
-                then echogreen  "Le mot de passe correspond !"
-                else echored  "Le mot de passe ne correspond pas.."
+            echored  "Veuillez répondre par Y(es) ou par N(o) : "
+            read reponse
+        done
+        
+        if [ "$reponse" == "Y" ] || [ "$reponse" == "y" ]
+        then
+            echo
+            genkeypass=$(generate_password)
+            gentrustpass=$(generate_password)
+            cd $ALF_HOME/ssl-tool
+            bash run.sh -keystorepass $genkeypass -truststorepass $gentrustpass
+        elif [ "$reponse" == "N" ] || [ "$reponse" == "n" ]
+        then
+            # Saisie de mot de passe du KESYTORE
+            echogreen "----------KEYSTORE----------"
+            while [ ${#keypass} -lt ${#charlen} ]
+            do
+                read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
+                
+                if [ ${#keypass} -lt ${#charlen} ]
+                then
+                    echo
+                    echored  "Votre mot de passe est trop court"
+                else
+                    keypassverif=$keypass
                     keypass=""
+                    echo
+                    read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
+                    if [ "$keypass" = "$keypassverif" ]
+                    then echogreen  "Le mot de passe correspond !"
+                    else echored  "Le mot de passe ne correspond pas.."
+                        keypass=""
+                    fi
                 fi
-            fi
-        done
-        # Saisie de mot de passe du TRUSTSTORE
-        echogreen "----------TRUSTSTORE----------"
-        while [ ${#trustpass} -lt ${#charlen} ]
-        do
-            read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
-            
-            if [ ${#trustpass} -lt ${#charlen} ]
-            then
-                echo
-                echored "Votre mot de passe est trop court"
-            else
-                trustpassverif=$trustpass
-                trustpass=""
-                echo
-                read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
-                if [ "$trustpass" = "$trustpassverif" ]
-                then echogreen  "Le mot de passe correspond !"
-                else echored  "Le mot de passe ne correspond pas.."
+            done
+            # Saisie de mot de passe du TRUSTSTORE
+            echogreen "----------TRUSTSTORE----------"
+            while [ ${#trustpass} -lt ${#charlen} ]
+            do
+                read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
+                
+                if [ ${#trustpass} -lt ${#charlen} ]
+                then
+                    echo
+                    echored "Votre mot de passe est trop court"
+                else
+                    trustpassverif=$trustpass
                     trustpass=""
+                    echo
+                    read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
+                    if [ "$trustpass" = "$trustpassverif" ]
+                    then echogreen  "Le mot de passe correspond !"
+                    else echored  "Le mot de passe ne correspond pas.."
+                        trustpass=""
+                    fi
                 fi
-            fi
-        done
-    fi
-    
+            done
+        fi
+        
 
-    # Launching the ssl-tool
-    cd $ALF_HOME/ssl-tool
-    bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
-    
-    # moving the keystores sub-folder to the correct location
-    mv $ALF_HOME/ssl-tool/keystores/* $CATALINA_HOME/data/keystore/.
-    mv $ALF_HOME/ssl-tool/certificates $CATALINA_HOME/data/keystore/.
-    mv $ALF_HOME/ssl-tool/ca $CATALINA_HOME/data/keystore/.
-    
-    # Deleting the ssl-tool repo
-    rm -rf $ALF_HOME/ssl-tool
+        # Launching the ssl-tool
+        cd $ALF_HOME/ssl-tool
+        bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
+        
+        # moving the keystores sub-folder to the correct location
+        mv $ALF_HOME/ssl-tool/keystores/* $CATALINA_HOME/data/keystore/.
+        mv $ALF_HOME/ssl-tool/certificates $CATALINA_HOME/data/keystore/.
+        mv $ALF_HOME/ssl-tool/ca $CATALINA_HOME/data/keystore/.
+        
+        # Deleting the ssl-tool repo
+        rm -rf $ALF_HOME/ssl-tool
     
     
     
@@ -477,14 +477,12 @@ then
         Alf_db_password=""
 
         while true; do
-            if [ "$reponse" == "y"]
-            then
-                Alf_db="alfresco_db"
-                Alf_user="alfresco_user"
-                Alf_db_password="alfresco_password"
+            if [ "$reponse" == "y"] then
+                $Alf_db="alfresco_db"
+                $Alf_user="alfresco_user"
+                $Alf_db_password="alfresco_password"
                 break
-            elif [ "$reponse" == "n" ]
-            then
+            else if [ "$reponse" == "n" ] then
                 echogreen "Choose a name for the database : "
                 read $Alf_db
                 echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : "
