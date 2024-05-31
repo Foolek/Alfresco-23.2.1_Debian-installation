@@ -273,6 +273,7 @@ then
         ApacheTomcatName=$ALF_HOME/apache-tomcat-10.1.24
         ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
         ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
+        
         SsltoolName=$ALF_HOME/alfresco-ssl-generator
         SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
         
@@ -308,7 +309,10 @@ then
         
         
         # Unzipping our repositories
-        unzip $ALF_HOME/*.zip 
+        unzip $ActiveMQ.zip
+        unzip $ApacheTomcatZip.zip
+        unzip $AlfSearchZip.zip
+        unzip $AlfContentZip.zip 
         tar zxf $ALF_HOME/*.gz
         
         
@@ -571,6 +575,11 @@ then
         echo >> $CATALINA_HOME/shared/classes/alfresco-global.properties "
         dir.root=$CATALINA_HOME/data
         dir.keystore=$CATALINA_HOME/data/keystore
+
+        # Solr setup
+        index.subsystem.name=solr6
+        solr.secureComms=https
+        solr.port=8983
 
         # MariaDB setup
         db.name=$Alf_db
