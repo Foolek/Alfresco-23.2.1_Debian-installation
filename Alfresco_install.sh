@@ -214,13 +214,12 @@ then
 
         if [ -n "$alf_user_search" ]
         then
-            echored "Alfresco user was found ! He will be removed and created back."
-            # Suppression de l'utilisateur alfresco
+            # If existing, alfresco user will be removed
             userdel $ALF_USER
         fi
 
             
-        # Création utilisateur Alfresco avec mot de passe
+        # Alfresco user creation
         useradd $ALF_USER -s /bin/bash -u 1739
         echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
 
