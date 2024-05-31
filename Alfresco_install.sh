@@ -492,7 +492,7 @@ then
                 
                 # Removing user if it already exist
                 if [ -n $findexistinguser ]; then
-                mariadb -e "DROP USER $Alf_user;"
+                mariadb -e "DROP USER $Alf_user@localhost;"
                 fi
 
                 # Deleting the tmp 
@@ -519,7 +519,7 @@ then
                 
                 # Removing user if it already exist
                 if [ -n $findexistinguser ]; then
-                mariadb -e "DROP USER $Alf_user;"
+                mariadb -e "DROP USER $Alf_user@localhost;"
                 fi
 
                 # Deleting the tmp 
