@@ -393,7 +393,7 @@ then
     elif [ "$reponse" == "N" ] || [ "$reponse" == "n" ]
     then
         # Saisie de mot de passe du KESYTORE
-        echored "----------KEYSTORE----------"
+        echogreen "----------KEYSTORE----------"
         while [ ${#keypass} -lt ${#charlen} ]
         do
             read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
@@ -415,7 +415,7 @@ then
             fi
         done
         # Saisie de mot de passe du TRUSTSTORE
-        echored "----------TRUSTSTORE----------"
+        echogreen "----------TRUSTSTORE----------"
         while [ ${#trustpass} -lt ${#charlen} ]
         do
             read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
@@ -465,10 +465,36 @@ then
         #mkdir $ALF_HOME/temp
         #mariadb -e "SHOW DATABASES;" >> $ALF_HOME/temp
         #mariadb -e "SHOW DATABASES; SELECT mysql; SELECT user FROM user;" >> $ALF_HOME/temp
+
+        echogreen "----------MariaDB----------"
+        echogreen "Wish you create the database his user and password with the default presset ?"
+        echogreen "Please answer by "y" (yes) or "n" (no) :"
+
+        read reponse
+
+        Alf_db=""
+        Alf_user=""
+        Alf_db_password=""
+
+        while true; do
+            if [ $reponse == "y"]
+                Alf_db="alfresco_db"
+                Alf_user="alfresco_user"
+                Alf_db_password="alfresco_password"
+                break
+            elif [ $reponse == "n" ]
+                echogreen "Choose a name for the database : "
+                read $Alf_db
+                echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : "
+                read $Alf_db_user
+                echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : "
+                read $Alf_db_user_password
+                break
+            else
+                echored "Please answer by "y" (yes) or "n" (no) :"
+            fi
+        done
         
-        echogreen "Choisissez un nom pour la base de donnée d'Alfresco : " && read Alf_db
-        echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " && read Alf_db_user
-        echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " && read Alf_db_user_password
         
         echogreen "Nom de la base de donnée : $Alf_db"
         echogreen "Nom de son utilisateur : $Alf_db_user"
