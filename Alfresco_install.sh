@@ -225,16 +225,16 @@ then
         
         while [ "$answer" -ne "y" || -ne "n"]
         do
-            echo "pelase answer by "y" (yes) or "n" (no) :"
+            echogreen "pelase answer by "y" (yes) or "n" (no) :"
             if [ "$answer" -eq "$answeryes" ]
             then
                 # Installation
-                sudo apt-get install -qq software-properties-common -y
-                sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y
                 sudo apt update -y -qq
-                apt --purge -qq autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential
-                apt update -y -qq && sudo apt upgrade -y -qq
+                apt --purge -qq autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential 
+                sudo apt-get install -qq software-properties-common -y
+                sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y -                
                 apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y -qq
+                apt update -y -qq
 
             elif [ "$answer" -eq "n" ]
             then
