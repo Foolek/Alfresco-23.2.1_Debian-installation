@@ -70,8 +70,6 @@ find_line_number() {
     grep -n "$search_text" "$file" | cut -d: -f1
 }
 
-
-
 find_file() {
     local file="$1"
     local folder="$2"
@@ -79,28 +77,28 @@ find_file() {
     find "$folder" -name "$file"
 }
 
-    # Fonction génerer un mot de passe aléatoire
-    generate_password(){
-        # Définir la longueur minimale et maximale du mot de passe
-        PASSWORD=$1
-        MIN_LENGTH=20
-        MAX_LENGTH=20
+# Fonction génerer un mot de passe aléatoire
+generate_password(){
+    # Définir la longueur minimale et maximale du mot de passe
+    PASSWORD=$1
+    MIN_LENGTH=20
+    MAX_LENGTH=20
         
-        # Définir les caractères autorisés dans le mot de passe
-        CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        
-        # Générer une longueur aléatoire pour le mot de passe
-        LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
-        
-        # Générer le mot de passe en utilisant une boucle
-        PASSWORD=""
-        for (( i = 0; i < $LENGTH; i++ )); do
-            PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1}"
-        done
-        
-        # Afficher le mot de passe généré
-        echo $PASSWORD
-    }
+    # Définir les caractères autorisés dans le mot de passe
+    CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    
+    # Générer une longueur aléatoire pour le mot de passe
+    LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
+    
+    # Générer le mot de passe en utilisant une boucle
+    PASSWORD=""
+    for (( i = 0; i < $LENGTH; i++ )); do
+        PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1}"
+    done
+    
+    # Afficher le mot de passe généré
+    echo $PASSWORD
+}
 
 
 
