@@ -232,23 +232,17 @@ then
 
         # Asking for installation
 
-        echoblue "Wish you continue the installation ? please answer by "y" (yes) or "n" (no) : "
-        read answer
-        
-        
+        echoblue "Wish you continue the installation ? please answer by "y" (yes) or "n" (no) : "   
         while true; do
-            echogreen "Voulez-vous installer les prérequis ? (y/n) "
             read answer
-
             if [ "$answer" == "y" ] || [ "$answer" == "Y" ]; then
                 # Installation
-                echo "Installation in process !"
                 sudo apt update -y -qq
-                sudo apt -qq --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y --allow-remove-essential
-                sudo apt-get install -qq software-properties-common -y
+                sudo apt -qq -o=Dpkg::Use-Pty=0 --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y --allow-remove-essential
+                sudo apt-get install -qq -o=Dpkg::Use-Pty=0 software-properties-common -y
                 sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y -
-                sudo apt install -qq git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y 
-                sudo apt update -y -qq
+                sudo apt install -qq -o=Dpkg::Use-Pty=0 git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y 
+                sudo apt update -y -qq -o=Dpkg::Use-Pty=0
                 break
             elif [ "$answer" == "n" ] || [ "$answer" == "N" ]; then
                 echo "Annulation de l'installation"
