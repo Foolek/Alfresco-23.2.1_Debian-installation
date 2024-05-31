@@ -78,13 +78,30 @@ find_line_firstword() {
     grep -w "$search_text" "$file" | cut -d: -f1
 }
 
-find_file() {
-    local file="$1"
-    local folder="$2"
-    
-    find "$folder" -name "$file"
+# Function to verify if a file or directory exist or not
+exitornot(){
+    local search=$1
+    if [ -n "$search" ]
+        echored "$search already exist !"
+    else
+        echogreen "$search doesn't exist !"
+    fi
 }
 
+# Function to verify if a file or directory exist and deleting it if true
+deletexisting(){
+    local search=$1
+    if [ -n "$search" ]
+        echored "$search already exist and will be removed"
+        rm -rf "$search"
+    fi
+}
+
+find_file() {
+    local file="$1"
+    local folder="$2"   
+    find "$folder" -name "$file"
+}
 # Fonction génerer un mot de passe aléatoire
 generate_password(){
     # Définir la longueur minimale et maximale du mot de passe
@@ -116,7 +133,9 @@ then
     #    Déclaration des variables d'environnement nécessaires    #
     #-------------------------------------------------------------#
     
-        sudo rm /etc/profile.d/alfresco_env.sh
+        # Check if the old environnement script exist and delete + replace it 
+        oldenv=$(find_line_firstword alfresco /etc/passwd)
+        deletexisting "$oldend"
         
         sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
 
@@ -197,14 +216,15 @@ then
             userdel $ALF_USER
             
             # Création utilisateur Alfresco avec mot de passe
-            useradd $ALF_USER -s /bin/bash
+            useradd $ALF_USER -s /bin/bash -u 1739
             echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
         else    
             # Création utilisateur Alfresco avec mot de passe
-            useradd $ALF_USER -s /bin/bash
+            useradd $ALF_USER -s /bin/bash -u 1739
             echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
         fi
         
+        su -u alfresco -c "source /etc/profile.d/alfresco_env.sh"
 
 
     
