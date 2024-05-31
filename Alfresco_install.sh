@@ -78,12 +78,13 @@ find_line_firstword() {
     awk "/$file/ {print}" $2 | cut -d: -f1
 }
 
-existing=""
+existing="faux"
+
 # Function to verify if a file or directory exist or not
 existornot(){
     local search=$1
     if [ -n "$search" ]; then
-        $existing="true"
+        $existing="vrai"
         echored "$search already exist !"
     else
         echogreen "$search doesn't exist !"
@@ -212,7 +213,7 @@ then
         alf_user_search=$(find_line_firstword "alfresco" "/etc/passwd")
         alf_user_exist=$(existornot $alf_user_search)
 
-        if [ "$existing" == "true" ]
+        if [ "$existing" == "vrai" ]
         then
             echored "Alfresco user was found ! He will be removed and created back."
             # Suppression de l'utilisateur alfresco
