@@ -75,7 +75,7 @@ find_line_firstword() {
     local folder="$2"
     
     # Utiliser grep et cut pour obtenir les numéros de ligne
-    awk "/$file/ {print}" $2 | cut -d: -f1
+    awk "/$file/ {print}" $folder | cut -d: -f1
 }
 
 
@@ -213,10 +213,9 @@ then
         alf_user_search=$(find_line_firstword "alfresco" "/etc/passwd")
         alf_user_exist=$(existornot $alf_user_search)
 
-        if [ -z "$alf_user_exist"]
+        if [ "$existing" == "true" ]
         then
             echored "Alfresco user was found ! He will be removed and created back."
-            echogreen $alf_user_exist
             # Suppression de l'utilisateur alfresco
             echogreen "il existe"
             groupdel $ALF_GROUP
