@@ -291,6 +291,7 @@ then
         if [ -n "$findoptalf"]
         then 
             echored "Un répertoire alfresco a été trouvé et va être supprimé"
+            sleep 5
             rm -rf $findoptalf
         fi
         
@@ -361,16 +362,6 @@ then
     #      Génération des clés SSL      #
     #-----------------------------------#
 
-    genkeypass=$(generate_password)
-    keypass=$genkeypass
-    
-    echo "$genkeypass ----------- $keypass"
-    
-    gentrust=$(generate_password)
-    trustpass=$gentrust
-    
-    echo "$gentrust ------------------ $trustpass"
-    
     #pattern minimum
     charlen="psswrd"
     
@@ -385,11 +376,11 @@ then
     genkeypass=""
     gentrustpass=""
     
-    echo -n "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
+    echogreen -n "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
     read reponse
     while [ "$reponse" != "Y" ] && [ "$reponse" != "y" ] && [ "$reponse" != "N" ] && [ "$reponse" != "n" ]
     do
-        echo -n "Veuillez répondre par Y(es) ou par N(o) : "
+        echored -n "Veuillez répondre par Y(es) ou par N(o) : "
         read reponse
     done
     
@@ -411,15 +402,15 @@ then
             if [ ${#keypass} -lt ${#charlen} ]
             then
                 echo
-                echo -n "Votre mot de passe est trop court"
+                echored -n "Votre mot de passe est trop court"
             else
                 keypassverif=$keypass
                 keypass=""
                 echo
                 read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
                 if [ "$keypass" = "$keypassverif" ]
-                then echo -n "Le mot de passe correspond !"
-                else echo -n "Le mot de passe ne correspond pas.."
+                then echogreen -n "Le mot de passe correspond !"
+                else echored -n "Le mot de passe ne correspond pas.."
                     keypass=""
                 fi
             fi
@@ -433,15 +424,15 @@ then
             if [ ${#trustpass} -lt ${#charlen} ]
             then
                 echo
-                echo -n "Votre mot de passe est trop court"
+                echored -n "Votre mot de passe est trop court"
             else
                 trustpassverif=$trustpass
                 trustpass=""
                 echo
                 read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
                 if [ "$trustpass" = "$trustpassverif" ]
-                then echo -n "Le mot de passe correspond !"
-                else echo -n "Le mot de passe ne correspond pas.."
+                then echogreen -n "Le mot de passe correspond !"
+                else echored -n "Le mot de passe ne correspond pas.."
                     trustpass=""
                 fi
             fi
@@ -572,7 +563,8 @@ then
         
         echogreen "Nom d'utilisateur : alfresco"
         echogreen "Mot de passe : alfresco"
-        echogreen "Pour vous connecter lancez la commande : su alfresco"
+        echo
+        echoblue "Pour vous connecter lancez la commande : su alfresco"
         echogreen "INSTALLATION TERMINÉE"
     
 else
