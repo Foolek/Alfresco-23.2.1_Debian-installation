@@ -236,29 +236,29 @@ then
         read answer
         
         
-        while [ "$answer" != "y" && "$answer" != "n" ]
-        do
-            echogreen "pelase answer by "y" (yes) or "n" (no) :"
-            if [ "$answer" == "y" ]
-            then
+        while true; do
+            echogreen "Voulez-vous installer les prérequis ? (y/n) "
+            read answer
+
+            if [ "$answer" == "y" ] || [ "$answer" == "Y" ]; then
                 # Installation
                 sudo apt update -y -qq
-                apt --purge -qq autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential 
+                sudo apt --purge -qq autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y --allow-remove-essential
                 sudo apt-get install -qq software-properties-common -y
-                sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y -                
-                apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y -qq
-                apt update -y -qq
-            fi
-            if [ "$answer" == "n" ]
-            then
+                sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y -
+                sudo apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y -qq
+                sudo apt update -y -qq
+                break
+            elif [ "$answer" == "n" ] || [ "$answer" == "N" ]; then
                 echo "Annulation de l'installation"
                 rm /etc/profile.d/alfresco_env.sh
-                # Exit installation 
+                # Exit installation
                 exit
             else
-                $answer=""
+                echogreen "Veuillez répondre par 'y' (oui) ou 'n' (non) :"
             fi
         done
+
         
         
         #  Variables des liens de téléchargements et noms des répertoires zip
