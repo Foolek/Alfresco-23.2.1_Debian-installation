@@ -238,11 +238,11 @@ then
             if [ "$answer" == "y" ] || [ "$answer" == "Y" ]; then
                 # Installation
                 sudo apt update -y -qq
-                sudo apt -qq -o=Dpkg::Use-Pty=0 --purge autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y --allow-remove-essential
-                sudo apt-get install -qq -o=Dpkg::Use-Pty=0 software-properties-common -y
-                sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y -
-                sudo apt install -qq -o=Dpkg::Use-Pty=0 git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y 
-                sudo apt update -y -qq -o=Dpkg::Use-Pty=0
+                sudo apt -qq autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y --allow-remove-essential
+                sudo apt-get install -qq -software-properties-common -y
+                sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y 
+                sudo apt install -qq git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y 
+                sudo apt update -y -qq
                 break
             elif [ "$answer" == "n" ] || [ "$answer" == "N" ]; then
                 echo "Annulation de l'installation"
