@@ -349,31 +349,6 @@ then
     #    Reorganization of Alfresco report    #
     #-----------------------------------------#
 
-        #  Variables des liens de téléchargements et noms des répertoires zip
-        
-        AlfContentName=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1
-        AlfContentZip=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1.zip
-        AlfContentServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-content-services-community-distribution/23.2.1/alfresco-content-services-community-distribution-23.2.1.zip
-        
-        AlfSearchName=$ALF_HOME/alfresco-search-services-2.0.9.1
-        AlfSearchZip=$ALF_HOME/alfresco-search-services-2.0.9.1.zip
-        AlfSearchServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-search-services/2.0.9.1/alfresco-search-services-2.0.9.1.zip
-        
-        ActiveMQName=$ALF_HOME/apache-activemq-6.1.2
-        ActiveMQZip=$ALF_HOME/apache-activemq-6.1.2-bin.tar.gz
-        ActiveMQUrl=https://dlcdn.apache.org//activemq/6.1.2/apache-activemq-6.1.2-bin.tar.gz
-        
-        ApacheTomcatName=$ALF_HOME/apache-tomcat-10.1.24
-        ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
-        ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
-        
-        SsltoolName=$ALF_HOME/alfresco-ssl-generator
-        SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
-        
-        JDBCurl=https://dlm.mariadb.com/3752064/Connectors/java/connector-java-2.7.12/mariadb-java-client-2.7.12.jar
-        JDBCname=$ALF_HOME/mariadb-java-client-2.7.12.jar
-        
-        
         # Deleting old alfresco folder if it exist
         findoptalf=$(find_file "/opt" "alfresco")
 
@@ -386,7 +361,32 @@ then
         mkdir $ALF_HOME
         cd $ALF_HOME
     
-    
+
+        #  Variables des liens de téléchargements et noms des répertoires zip
+        
+        AlfContentName=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1
+        AlfContentZip=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1.zip
+        AlfContentServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-content-services-community-distribution/23.2.1/alfresco-content-services-community-distribution-23.2.1.zip
+        
+        AlfSearchName=$ALF_HOME/alfresco-search-services-2.0.9.1
+        AlfSearchZip=$ALF_HOME/alfresco-search-services-2.0.9.1.zip
+        AlfSearchServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-search-services/2.0.9.1/alfresco-search-services-2.0.9.1.zip
+        
+        ApacheTomcatName=$ALF_HOME/apache-tomcat-10.1.24
+        ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
+        ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
+
+        ActiveMQName=$ALF_HOME/apache-activemq-6.1.2
+        ActiveMQZip=$ALF_HOME/apache-activemq-6.1.2-bin.tar.gz
+        ActiveMQUrl=https://dlcdn.apache.org//activemq/6.1.2/apache-activemq-6.1.2-bin.tar.gz
+        
+        SsltoolName=$ALF_HOME/alfresco-ssl-generator
+        SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
+        
+        JDBCurl=https://dlm.mariadb.com/3752064/Connectors/java/connector-java-2.7.12/mariadb-java-client-2.7.12.jar
+        JDBCname=$ALF_HOME/mariadb-java-client-2.7.12.jar
+
+            
         # Downloading all binaries repository of our dependencies
         wget $AlfContentServiceUrl 
         wget $AlfSearchServiceUrl 
@@ -395,13 +395,12 @@ then
         wget $JDBCurl 
         git clone $SsltoolUrl
         
-        
+    
         # Unzipping our repositories
-        unzip $ActiveMQZip
-        unzip $ApacheTomcatZip
+        unzip $AlfContentZip
         unzip $AlfSearchZip
-        unzip $AlfContentZip 
-        tar zxf $ALF_HOME/*.gz
+        unzip $ApacheTomcatZip
+        tar zxf $ActiveMQZip
         
         
         # Rename our dependency repositories
