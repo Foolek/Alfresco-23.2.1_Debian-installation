@@ -240,7 +240,7 @@ then
 
         # Disclaimer
 
-        echored "PLEASE READ CAREFULLY!
+        echored ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PLEASE READ CAREFULLY <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         This script contains lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
         echogreen "The following packages will be installed :\n
             *git
