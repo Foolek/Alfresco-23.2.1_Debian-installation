@@ -291,7 +291,6 @@ then
         if [ -n "$findoptalf"]
         then 
             echored "Un répertoire alfresco a été trouvé et va être supprimé"
-            sleep 5
             rm -rf $findoptalf
         fi
         
