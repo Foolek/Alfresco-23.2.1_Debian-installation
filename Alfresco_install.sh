@@ -217,21 +217,13 @@ then
             echored "Alfresco user was found ! He will be removed and created back."
             # Suppression de l'utilisateur alfresco
             userdel $ALF_USER
-            
-            # Création utilisateur Alfresco avec mot de passe
-            useradd $ALF_USER -s /bin/bash -u 1739
-            echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
-        else 
-            echored "Alfresco user was not found ! He will be created."
-            # Création utilisateur Alfresco avec mot de passe
-            useradd $ALF_USER -s /bin/bash -u 1739
-            echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
         fi
-        
-        su alfresco -c "source /etc/profile.d/alfresco_env.sh"
 
+            
+        # Création utilisateur Alfresco avec mot de passe
+        useradd $ALF_USER -s /bin/bash -u 1739
+        echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
 
-    
     
     #--------------------------------------------------------------#
     #    Installation et téléchargement des paquets nécessaires    #
@@ -240,9 +232,9 @@ then
 
         # Disclaimer
 
-        echored ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PLEASE READ CAREFULLY! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        This script contains lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
-        echogreen "The following packages will be installed :\n
+        echored ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PLEASE READ CAREFULLY! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        echoredThis "This script contains some lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
+        echogreen "The following packages will be installed :
             *git
             *curl
             *mariadb-server
