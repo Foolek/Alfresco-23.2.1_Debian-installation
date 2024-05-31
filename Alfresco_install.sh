@@ -87,7 +87,6 @@ existornot(){
         $existing=true
         echored "$search already exist !"
     else
-        $existing=false
         echogreen "$search doesn't exist !"
     fi
 }
@@ -214,7 +213,7 @@ then
         alf_user_search=$(find_line_firstword "alfresco" "/etc/passwd")
         alf_user_exist=$(existornot $alf_user_search)
 
-        if [ $existing -eq  true ]
+        if [ "$existing" == "true" ]
         then
             echored "Alfresco user was found ! He will be removed and created back."
             # Suppression de l'utilisateur alfresco
