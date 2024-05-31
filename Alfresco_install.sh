@@ -217,6 +217,7 @@ then
         then
             echored "Alfresco user was found ! He will be removed and created back."
             # Suppression de l'utilisateur alfresco
+            echogreen "il existe"
             groupdel $ALF_GROUP
             userdel $ALF_USER
             
@@ -224,6 +225,7 @@ then
             useradd $ALF_USER -s /bin/bash -u 1739
             echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
         else    
+            echored "Alfresco user was not found ! He will be created back."
             # Création utilisateur Alfresco avec mot de passe
             useradd $ALF_USER -s /bin/bash -u 1739
             echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
