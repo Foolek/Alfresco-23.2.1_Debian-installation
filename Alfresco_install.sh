@@ -235,11 +235,11 @@ then
                 apt --purge -qq autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential
                 apt update -y -qq && sudo apt upgrade -y -qq
                 apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y -qq
-                if [ "$answer" -n   ]
+                
+            if [ "$answer" -eq "n" ]
+            then
                 echo "Annulation de l'installation"
                 rm /etc/profile.d/alfresco_env.sh
-            elif [ "$answer" -eq "n" ]
-            then
                 # Exit installation 
                 exit
             fi
