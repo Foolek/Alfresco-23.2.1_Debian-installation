@@ -232,7 +232,7 @@ then
 
         # Asking for installation
 
-        echoblue "Wish you continue the installation ? please answer by "y" (yes) or "n" (no) : "   
+        echogreen "Wish you continue and proceed to installation ? please answer by "y" (yes) or "n" (no) : "   
         while true; do
             read answer
             if [ "$answer" == "y" ] || [ "$answer" == "Y" ]; then
@@ -532,7 +532,7 @@ then
         
         
         echogreen "Nom de la base de donnée : $Alf_db"
-        echogreen "Nom de son utilisateur : $Alf_db_user"
+        echogreen "Nom de son utilisateur : $Alf_user"
         echogreen "Mot de passe utilisateur : $Alf_db_password"
         
         mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
