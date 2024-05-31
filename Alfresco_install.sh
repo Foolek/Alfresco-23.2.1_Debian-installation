@@ -470,13 +470,14 @@ then
         echogreen "Wish you create the database his user and password with the default presset ?"
         echogreen "Please answer by "y" (yes) or "n" (no) :"
 
-        read reponse
+        
 
         Alf_db=""
         Alf_user=""
         Alf_db_password=""
 
         while true; do
+            read reponse
             if [ "$reponse" == "y"] then;
                 $Alf_db="alfresco_db"
                 $Alf_user="alfresco_user" 
