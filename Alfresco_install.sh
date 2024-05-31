@@ -78,19 +78,6 @@ find_line_firstword() {
     awk "/$file/ {print}" $folder | cut -d: -f1
 }
 
-
-# Function to verify if a file or directory exist or not
-existornot(){
-    local search=$1
-    if [ -n "$search" ]; then
-        existing="true"
-        echored "$search already exist !"
-    else
-        existing="false"
-        echogreen "$search doesn't exist !"
-    fi
-}
-
 # Function to verify if a file or directory exist and deleting it if true
 deletexisting(){
     local search=$1
@@ -263,7 +250,7 @@ then
                 apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y -qq
                 apt update -y -qq
 
-            elif [ "$answer" == "n" ]
+            if [ "$answer" == "n" ]
             then
                 echo "Annulation de l'installation"
                 rm /etc/profile.d/alfresco_env.sh
