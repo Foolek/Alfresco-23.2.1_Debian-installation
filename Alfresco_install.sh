@@ -235,12 +235,11 @@ then
         echoblue "Wish you continue the installation ? please answer by "y" (yes) or "n" (no) : "
         read answer
         
-        answeryes="y"
         
-        while [ "$answer" == "y" || "$answer" == "n" ]
+        while [ "$answer" != "y" || "$answer" != "n" ]
         do
             echogreen "pelase answer by "y" (yes) or "n" (no) :"
-            if [ "$answer" == "$answeryes" ]
+            if [ "$answer" == "y" ]
             then
                 # Installation
                 sudo apt update -y -qq
