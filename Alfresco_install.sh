@@ -253,9 +253,102 @@ then
                 echogreen "Veuillez répondre par 'y' (oui) ou 'n' (non) :"
             fi
         done
+    #-------------------------#
+    #    Database creation    #
+    #-------------------------#
+    
+        # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
+        
+        ### !!!!! Créer une boucle permettant de vérifier s'il existe déjà une BDD/utilisateur et agir en conséquence
+        
+        #mkdir $ALF_HOME/temp
+        #mariadb -e "SHOW DATABASES;" >> $ALF_HOME/temp
+        #mariadb -e "SHOW DATABASES; SELECT mysql; SELECT user FROM user;" >> $ALF_HOME/temp
+
+        echogreen "----------MariaDB----------"
+        echogreen "Wish you create the database his user and password with the default presset ?"
+        echogreen "Please answer by "y" (yes) or "n" (no) :"
 
         
+
+        Alf_db="alfresco_db"
+        Alf_user="alfresco_user" 
+        Alf_db_password="alfresco_password"
+
+        while true; do
+            read reponse
+            if [ "$reponse" = "y" ]; then
+
+                #Check if Database and user already exists
+                mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
+                findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
+                findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
+
+                # Removing Database if it already exist
+                if [ -n $findexistingdb ]; then
+                mariadb -e "DROP DATABASE $Alf_db;"
+                fi
+                
+                # Removing user if it already exist
+                if [ -n $findexistinguser ]; then
+                mariadb -e "DROP USER $Alf_user@localhost;"
+                fi
+
+                # Deleting the tmp 
+                rm /opt/alfresco/tmpmaria
+
+                break
+            elif [ "$reponse" = "n" ]; then
+                echogreen "Choose a name for the database : "
+                read Alf_db
+                echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : "
+                read Alf_db_user
+                echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : "
+                read Alf_db_user_password
+
+                #Check if Database and user already exists
+                mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
+                findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
+                findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
+
+                # Removing Database if it already exist
+                if [ -n $findexistingdb ]; then
+                mariadb -e "DROP DATABASE $Alf_db;"
+                fi
+                
+                # Removing user if it already exist
+                if [ -n $findexistinguser ]; then
+                mariadb -e "DROP USER $Alf_user@localhost;"
+                fi
+
+                # Deleting the tmp 
+                rm /opt/alfresco/tmpmaria
+                break
+            else
+                echored "Please answer by "y" (yes) or "n" (no) :"
+            fi
+        done
         
+        
+        echogreen "Nom de la base de donnée : $Alf_db"
+        echogreen "Nom de son utilisateur : $Alf_user"
+        echogreen "Mot de passe utilisateur : $Alf_db_password"
+        
+        mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
+        mariadb -e "CREATE USER $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
+        mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
+        mariadb -e "FLUSH PRIVILEGES;"
+        
+        max_co_mariadb="max_connections         = 275"
+        sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
+        sudo systemctl restart mariadb
+        
+
+
+    #-----------------------------------------#
+    #    Reorganization of Alfresco report    #
+    #-----------------------------------------#
+
         #  Variables des liens de téléchargements et noms des répertoires zip
         
         AlfContentName=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1
@@ -280,11 +373,6 @@ then
         JDBCurl=https://dlm.mariadb.com/3752064/Connectors/java/connector-java-2.7.12/mariadb-java-client-2.7.12.jar
         JDBCname=$ALF_HOME/mariadb-java-client-2.7.12.jar
         
-    
-
-    #-----------------------------------------#
-    #    Reorganization of Alfresco report    #
-    #-----------------------------------------#
         
         # Deleting old alfresco folder if it exist
         findoptalf=$(find_file "/opt" "alfresco")
@@ -309,10 +397,10 @@ then
         
         
         # Unzipping our repositories
-        unzip $ActiveMQ.zip
-        unzip $ApacheTomcatZip.zip
-        unzip $AlfSearchZip.zip
-        unzip $AlfContentZip.zip 
+        unzip $ActiveMQZip
+        unzip $ApacheTomcatZip
+        unzip $AlfSearchZip
+        unzip $AlfContentZip 
         tar zxf $ALF_HOME/*.gz
         
         
@@ -462,95 +550,7 @@ then
     
     
     
-    #-------------------------#
-    #    Database creation    #
-    #-------------------------#
-    
-        # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
-        
-        ### !!!!! Créer une boucle permettant de vérifier s'il existe déjà une BDD/utilisateur et agir en conséquence
-        
-        #mkdir $ALF_HOME/temp
-        #mariadb -e "SHOW DATABASES;" >> $ALF_HOME/temp
-        #mariadb -e "SHOW DATABASES; SELECT mysql; SELECT user FROM user;" >> $ALF_HOME/temp
 
-        echogreen "----------MariaDB----------"
-        echogreen "Wish you create the database his user and password with the default presset ?"
-        echogreen "Please answer by "y" (yes) or "n" (no) :"
-
-        
-
-        Alf_db="alfresco_db"
-        Alf_user="alfresco_user" 
-        Alf_db_password="alfresco_password"
-
-        while true; do
-            read reponse
-            if [ "$reponse" = "y" ]; then
-
-                #Check if Database and user already exists
-                mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
-                findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
-                findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
-
-                # Removing Database if it already exist
-                if [ -n $findexistingdb ]; then
-                mariadb -e "DROP DATABASE $Alf_db;"
-                fi
-                
-                # Removing user if it already exist
-                if [ -n $findexistinguser ]; then
-                mariadb -e "DROP USER $Alf_user@localhost;"
-                fi
-
-                # Deleting the tmp 
-                rm /opt/alfresco/tmpmaria
-
-                break
-            elif [ "$reponse" = "n" ]; then
-                echogreen "Choose a name for the database : "
-                read Alf_db
-                echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : "
-                read Alf_db_user
-                echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : "
-                read Alf_db_user_password
-
-                #Check if Database and user already exists
-                mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
-                findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
-                findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
-
-                # Removing Database if it already exist
-                if [ -n $findexistingdb ]; then
-                mariadb -e "DROP DATABASE $Alf_db;"
-                fi
-                
-                # Removing user if it already exist
-                if [ -n $findexistinguser ]; then
-                mariadb -e "DROP USER $Alf_user@localhost;"
-                fi
-
-                # Deleting the tmp 
-                rm /opt/alfresco/tmpmaria
-                break
-            else
-                echored "Please answer by "y" (yes) or "n" (no) :"
-            fi
-        done
-        
-        
-        echogreen "Nom de la base de donnée : $Alf_db"
-        echogreen "Nom de son utilisateur : $Alf_user"
-        echogreen "Mot de passe utilisateur : $Alf_db_password"
-        
-        mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
-        mariadb -e "CREATE USER $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
-        mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
-        mariadb -e "FLUSH PRIVILEGES;"
-        
-        max_co_mariadb="max_connections         = 275"
-        sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
-        sudo systemctl restart mariadb
     
     
     #------------------------------------------------------------#
