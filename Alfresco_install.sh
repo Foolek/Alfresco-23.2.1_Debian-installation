@@ -221,7 +221,7 @@ then
         echoblue "Wish you continue the installation ?"
         read answer
         
-        answeryes = "y"
+        answeryes="y"
         
         while [ "$answer" -ne "y" || -ne "n"]
         do
