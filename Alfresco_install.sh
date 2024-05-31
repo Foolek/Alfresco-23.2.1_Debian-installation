@@ -375,11 +375,11 @@ then
     genkeypass=""
     gentrustpass=""
     
-    echogreen -n "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
+    echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
     read reponse
     while [ "$reponse" != "Y" ] && [ "$reponse" != "y" ] && [ "$reponse" != "N" ] && [ "$reponse" != "n" ]
     do
-        echored -n "Veuillez répondre par Y(es) ou par N(o) : "
+        echored  "Veuillez répondre par Y(es) ou par N(o) : "
         read reponse
     done
     
@@ -393,7 +393,7 @@ then
     elif [ "$reponse" == "N" ] || [ "$reponse" == "n" ]
     then
         # Saisie de mot de passe du KESYTORE
-        echo -n "----------KEYSTORE----------"
+        echored "----------KEYSTORE----------"
         while [ ${#keypass} -lt ${#charlen} ]
         do
             read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
@@ -401,21 +401,21 @@ then
             if [ ${#keypass} -lt ${#charlen} ]
             then
                 echo
-                echored -n "Votre mot de passe est trop court"
+                echored  "Votre mot de passe est trop court"
             else
                 keypassverif=$keypass
                 keypass=""
                 echo
                 read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
                 if [ "$keypass" = "$keypassverif" ]
-                then echogreen -n "Le mot de passe correspond !"
-                else echored -n "Le mot de passe ne correspond pas.."
+                then echogreen  "Le mot de passe correspond !"
+                else echored  "Le mot de passe ne correspond pas.."
                     keypass=""
                 fi
             fi
         done
         # Saisie de mot de passe du TRUSTSTORE
-        echo -n "----------TRUSTSTORE----------"
+        echored "----------TRUSTSTORE----------"
         while [ ${#trustpass} -lt ${#charlen} ]
         do
             read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
@@ -423,15 +423,15 @@ then
             if [ ${#trustpass} -lt ${#charlen} ]
             then
                 echo
-                echored -n "Votre mot de passe est trop court"
+                echored "Votre mot de passe est trop court"
             else
                 trustpassverif=$trustpass
                 trustpass=""
                 echo
                 read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
                 if [ "$trustpass" = "$trustpassverif" ]
-                then echogreen -n "Le mot de passe correspond !"
-                else echored -n "Le mot de passe ne correspond pas.."
+                then echogreen  "Le mot de passe correspond !"
+                else echored  "Le mot de passe ne correspond pas.."
                     trustpass=""
                 fi
             fi
