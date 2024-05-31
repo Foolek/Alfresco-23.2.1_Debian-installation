@@ -211,13 +211,11 @@ then
         ALF_USER_PASS="alfresco"
         
         alf_user_search=$(find_line_firstword "alfresco" "/etc/passwd")
-        alf_user_exist=$(existornot $alf_user_search)
 
-        if [ "$existing" == "true" ]
+        if [ -n $alf_user_search == "alfresco"]
         then
             echored "Alfresco user was found ! He will be removed and created back."
             # Suppression de l'utilisateur alfresco
-            echogreen "il existe"
             groupdel $ALF_GROUP
             userdel $ALF_USER
             
