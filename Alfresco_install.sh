@@ -93,6 +93,7 @@ find_file() {
     local folder="$2"   
     find "$folder" -name "$file"
 }
+
 # Fonction génerer un mot de passe aléatoire
 generate_password(){
     # Définir la longueur minimale et maximale du mot de passe
@@ -352,10 +353,9 @@ then
         # Deleting old alfresco folder if it exist
         findoptalf=$(find_file "/opt" "alfresco")
 
-        if [ -n "$findoptalf"]
-        then 
+        if [ -n "$findoptalf"]; then 
             echored "Un répertoire alfresco a été trouvé et va être supprimé"
-            rm -rf $findoptalf
+            rm -rf $ALF_HOME
         fi
         
         mkdir $ALF_HOME
@@ -448,9 +448,7 @@ then
         rm $CATALINA_HOME/*
         rm $CATALINA_HOME/keystore/*
     
-    
-    
-    
+
     
     #-----------------------------------#
     #      Génération des clés SSL      #
@@ -569,50 +567,65 @@ then
         # Configuration du fichier $CATALINA_HOME/bin/catalina.sh - ajout d'options de lancement JVM
         JAVA_TOOL_OPTIONS_STRING="export JAVA_TOOL_OPTIONS=\"-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/opt/alfresco/tomcat/data/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede\""
         sed -i "299i $JAVA_TOOL_OPTIONS_STRING" $CATALINA_HOME/bin/catalina.sh
-        
-        # Création du fichier alfresco.global.properties
-        echo >> $CATALINA_HOME/shared/classes/alfresco-global.properties "
-        dir.root=$CATALINA_HOME/data
-        dir.keystore=$CATALINA_HOME/data/keystore
 
-        # Solr setup
-        index.subsystem.name=solr6
-        solr.secureComms=https
-        solr.port=8983
+        #-------------------------------------#
+        #      Alfresco-global.properties     #
+        #-------------------------------------#
+            echo >> $CATALINA_HOME/shared/classes/alfresco-global.properties "
+            dir.root=$CATALINA_HOME/data
+            dir.keystore=$CATALINA_HOME/data/keystore
 
-        # MariaDB setup
-        db.name=$Alf_db
-        db.username=$Alf_db_user
-        db.password=$Alf_db_user_password
-        db.port=3306
-        db.host=127.0.0.1
-        db.pool.max=275
-        db.driver=org.mariadb.jdbc.Driver
-        db.url=jdbc:mariadb://127.0.0.1:3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
+            # Solr setup
+            index.subsystem.name=solr6
+            solr.secureComms=https
+            solr.port=8983
 
-        alfresco.context=alfresco
-        alfresco.host=localhost
-        alfresco.port=8080
-        alfresco.protocol=http
+            # MariaDB setup
+            db.name=$Alf_db
+            db.username=$Alf_db_user
+            db.password=$Alf_db_user_password
+            db.port=3306
+            db.host=127.0.0.1
+            db.pool.max=275
+            db.driver=org.mariadb.jdbc.Driver
+            db.url=jdbc:mariadb://127.0.0.1:3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
 
-        #ActiveMQ setup
-        messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
+            user.name.caseSensitive=true
+            domain.name.caseSensitive=false
+            domain.separator=
 
-        #
-        share.context=share
-        share.host=localhost
-        share.port=8080
-        share.protocol=http
 
-        user.name.caseSensitive=true
-        domain.name.caseSensitive=false
-        domain.separator=
 
-        imap.server.enabled=false
-        alfresco.rmi.services.host=0.0.0.0
-        smart.folders.enabled=true
-        smart.folders.model=alfresco/model/smartfolder.xml
+            #ActiveMQ setup
+            messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
+
+            #Context generator
+            alfresco.context=alfresco
+            alfresco.host=localhost
+            alfresco.port=8080
+            alfresco.protocol=http
+            share.context=share
+            share.host=localhost
+            share.port=8080
+            share.protocol=http
+
+
+
+            imap.server.enabled=false
+            alfresco.rmi.services.host=0.0.0.0
+            smart.folders.enabled=true
+            smart.folders.model=alfresco/model/smartfolder.xml
             smart.folders.model.labels=alfresco/messages/smartfolder-model"
+        
+        
+        #---------------------#
+        #      Server.xml     #
+        #---------------------#
+
+        addconnector=$(find_line_number "<Service name=Catalina>" "$CATALINA_HOME/conf/server.xml")
+        nextline=$
+        if [ -n $addconnector ]; then
+        sed -i 
         
         #Script de lancement
         echo >> startserver.sh "#!/bin/bash
