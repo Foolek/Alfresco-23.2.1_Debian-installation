@@ -241,7 +241,7 @@ then
                 sudo apt autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y --allow-remove-essential
                 sudo apt-get install -qq -software-properties-common -y
                 sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y 
-                sudo apt install -qq git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y 
+                sudo apt install -qq git rsync curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y 
                 sudo apt update -y -qq
                 break
             elif [ "$answer" == "n" ] || [ "$answer" == "N" ]; then
@@ -536,8 +536,8 @@ then
         echogreen "Mot de passe utilisateur : $Alf_db_password"
         
         mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
-        mariadb -e "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
-        mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_password';"
+        mariadb -e "CREATE USER $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
+        mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
         mariadb -e "FLUSH PRIVILEGES;"
     
     
