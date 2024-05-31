@@ -235,10 +235,10 @@ then
         
         answeryes="y"
         
-        while [ "$answer" -ne "y" || "$answer" -ne "n"]
+        while [ "$answer" == "y" || "$answer" == "n"]
         do
             echogreen "pelase answer by "y" (yes) or "n" (no) :"
-            if [ "$answer" -eq "$answeryes" ]
+            if [ "$answer" == "$answeryes" ]
             then
                 # Installation
                 sudo apt update -y -qq
@@ -248,7 +248,7 @@ then
                 apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y -qq
                 apt update -y -qq
 
-            elif [ "$answer" -eq "n" ]
+            elif [ "$answer" == "n" ]
             then
                 echo "Annulation de l'installation"
                 rm /etc/profile.d/alfresco_env.sh
