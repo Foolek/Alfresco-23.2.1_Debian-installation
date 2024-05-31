@@ -249,7 +249,7 @@ then
                 sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y -                
                 apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y -qq
                 apt update -y -qq
-
+            fi
             if [ "$answer" == "n" ]
             then
                 echo "Annulation de l'installation"
