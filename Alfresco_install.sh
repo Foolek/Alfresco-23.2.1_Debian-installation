@@ -78,15 +78,15 @@ find_line_firstword() {
     awk "/$file/ {print}" $2 | cut -d: -f1
 }
 
-existing="faux"
 
 # Function to verify if a file or directory exist or not
 existornot(){
     local search=$1
     if [ -n "$search" ]; then
-        $existing="vrai"
+        existing="true"
         echored "$search already exist !"
     else
+        existing="false"
         echogreen "$search doesn't exist !"
     fi
 }
