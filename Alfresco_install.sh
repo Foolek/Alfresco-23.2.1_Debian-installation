@@ -82,6 +82,7 @@ find_line_firstword() {
 exitornot(){
     local search=$1
     if [ -n "$search" ]
+    then
         echored "$search already exist !"
     else
         echogreen "$search doesn't exist !"
