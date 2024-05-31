@@ -213,7 +213,7 @@ then
         alf_user_search=$(find_line_firstword "alfresco" "/etc/passwd")
         alf_user_exist=$(existornot $alf_user_search)
 
-        if [ "$existing" == "vrai" ]
+        if [ "$existing" == "true" ]
         then
             echored "Alfresco user was found ! He will be removed and created back."
             # Suppression de l'utilisateur alfresco
@@ -224,8 +224,8 @@ then
             # Création utilisateur Alfresco avec mot de passe
             useradd $ALF_USER -s /bin/bash -u 1739
             echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
-        else    
-            echored "Alfresco user was not found ! He will be created back."
+        else 
+            echored "Alfresco user was not found ! He will be created."
             # Création utilisateur Alfresco avec mot de passe
             useradd $ALF_USER -s /bin/bash -u 1739
             echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
