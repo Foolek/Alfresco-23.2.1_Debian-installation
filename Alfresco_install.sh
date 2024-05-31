@@ -40,67 +40,82 @@ echogreen () {
 
 
 
-echogreen "-----------------------------------------------------
-Bienvenue sur l'installeur d'Alfresco par S-Zilean
------------------------------------------------------"
+echogreen "------------------------------------------------------"
+echogreen "  Bienvenue sur l'installeur d'Alfresco par S-Zilean"
+echogreen "------------------------------------------------------"
 echo
-echoblue   "Ce script utilise le paquet "sudo" veuillez installer le paquet pour éviter les erreurs."
-echored    "L'installation via ce script requiert des privilèges administrateurs "
-echoblue   "Tous les paquets seront installés dans /opt/. , des liens symboliques seront créés dans /usr/local/bin"
+echogreen  "Ce script utilise le paquet "sudo" veuillez installer le paquet pour éviter les erreurs."
+echogreen  "L'installation via ce script requiert des privilèges administrateurs "
+echogreen  "Tous les paquets seront installés dans /opt/. , des liens symboliques seront créés dans /usr/local/bin"
 echo
-echored    "-----------------------------------------------------"
+echogreen  "-----------------------------------------------------"
 echo
-echoblue   "Voulez-vous continuer et lancer l'installation ? Y/N : "
+echogreen   "Wish you proceed to the installation ? Please answer by "y" (yes) or "n"(no) : "
 read accordInstallation
 echo
 
 
 
-#------------------------------------#
-#    Function to simplify my work    #
-#------------------------------------#
+#------------------------------------------#
+#     Création des fonctions utilisées     #
+#------------------------------------------#
 
 
-    # to find a line numer using grep - to combine with sed
-    find_line_number() {
-        local file="$1"
-        local search_text="$2"
+# Fonction pour trouver le numéro de ligne contenant un texte recherché
+find_line_number() {
+    local file="$1"
+    local search_text="$2"
+    
+    # Utiliser grep et cut pour obtenir les numéros de ligne
+    grep -n "$search_text" "$file" | cut -d: -f1
+}
+
+find_line_firstword() {
+    local word="$1"
+    local folder="$2"
+    
+    # Utiliser grep et cut pour obtenir les numéros de ligne
+    awk "/$word/ {print}" $folder | cut -d: -f1
+}
+
+# Function to verify if a file or directory exist and deleting it if true
+deletexisting(){
+    local search=$1
+    if [ -n "$search" ]
+    then
+        echored "$search already exist and will be removed"
+        rm -rf "$search"
+    fi
+}
+
+find_file() {
+    local file="$1"
+    local folder="$2"   
+    find "$folder" -name "$file"
+}
+
+# Fonction génerer un mot de passe aléatoire
+generate_password(){
+    # Définir la longueur minimale et maximale du mot de passe
+    PASSWORD=$1
+    MIN_LENGTH=20
+    MAX_LENGTH=20
         
-        # Utiliser grep et cut pour obtenir les numéros de ligne
-        grep -n "$search_text" "$file" | cut -d: -f1
-    }
-
-
-    # to find a file - using "find expression -name expression"
-    find_file() {
-        local file="$1"
-        local folder="$2"
-        
-        find "$folder" -name "$file"
-    }
-
-        # Fonction génerer un mot de passe aléatoire
-    generate_password(){
-            # Définir la longueur minimale et maximale du mot de passe
-            PASSWORD=$1
-            MIN_LENGTH=20
-            MAX_LENGTH=20
-            
-            # Définir les caractères autorisés dans le mot de passe
-            CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-            
-            # Générer une longueur aléatoire pour le mot de passe
-            LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
-            
-            # Générer le mot de passe en utilisant une boucle
-            PASSWORD=""
-            for (( i = 0; i < $LENGTH; i++ )); do
-                PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1}"
-            done
-            
-            # Afficher le mot de passe généré
-            echo $PASSWORD
-        }
+    # Définir les caractères autorisés dans le mot de passe
+    CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    
+    # Générer une longueur aléatoire pour le mot de passe
+    LENGTH=$(( $RANDOM % $MAX_LENGTH + $MIN_LENGTH ))
+    
+    # Générer le mot de passe en utilisant une boucle
+    PASSWORD=""
+    for (( i = 0; i < $LENGTH; i++ )); do
+        PASSWORD+="${CHARACTERS:$(( $RANDOM % ${#CHARACTERS} )):1}"
+    done
+    
+    # Afficher le mot de passe généré
+    echo $PASSWORD
+}
 
 
 
@@ -110,7 +125,9 @@ then
     #    Déclaration des variables d'environnement nécessaires    #
     #-------------------------------------------------------------#
     
-        sudo rm /etc/profile.d/alfresco_env.sh
+        # Check if the old environnement script exist and delete + replace it 
+        oldenv=$(find_line_firstword alfresco /etc/passwd)
+        deletexisting "$oldend"
         
         sudo echo >> /etc/profile.d/alfresco_env.sh "#!/bin/bash
 
@@ -181,23 +198,19 @@ then
         ALF_GROUP="alfresco"
         ALF_USER_PASS="alfresco"
         
-        alfresco_found=$(find_line_number alfresco /etc/passwd)
-        
-        if [ "$alfresco_found" -eq "$ALF_USER"]
+        alf_user_search=$(find_line_firstword "alfresco" "/etc/passwd")
+
+        if [ -n "$alf_user_search" ]
         then
-            echored "L'utilisateur Alfresco a été trouvé et supprimé pour être recréé."
-            # Suppression de l'utilisateur alfresco
-            groupdel $ALF_GROUP
+            # If existing, alfresco user will be removed
             userdel $ALF_USER
         fi
-        
 
-        # Création utilisateur Alfresco avec mot de passe
-
-        useradd $ALF_USER -s /bin/bash
+            
+        # Alfresco user creation
+        useradd $ALF_USER -s /bin/bash -u 1739
         echo "$ALF_USER:$ALF_USER_PASS" | sudo chpasswd
-    
-    
+
     
     #--------------------------------------------------------------#
     #    Installation et téléchargement des paquets nécessaires    #
@@ -206,9 +219,9 @@ then
 
         # Disclaimer
 
-        echored "PLEASE READ CAREFULLY!
-        This script contains lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
-        echogreen "The following packages will be installed :\n
+        echored ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PLEASE READ CAREFULLY! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        echored "This script contains some lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
+        echogreen "The following packages will be installed :
             *git
             *curl
             *mariadb-server
@@ -220,35 +233,135 @@ then
 
         # Asking for installation
 
-        echoblue "Wish you continue the installation ?"
-        read answer
-        
-        answeryes = "y"
-        
-        while [ "$answer" -ne "y" || -ne "n"]
-        do
-            echo "pelase answer by "y" (yes) or "n" (no) :"
-            if [ "$answer" -eq "$answeryes" ]
-            then
+        echogreen "Wish you continue and proceed to installation ? please answer by "y" (yes) or "n" (no) : "   
+        while true; do
+            read answer
+            if [ "$answer" == "y" ] || [ "$answer" == "Y" ]; then
                 # Installation
-                sudo apt-get install -qq software-properties-common -y
-                sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y
                 sudo apt update -y -qq
-                apt --purge -qq autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y --allow-remove-essential
-                apt update -y -qq && sudo apt upgrade -y -qq
-                apt install git curl mariadb-server openjdk-17-jdk-headless nginx zip sed -y -qq
-                if [ "$answer" -n   ]
+                sudo apt autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y --allow-remove-essential
+                sudo apt-get install -qq -software-properties-common -y
+                sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y 
+                sudo apt install -qq git rsync curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y 
+                sudo apt update -y -qq
+                break
+            elif [ "$answer" == "n" ] || [ "$answer" == "N" ]; then
                 echo "Annulation de l'installation"
                 rm /etc/profile.d/alfresco_env.sh
-            if [ "$answer" -eq "n" ]
-            then
-                # Exit installation 
+                # Exit installation
                 exit
             else
+                echogreen "Veuillez répondre par 'y' (oui) ou 'n' (non) :"
+            fi
+        done
+    #-------------------------#
+    #    Database creation    #
+    #-------------------------#
+    
+        # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
+        
+        ### !!!!! Créer une boucle permettant de vérifier s'il existe déjà une BDD/utilisateur et agir en conséquence
+        
+        #mkdir $ALF_HOME/temp
+        #mariadb -e "SHOW DATABASES;" >> $ALF_HOME/temp
+        #mariadb -e "SHOW DATABASES; SELECT mysql; SELECT user FROM user;" >> $ALF_HOME/temp
+
+        echogreen "----------MariaDB----------"
+        echogreen "Wish you create the database his user and password with the default presset ?"
+        echogreen "Please answer by "y" (yes) or "n" (no) :"
+
+        
+
+        Alf_db="alfresco_db"
+        Alf_user="alfresco_user" 
+        Alf_db_password="alfresco_password"
+
+        while true; do
+            read reponse
+            if [ "$reponse" = "y" ]; then
+
+                #Check if Database and user already exists
+                mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
+                findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
+                findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
+
+                # Removing Database if it already exist
+                if [ -n $findexistingdb ]; then
+                mariadb -e "DROP DATABASE $Alf_db;"
+                fi
+                
+                # Removing user if it already exist
+                if [ -n $findexistinguser ]; then
+                mariadb -e "DROP USER $Alf_user@localhost;"
+                fi
+
+                # Deleting the tmp 
+                rm /opt/alfresco/tmpmaria
+
+                break
+            elif [ "$reponse" = "n" ]; then
+                echogreen "Choose a name for the database : "
+                read Alf_db
+                echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : "
+                read Alf_db_user
+                echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : "
+                read Alf_db_user_password
+
+                #Check if Database and user already exists
+                mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
+                findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
+                findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
+
+                # Removing Database if it already exist
+                if [ -n $findexistingdb ]; then
+                mariadb -e "DROP DATABASE $Alf_db;"
+                fi
+                
+                # Removing user if it already exist
+                if [ -n $findexistinguser ]; then
+                mariadb -e "DROP USER $Alf_user@localhost;"
+                fi
+
+                # Deleting the tmp 
+                rm /opt/alfresco/tmpmaria
+                break
+            else
+                echored "Please answer by "y" (yes) or "n" (no) :"
             fi
         done
         
         
+        echogreen "Nom de la base de donnée : $Alf_db"
+        echogreen "Nom de son utilisateur : $Alf_user"
+        echogreen "Mot de passe utilisateur : $Alf_db_password"
+        
+        mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
+        mariadb -e "CREATE USER $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
+        mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
+        mariadb -e "FLUSH PRIVILEGES;"
+        
+        max_co_mariadb="max_connections         = 275"
+        sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
+        sudo systemctl restart mariadb
+        
+
+
+    #-----------------------------------------#
+    #    Reorganization of Alfresco report    #
+    #-----------------------------------------#
+
+        # Deleting old alfresco folder if it exist
+        findoptalf=$(find_file "/opt" "alfresco")
+
+        if [ -n "$findoptalf"]; then 
+            echored "Un répertoire alfresco a été trouvé et va être supprimé"
+            rm -rf $ALF_HOME
+        fi
+        
+        mkdir $ALF_HOME
+        cd $ALF_HOME
+    
+
         #  Variables des liens de téléchargements et noms des répertoires zip
         
         AlfContentName=$ALF_HOME/alfresco-content-services-community-distribution-23.2.1
@@ -259,46 +372,35 @@ then
         AlfSearchZip=$ALF_HOME/alfresco-search-services-2.0.9.1.zip
         AlfSearchServiceUrl=https://nexus.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-search-services/2.0.9.1/alfresco-search-services-2.0.9.1.zip
         
+        ApacheTomcatName=$ALF_HOME/apache-tomcat-10.1.24
+        ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
+        ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
+
         ActiveMQName=$ALF_HOME/apache-activemq-6.1.2
         ActiveMQZip=$ALF_HOME/apache-activemq-6.1.2-bin.tar.gz
         ActiveMQUrl=https://dlcdn.apache.org//activemq/6.1.2/apache-activemq-6.1.2-bin.tar.gz
         
-        ApacheTomcatName=$ALF_HOME/apache-tomcat-10.1.24
-        ApacheTomcatZip=$ALF_HOME/apache-tomcat-10.1.24.zip
-        ApacheTomcatUrl=https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.zip
         SsltoolName=$ALF_HOME/alfresco-ssl-generator
         SsltoolUrl=https://github.com/Alfresco/alfresco-ssl-generator.git
         
         JDBCurl=https://dlm.mariadb.com/3752064/Connectors/java/connector-java-2.7.12/mariadb-java-client-2.7.12.jar
         JDBCname=$ALF_HOME/mariadb-java-client-2.7.12.jar
-        
-    
 
-    #-----------------------------------------#
-    #    Reorganization of Alfresco report    #
-    #-----------------------------------------#
-        
-        # Deleting old alfresco folder if it exist
-        findoptalf=$(find_file "/opt" "alfresco")
-
-        if [ -n "$findoptalf"]
-        then 
-            echored "Un répertoire alfresco a été trouvé et va être supprimé"
-            rm -rf $findoptalf
-        fi
-        
-        mkdir $ALF_HOME
-        cd $ALF_HOME
-    
-    
+            
         # Downloading all binaries repository of our dependencies
-        wget $AlfContentServiceUrl $AlfSearchServiceUrl $ActiveMQUrl $ApacheTomcatUrl $JDBCurl 
+        wget $AlfContentServiceUrl 
+        wget $AlfSearchServiceUrl 
+        wget $ActiveMQUrl 
+        wget $ApacheTomcatUrl 
+        wget $JDBCurl 
         git clone $SsltoolUrl
         
-        
+    
         # Unzipping our repositories
-        unzip $ALF_HOME/*.zip 
-        tar zxf $ALF_HOME/*.gz
+        unzip $AlfContentZip
+        unzip $AlfSearchZip
+        unzip $ApacheTomcatZip
+        tar zxf $ActiveMQZip
         
         
         # Rename our dependency repositories
@@ -346,160 +448,112 @@ then
         rm $CATALINA_HOME/*
         rm $CATALINA_HOME/keystore/*
     
-    
-    
-    
+
     
     #-----------------------------------#
     #      Génération des clés SSL      #
     #-----------------------------------#
 
-    genkeypass=$(generate_password)
-    keypass=$genkeypass
-    
-    echo "$genkeypass ----------- $keypass"
-    
-    gentrust=$(generate_password)
-    trustpass=$gentrust
-    
-    echo "$gentrust ------------------ $trustpass"
-    
-    #pattern minimum
-    charlen="psswrd"
-    
-    #mdp keystore/truststopre
-    keypass=""
-    trustpass=""
-    
-    #verification mdp
-    keypassverif=
-    trustpassverif=
-    
-    genkeypass=""
-    gentrustpass=""
-    
-    echo -n "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
-    read reponse
-    while [ "$reponse" != "Y" ] && [ "$reponse" != "y" ] && [ "$reponse" != "N" ] && [ "$reponse" != "n" ]
-    do
-        echo -n "Veuillez répondre par Y(es) ou par N(o) : "
+        #pattern minimum
+        charlen="psswrd"
+        
+        #mdp keystore/truststopre
+        keypass=""
+        trustpass=""
+        
+        #verification mdp
+        keypassverif=
+        trustpassverif=
+
+        
+        echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
         read reponse
-    done
-    
-    if [ "$reponse" == "Y" ] || [ "$reponse" == "y" ]
-    then
-        echo
-        genkeypass=$(generate_password)
-        gentrustpass=$(generate_password)
-        cd $ALF_HOME/ssl-tool
-        bash run.sh -keystorepass $genkeypass -truststorepass $gentrustpass
-    elif [ "$reponse" == "N" ] || [ "$reponse" == "n" ]
-    then
-        # Saisie de mot de passe du KESYTORE
-        echo -n "----------KEYSTORE----------"
-        while [ ${#keypass} -lt ${#charlen} ]
+        while [ "$reponse" != "y" ] && [ "$reponse" != "n" ]
         do
-            read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
-            
-            if [ ${#keypass} -lt ${#charlen} ]
-            then
-                echo
-                echo -n "Votre mot de passe est trop court"
-            else
-                keypassverif=$keypass
-                keypass=""
-                echo
-                read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
-                if [ "$keypass" = "$keypassverif" ]
-                then echo -n "Le mot de passe correspond !"
-                else echo -n "Le mot de passe ne correspond pas.."
+            echored  "Please answer by  "y" (yes) or "n" (no) : "
+            read reponse
+        done
+        
+        if [ "$reponse" == "y" ]; then
+            #Generate truststore et keystore password
+            keypass=$(generate_password)
+            trustpass=$(generate_password)
+
+            cd $ALF_HOME/ssl-tool
+            bash run.sh -keystorepass $keypass -truststorepass $keypass
+
+        elif [ "$reponse" == "n" ]; then
+
+            # Reading keystore password
+            echogreen "----------KEYSTORE----------"
+            while [ ${#keypass} -lt ${#charlen} ]
+            do
+                read -s -p "KEYSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre keystore : " keypass
+                
+                if [ ${#keypass} -lt ${#charlen} ]
+                then
+                    echo
+                    echored  "Votre mot de passe est trop court"
+                else
+                    keypassverif=$keypass
                     keypass=""
+                    echo
+                    read -s -p "Veuillez saisir le mot de passe à nouveau : " keypass
+                    if [ "$keypass" = "$keypassverif" ]
+                    then echogreen  "Le mot de passe correspond !"
+                    else echored  "Le mot de passe ne correspond pas.."
+                        keypass=""
+                    fi
                 fi
-            fi
-        done
-        # Saisie de mot de passe du TRUSTSTORE
-        echo -n "----------TRUSTSTORE----------"
-        while [ ${#trustpass} -lt ${#charlen} ]
-        do
-            read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
-            
-            if [ ${#trustpass} -lt ${#charlen} ]
-            then
-                echo
-                echo -n "Votre mot de passe est trop court"
-            else
-                trustpassverif=$trustpass
-                trustpass=""
-                echo
-                read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
-                if [ "$trustpass" = "$trustpassverif" ]
-                then echo -n "Le mot de passe correspond !"
-                else echo -n "Le mot de passe ne correspond pas.."
+            done
+
+            # Reading truststore password 
+            echogreen "----------TRUSTSTORE----------"
+            while [ ${#trustpass} -lt ${#charlen} ]
+            do
+                read -s -p "TRUSTSTORE - Veuillez saisir un mot de passe de 6 caractères pour votre truststore : " trustpass
+                
+                if [ ${#trustpass} -lt ${#charlen} ]
+                then
+                    echo
+                    echored "Votre mot de passe est trop court"
+                else
+                    trustpassverif=$trustpass
                     trustpass=""
+                    echo
+                    read -s -p "Veuillez saisir le mot de passe à nouveau : " trustpass
+                    if [ "$trustpass" = "$trustpassverif" ]
+                    then echogreen  "Le mot de passe correspond !"
+                    else echored  "Le mot de passe ne correspond pas.."
+                        trustpass=""
+                    fi
                 fi
-            fi
-        done
-    fi
+            done
+        fi
+        
+
+        # Launching the ssl-tool
+        cd $ALF_HOME/ssl-tool
+        bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
+        
+        # moving the keystores sub-folder to the correct location
+        mv $ALF_HOME/ssl-tool/keystores/* $CATALINA_HOME/data/keystore/.
+        mv $ALF_HOME/ssl-tool/certificates $CATALINA_HOME/data/keystore/.
+        mv $ALF_HOME/ssl-tool/ca $CATALINA_HOME/data/keystore/.
+        
+        # Deleting the ssl-tool repo
+        rm -rf $ALF_HOME/ssl-tool
+    
+    
+    
     
 
-    # Launching the ssl-tool
-    cd $ALF_HOME/ssl-tool
-    bash run.sh -keystorepass $keystorepass -truststorepass $truststorepass
-    
-    # moving the keystores sub-folder to the correct location
-    mv $ALF_HOME/ssl-tool/keystores/* $CATALINA_HOME/data/keystore/.
-    mv $ALF_HOME/ssl-tool/certificates $CATALINA_HOME/data/keystore/.
-    mv $ALF_HOME/ssl-tool/ca $CATALINA_HOME/data/keystore/.
-    
-    # Deleting the ssl-tool repo
-    rm -rf $ALF_HOME/ssl-tool
-    
-    
-    
-    
-    #-------------------------#
-    #    Database creation    #
-    #-------------------------#
-    
-        # Manipulation base de donnée - Création base de donnée - utilisateur base de donnée
-        
-        ### !!!!! Créer une boucle permettant de vérifier s'il existe déjà une BDD/utilisateur et agir en conséquence
-        
-        #mkdir $ALF_HOME/temp
-        #mariadb -e "SHOW DATABASES;" >> $ALF_HOME/temp
-        #mariadb -e "SHOW DATABASES; SELECT mysql; SELECT user FROM user;" >> $ALF_HOME/temp
-        
-        echogreen "Choisissez un nom pour la base de donnée d'Alfresco : " && read Alf_db
-        echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : " && read Alf_db_user
-        echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : " && read Alf_db_user_password
-        
-        echogreen "Nom de la base de donnée : $Alf_db"
-        echogreen "Nom de son utilisateur : $Alf_db_user"
-        echogreen "Mot de passe utilisateur : $Alf_db_password"
-        
-        mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
-        mariadb -e "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
-        mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
-        mariadb -e "FLUSH PRIVILEGES;"
-    
-    
-    
-    
     
     
     #------------------------------------------------------------#
     #      Modification/Ajout des fichiers de configuration      #
     #------------------------------------------------------------#
-        
-        #------MariaDB------#
-        
-        ##### Fichier /etc/mysql/mariadb.conf.d/50-server.cnf  -- Ajout max connections
-        max_co_mariadb="max_connections         = 275"
-        sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
-        sudo systemctl restart mariadb
-        
-        
-        
+ 
         #------Alfresco/Tomcat------#
         
         ##### Configuration du fichier $CATALINA_HOME/conf/catalina.properties
@@ -513,46 +567,71 @@ then
         # Configuration du fichier $CATALINA_HOME/bin/catalina.sh - ajout d'options de lancement JVM
         JAVA_TOOL_OPTIONS_STRING="export JAVA_TOOL_OPTIONS=\"-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/opt/alfresco/tomcat/data/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede\""
         sed -i "299i $JAVA_TOOL_OPTIONS_STRING" $CATALINA_HOME/bin/catalina.sh
-        
-        # Création du fichier alfresco.global.properties
-        echo >> $CATALINA_HOME/shared/classes/alfresco-global.properties "
-        dir.root=$CATALINA_HOME/data
-        dir.keystore=$CATALINA_HOME/data/keystore
 
-        # MariaDB setup
-        db.name=$Alf_db
-        db.username=$Alf_db_user
-        db.password=$Alf_db_user_password
-        db.port=3306
-        db.host=127.0.0.1
-        db.pool.max=275
-        db.driver=org.mariadb.jdbc.Driver
-        db.url=jdbc:mariadb://127.0.0.1:3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
+        #-------------------------------------#
+        #      Alfresco-global.properties     #
+        #-------------------------------------#
+            echo >> $CATALINA_HOME/shared/classes/alfresco-global.properties "
+            dir.root=$CATALINA_HOME/data
+            dir.keystore=$CATALINA_HOME/data/keystore
 
-        alfresco.context=alfresco
-        alfresco.host=localhost
-        alfresco.port=8080
-        alfresco.protocol=http
+            # Solr setup
+            index.subsystem.name=solr6
+            solr.secureComms=https
+            solr.port=8983
 
-        #ActiveMQ setup
-        messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
+            # MariaDB setup
+            db.name=$Alf_db
+            db.username=$Alf_db_user
+            db.password=$Alf_db_user_password
+            db.port=3306
+            db.host=127.0.0.1
+            db.pool.max=275
+            db.driver=org.mariadb.jdbc.Driver
+            db.url=jdbc:mariadb://127.0.0.1:3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
 
-        #
-        share.context=share
-        share.host=localhost
-        share.port=8080
-        share.protocol=http
+            user.name.caseSensitive=true
+            domain.name.caseSensitive=false
+            domain.separator=
 
-        user.name.caseSensitive=true
-        domain.name.caseSensitive=false
-        domain.separator=
 
-        imap.server.enabled=false
-        alfresco.rmi.services.host=0.0.0.0
-        smart.folders.enabled=true
-        smart.folders.model=alfresco/model/smartfolder.xml
+
+            #ActiveMQ setup
+            messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
+
+            #Context generator
+            alfresco.context=alfresco
+            alfresco.host=localhost
+            alfresco.port=8080
+            alfresco.protocol=http
+            share.context=share
+            share.host=localhost
+            share.port=8080
+            share.protocol=http
+
+
+
+            imap.server.enabled=false
+            alfresco.rmi.services.host=0.0.0.0
+            smart.folders.enabled=true
+            smart.folders.model=alfresco/model/smartfolder.xml
             smart.folders.model.labels=alfresco/messages/smartfolder-model"
         
+        
+        #---------------------#
+        #      Server.xml     #
+        #---------------------#
+
+            addconnector=$(find_line_number "<Service name=Catalina>" "$CATALINA_HOME/conf/server.xml")
+            next_line_number=$((addconnector+1))
+
+            next_line_number=$((addconnector+1))
+
+
+        #---------------------#
+        #      Server.xml     #
+        #---------------------#
+
         #Script de lancement
         echo >> startserver.sh "#!/bin/bash
         activemq start
@@ -565,7 +644,8 @@ then
         
         echogreen "Nom d'utilisateur : alfresco"
         echogreen "Mot de passe : alfresco"
-        echogreen "Pour vous connecter lancez la commande : su alfresco"
+        echo
+        echoblue "Pour vous connecter lancez la commande : su alfresco"
         echogreen "INSTALLATION TERMINÉE"
     
 else
