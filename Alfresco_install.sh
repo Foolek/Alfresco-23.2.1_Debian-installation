@@ -238,11 +238,10 @@ then
                 if [ "$answer" -n   ]
                 echo "Annulation de l'installation"
                 rm /etc/profile.d/alfresco_env.sh
-            if [ "$answer" -eq "n" ]
+            elif [ "$answer" -eq "n" ]
             then
                 # Exit installation 
                 exit
-            else
             fi
         done
         
