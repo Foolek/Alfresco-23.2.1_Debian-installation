@@ -299,7 +299,11 @@ then
     
     
         # Downloading all binaries repository of our dependencies
-        wget $AlfContentServiceUrl $AlfSearchServiceUrl $ActiveMQUrl $ApacheTomcatUrl $JDBCurl 
+        wget $AlfContentServiceUrl 
+        wget $AlfSearchServiceUrl 
+        wget $ActiveMQUrl 
+        wget $ApacheTomcatUrl 
+        wget $JDBCurl 
         git clone $SsltoolUrl
         
         
@@ -539,22 +543,16 @@ then
         mariadb -e "CREATE USER $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
         mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
         mariadb -e "FLUSH PRIVILEGES;"
-    
+        
+        max_co_mariadb="max_connections         = 275"
+        sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
+        sudo systemctl restart mariadb
     
     
     #------------------------------------------------------------#
     #      Modification/Ajout des fichiers de configuration      #
     #------------------------------------------------------------#
-        
-        #------MariaDB------#
-        
-        ##### Fichier /etc/mysql/mariadb.conf.d/50-server.cnf  -- Ajout max connections
-        max_co_mariadb="max_connections         = 275"
-        sed -i "40i $max_co_mariadb" /etc/mysql/mariadb.conf.d/50-server.cnf
-        sudo systemctl restart mariadb
-        
-        
-        
+ 
         #------Alfresco/Tomcat------#
         
         ##### Configuration du fichier $CATALINA_HOME/conf/catalina.properties
