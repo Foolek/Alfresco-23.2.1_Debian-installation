@@ -93,6 +93,7 @@ exitornot(){
 deletexisting(){
     local search=$1
     if [ -n "$search" ]
+    then
         echored "$search already exist and will be removed"
         rm -rf "$search"
     fi
