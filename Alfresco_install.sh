@@ -208,7 +208,7 @@ then
         ALF_GROUP="alfresco"
         ALF_USER_PASS="alfresco"
         
-        alfresco_found=$(find_line_firstword alfresco /etc/passwd)
+        alfresco_found=$(find_line_firstword "alfresco" "/etc/passwd")
         
         if [ "$alfresco_found" == "$ALF_USER" ]
         then
