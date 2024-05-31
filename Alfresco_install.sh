@@ -233,7 +233,7 @@ then
         # Disclaimer
 
         echored ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PLEASE READ CAREFULLY! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-        echoredThis "This script contains some lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
+        echored "This script contains some lines of code that purge entire packages. To avoid any problems, please run this script in a blank environment."
         echogreen "The following packages will be installed :
             *git
             *curl
