@@ -236,7 +236,7 @@ then
         read answer
         
         
-        while [ [ "$answer" != "y" ||  "$answer" != "n" ] ]
+        while [ [ "$answer" != "y" || "$answer" != "n" ] ]
         do
             echogreen "pelase answer by "y" (yes) or "n" (no) :"
             if [ "$answer" == "y" ]
