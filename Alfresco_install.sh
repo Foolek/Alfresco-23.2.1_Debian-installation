@@ -503,7 +503,7 @@ then
         
         mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
         mariadb -e "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
-        mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
+        mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_password';"
         mariadb -e "FLUSH PRIVILEGES;"
     
     
