@@ -626,15 +626,11 @@ then
             next_line_number=$((addconnector+1))
 
             next_line_number=$((addconnector+1))
-            sed -i "$next_line_number a \
-            <Connector port=\"8443\" protocol=\"HTTP/1.1\" \
-            SSLEnabled=\"true\" maxThreads=\"150\" scheme=\"https\" \
-            keystoreFile=\"$CATALINA_HOME/data/keystore/alfresco/ssl.keystore\" \
-            keystorePass=\"$keypass\" keystoreType=\"JCEKS\" \
-            secure=\"true\" connectionTimeout=\"240000\" \
-            truststoreFile=\"$CATALINA_HOME/data/keystore/alfresco/ssl.truststore\" \
-            truststorePass=\"motdepasse\" truststoreType=\"JCEKS\" \
-            clientAuth=\"want\" sslProtocol=\"TLS\"/>" "$CATALINA_HOME/conf/server.xml"
+
+
+        #---------------------#
+        #      Server.xml     #
+        #---------------------#
 
         #Script de lancement
         echo >> startserver.sh "#!/bin/bash
