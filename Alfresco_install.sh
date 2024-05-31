@@ -216,7 +216,6 @@ then
         then
             echored "Alfresco user was found ! He will be removed and created back."
             # Suppression de l'utilisateur alfresco
-            groupdel $ALF_GROUP
             userdel $ALF_USER
             
             # Création utilisateur Alfresco avec mot de passe
