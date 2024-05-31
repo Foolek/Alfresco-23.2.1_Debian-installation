@@ -181,7 +181,7 @@ then
         
         alfresco_found=$(find_line_number alfresco /etc/passwd)
         
-        if [ "$alfresco_found" -eq "$ALF_USER"]
+        if [ "$alfresco_found" == "$ALF_USER" ]
         then
             echored "L'utilisateur Alfresco a été trouvé et supprimé pour être recréé."
             # Suppression de l'utilisateur alfresco
