@@ -212,7 +212,7 @@ then
         
         alf_user_search=$(find_line_firstword "alfresco" "/etc/passwd")
 
-        if [ -n $alf_user_search == "alfresco"]
+        if [ -n $alf_user_search ]
         then
             echored "Alfresco user was found ! He will be removed and created back."
             # Suppression de l'utilisateur alfresco
