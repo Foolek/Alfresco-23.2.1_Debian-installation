@@ -82,9 +82,8 @@ existing=""
 # Function to verify if a file or directory exist or not
 existornot(){
     local search=$1
-    if [ -n "$search" ]
-    then
-        $existing=true
+    if [ -n "$search" ]; then
+        $existing="true"
         echored "$search already exist !"
     else
         echogreen "$search doesn't exist !"
