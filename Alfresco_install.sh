@@ -50,7 +50,7 @@ echogreen  "Tous les paquets seront installés dans /opt/. , des liens symboliqu
 echo
 echogreen  "-----------------------------------------------------"
 echo
-echoblue   "Voulez-vous continuer et lancer l'installation ? Y/N : "
+echogreen   "Wish you proceed to the installation ? Please answer by "y" (yes) or "n"(no) : "
 read accordInstallation
 echo
 
