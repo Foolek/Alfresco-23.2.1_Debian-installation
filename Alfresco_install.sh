@@ -75,7 +75,7 @@ find_line_firstword() {
     local folder="$2"
     
     # Utiliser grep et cut pour obtenir les numéros de ligne
-    awk "/$file/ {print}" $folder | cut -d: -f1
+    awk "/$word/ {print}" $folder | cut -d: -f1
 }
 
 # Function to verify if a file or directory exist and deleting it if true
@@ -238,7 +238,7 @@ then
             if [ "$answer" == "y" ] || [ "$answer" == "Y" ]; then
                 # Installation
                 sudo apt update -y -qq
-                sudo apt -qq autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y --allow-remove-essential
+                sudo apt autoremove git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y --allow-remove-essential
                 sudo apt-get install -qq -software-properties-common -y
                 sudo add-apt-repository -qq 'deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main' -y 
                 sudo apt install -qq git curl mariadb-server openjdk-17-jdk-headless nginx zip zip sed sed -y 
@@ -472,16 +472,32 @@ then
 
         
 
-        Alf_db=""
-        Alf_user=""
-        Alf_db_password=""
+        Alf_db="alfresco_db"
+        Alf_user="alfresco_user" 
+        Alf_db_password="alfresco_password"
 
         while true; do
             read reponse
             if [ "$reponse" = "y" ]; then
-                Alf_db="alfresco_db"
-                Alf_user="alfresco_user" 
-                Alf_db_password="alfresco_password"
+
+                #Check if Database and user already exists
+                mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
+                findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
+                findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
+
+                # Removing Database if it already exist
+                if [ -n $findexistingdb ]; then
+                mariadb -e "DROP DATABASE $Alf_db;"
+                fi
+                
+                # Removing user if it already exist
+                if [ -n $findexistinguser ]; then
+                mariadb -e "DROP USER $Alf_user;"
+                fi
+
+                # Deleting the tmp 
+                rm /opt/alfresco/tmpmaria
+
                 break
             elif [ "$reponse" = "n" ]; then
                 echogreen "Choose a name for the database : "
@@ -490,6 +506,24 @@ then
                 read Alf_db_user
                 echogreen "Choisissez un mot de passe pour l'utilisateur de la bade de donnée d'Alfresco : "
                 read Alf_db_user_password
+
+                #Check if Database and user already exists
+                mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
+                findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
+                findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
+
+                # Removing Database if it already exist
+                if [ -n $findexistingdb ]; then
+                mariadb -e "DROP DATABASE $Alf_db;"
+                fi
+                
+                # Removing user if it already exist
+                if [ -n $findexistinguser ]; then
+                mariadb -e "DROP USER $Alf_user;"
+                fi
+
+                # Deleting the tmp 
+                rm /opt/alfresco/tmpmaria
                 break
             else
                 echored "Please answer by "y" (yes) or "n" (no) :"
@@ -505,9 +539,6 @@ then
         mariadb -e "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_user_password';"
         mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_password';"
         mariadb -e "FLUSH PRIVILEGES;"
-    
-    
-    
     
     
     
