@@ -482,7 +482,7 @@ then
                 Alf_user="alfresco_user"
                 Alf_db_password="alfresco_password"
                 break
-            elif [ "$reponse" == "n" ]
+            else if [ "$reponse" == "n" ]
                 echogreen "Choose a name for the database : "
                 read $Alf_db
                 echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : "
