@@ -464,28 +464,27 @@ then
         #verification mdp
         keypassverif=
         trustpassverif=
-        
-        genkeypass=""
-        gentrustpass=""
+
         
         echogreen "Voulez-vous générer un mot de passe aléatoire ? Y(es)/n(o) :"
         read reponse
-        while [ "$reponse" != "Y" ] && [ "$reponse" != "y" ] && [ "$reponse" != "N" ] && [ "$reponse" != "n" ]
+        while [ "$reponse" != "y" ] && [ "$reponse" != "n" ]
         do
-            echored  "Veuillez répondre par Y(es) ou par N(o) : "
+            echored  "Please answer by  "y" (yes) or "n" (no) : "
             read reponse
         done
         
-        if [ "$reponse" == "Y" ] || [ "$reponse" == "y" ]
-        then
-            echo
-            genkeypass=$(generate_password)
-            gentrustpass=$(generate_password)
+        if [ "$reponse" == "y" ]; then
+            #Generate truststore et keystore password
+            keypass=$(generate_password)
+            trustpass=$(generate_password)
+
             cd $ALF_HOME/ssl-tool
-            bash run.sh -keystorepass $genkeypass -truststorepass $gentrustpass
-        elif [ "$reponse" == "N" ] || [ "$reponse" == "n" ]
-        then
-            # Saisie de mot de passe du KESYTORE
+            bash run.sh -keystorepass $keypass -truststorepass $keypass
+
+        elif [ "$reponse" == "n" ]; then
+
+            # Reading keystore password
             echogreen "----------KEYSTORE----------"
             while [ ${#keypass} -lt ${#charlen} ]
             do
@@ -507,7 +506,8 @@ then
                     fi
                 fi
             done
-            # Saisie de mot de passe du TRUSTSTORE
+
+            # Reading truststore password 
             echogreen "----------TRUSTSTORE----------"
             while [ ${#trustpass} -lt ${#charlen} ]
             do
@@ -622,11 +622,20 @@ then
         #      Server.xml     #
         #---------------------#
 
-        addconnector=$(find_line_number "<Service name=Catalina>" "$CATALINA_HOME/conf/server.xml")
-        nextline=$
-        if [ -n $addconnector ]; then
-        sed -i 
-        
+            addconnector=$(find_line_number "<Service name=Catalina>" "$CATALINA_HOME/conf/server.xml")
+            next_line_number=$((addconnector+1))
+
+            next_line_number=$((addconnector+1))
+            sed -i "$next_line_number a \
+            <Connector port=\"8443\" protocol=\"HTTP/1.1\" \
+            SSLEnabled=\"true\" maxThreads=\"150\" scheme=\"https\" \
+            keystoreFile=\"$CATALINA_HOME/data/keystore/alfresco/ssl.keystore\" \
+            keystorePass=\"$keypass\" keystoreType=\"JCEKS\" \
+            secure=\"true\" connectionTimeout=\"240000\" \
+            truststoreFile=\"$CATALINA_HOME/data/keystore/alfresco/ssl.truststore\" \
+            truststorePass=\"motdepasse\" truststoreType=\"JCEKS\" \
+            clientAuth=\"want\" sslProtocol=\"TLS\"/>" "$CATALINA_HOME/conf/server.xml"
+
         #Script de lancement
         echo >> startserver.sh "#!/bin/bash
         activemq start
