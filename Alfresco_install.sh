@@ -71,11 +71,11 @@ find_line_number() {
 }
 
 find_line_firstword() {
-    local file="$1"
-    local search_text="$2"
+    local word="$1"
+    local folder="$2"
     
     # Utiliser grep et cut pour obtenir les numéros de ligne
-    grep -w "$search_text" "$file" | cut -d: -f1
+    awk "/$file/ {print}" $2 | cut -d: -f1
 }
 
 existing=""
