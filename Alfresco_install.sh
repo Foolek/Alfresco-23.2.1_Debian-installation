@@ -478,11 +478,13 @@ then
 
         while true; do
             if [ "$reponse" == "y"]
+            then
                 Alf_db="alfresco_db"
                 Alf_user="alfresco_user"
                 Alf_db_password="alfresco_password"
                 break
-            if [ "$reponse" == "n" ]
+            elif [ "$reponse" == "n" ]
+            then
                 echogreen "Choose a name for the database : "
                 read $Alf_db
                 echogreen "Choisissez un nom pour l'utilisateur de la base de donnée d'Alfresco : "
