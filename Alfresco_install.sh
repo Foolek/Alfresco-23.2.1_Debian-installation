@@ -198,9 +198,9 @@ then
     ALF_GROUP="alfresco"
     ALF_USER_PASS="alfresco"
     
-    alf_user_search=$(find_line_firstword "alfresco" "/etc/passwd")
+    ALF_USER_search=$(find_line_firstword "alfresco" "/etc/passwd")
     
-    if [ -n "$alf_user_search" ]
+    if [ -n "$ALF_USER_search" ]
     then
         # If existing, alfresco user will be removed
         userdel $ALF_USER
@@ -283,7 +283,7 @@ then
             #Check if Database and user already exists
             mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
             findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
-            findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
+            findexistinguser=$(find_line_firstword "$Alf_db_user" "/opt/alfresco/tmpmaria")
             
             # Removing Database if it already exist
             if [ -n $findexistingdb ]; then
@@ -292,7 +292,7 @@ then
             
             # Removing user if it already exist
             if [ -n $findexistinguser ]; then
-                mariadb -e "DROP USER $Alf_user@localhost;"
+                mariadb -e "DROP USER $Alf_db_user@localhost;"
             fi
             
             # Deleting the tmp
@@ -310,7 +310,7 @@ then
             #Check if Database and user already exists
             mariadb -e "SHOW DATABASES; SELECT user FROM mysql.user;" >> /opt/alfresco/tmpmaria
             findexistingdb=$(find_line_firstword "$Alf_db" "/opt/alfresco/tmpmaria")
-            findexistinguser=$(find_line_firstword "$Alf_user" "/opt/alfresco/tmpmaria")
+            findexistinguser=$(find_line_firstword "$Alf_db_user" "/opt/alfresco/tmpmaria")
             
             # Removing Database if it already exist
             if [ -n $findexistingdb ]; then
@@ -319,7 +319,7 @@ then
             
             # Removing user if it already exist
             if [ -n $findexistinguser ]; then
-                mariadb -e "DROP USER $Alf_user@localhost;"
+                mariadb -e "DROP USER $Alf_db_user@localhost;"
             fi
             
             # Deleting the tmp
@@ -332,12 +332,12 @@ then
     
     
     echogreen "Nom de la base de donnée : $Alf_db"
-    echogreen "Nom de son utilisateur : $Alf_user"
+    echogreen "Nom de son utilisateur : $Alf_db_user"
     echogreen "Mot de passe utilisateur : $Alf_db_password"
     
     mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
-    mariadb -e "CREATE USER $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
-    mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_user@localhost IDENTIFIED BY '$Alf_db_password';"
+    mariadb -e "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_password';"
+    mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_password';"
     mariadb -e "FLUSH PRIVILEGES;"
     
     max_co_mariadb="max_connections         = 275"
@@ -583,7 +583,7 @@ then
             # MariaDB setup
             db.name=$Alf_db
             db.username=$Alf_db_user
-            db.password=$Alf_db_password
+            db.password=$Alf_db_user_password
             db.port=3306
             db.host=127.0.0.1
             db.pool.max=275
