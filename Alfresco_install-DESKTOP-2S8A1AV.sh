@@ -638,6 +638,12 @@ then
     tomcat start"
     
     
+    #
+    # To Do list:
+    # Modify searchservice/solrhome/../solrcore.xml
+    # Modify searchservice/solr.in.sh
+    # Script de lancement
+    
     ##### Changement propriétaire d'$ALF_HOME
     chown $ALF_USER:$ALF_USER $ALF_HOME -R
     usermod $ALF_USER -m -d /opt/alfresco
