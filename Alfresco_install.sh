@@ -572,49 +572,49 @@ then
     #      Alfresco-global.properties     #
     #-------------------------------------#
     echo >> $CATALINA_HOME/shared/classes/alfresco-global.properties "
-            dir.root=$CATALINA_HOME/data
-            dir.keystore=$CATALINA_HOME/data/keystore
+dir.root=$CATALINA_HOME/data
+dir.keystore=$CATALINA_HOME/data/keystore
 
-            # Solr setup
-            index.subsystem.name=solr6
-            solr.secureComms=https
-            solr.port=8983
+# Solr setup
+index.subsystem.name=solr6
+solr.secureComms=https
+solr.port=8983
 
-            # MariaDB setup
-            db.name=$Alf_db
-            db.username=$Alf_db_user
-            db.password=$Alf_db_user_password
-            db.port=3306
-            db.host=127.0.0.1
-            db.pool.max=275
-            db.driver=org.mariadb.jdbc.Driver
-            db.url=jdbc:mariadb://127.0.0.1:3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
+# MariaDB setup
+db.name=$Alf_db
+db.username=$Alf_db_user
+db.password=$Alf_db_user_password
+db.port=3306
+db.host=127.0.0.1
+db.pool.max=275
+db.driver=org.mariadb.jdbc.Driver
+db.url=jdbc:mariadb://127.0.0.1:3306/$Alf_db?useUnicode=yes&characterEncoding=UTF-8
 
-            user.name.caseSensitive=true
-            domain.name.caseSensitive=false
-            domain.separator=
-
-
-
-            #ActiveMQ setup
-            messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
-
-            #Context generator
-            alfresco.context=alfresco
-            alfresco.host=localhost
-            alfresco.port=8080
-            alfresco.protocol=http
-            share.context=share
-            share.host=localhost
-            share.port=8080
-            share.protocol=http
+user.name.caseSensitive=true
+domain.name.caseSensitive=false
+domain.separator=
 
 
 
-            imap.server.enabled=false
-            alfresco.rmi.services.host=0.0.0.0
-            smart.folders.enabled=true
-            smart.folders.model=alfresco/model/smartfolder.xml
+#ActiveMQ setup
+messaging.broker.url=failover:(tcp://localhost:61616)?timeout=3000
+
+#Context generator
+alfresco.context=alfresco
+alfresco.host=localhost
+alfresco.port=8080
+alfresco.protocol=http
+share.context=share
+share.host=localhost
+share.port=8080
+share.protocol=http
+
+
+
+imap.server.enabled=false
+alfresco.rmi.services.host=0.0.0.0
+smart.folders.enabled=true
+smart.folders.model=alfresco/model/smartfolder.xml
     smart.folders.model.labels=alfresco/messages/smartfolder-model"
     
     
