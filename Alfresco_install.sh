@@ -337,7 +337,7 @@ then
     
     mariadb -e "CREATE DATABASE $Alf_db CHARACTER SET utf8 COLLATE utf8_general_ci;"
     mariadb -e "CREATE USER $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_password';"
-    mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_password';"
+    mariadb -e "GRANT ALL ON $Alf_db.* TO $Alf_db_user@localhost IDENTIFIED BY '$Alf_db_password;"
     mariadb -e "FLUSH PRIVILEGES;"
     
     max_co_mariadb="max_connections         = 275"
@@ -583,7 +583,7 @@ solr.port=8983
 # MariaDB setup
 db.name=$Alf_db
 db.username=$Alf_db_user
-db.password=$Alf_db_user_password
+db.password=$Alf_db_password
 db.port=3306
 db.host=127.0.0.1
 db.pool.max=275
@@ -615,7 +615,8 @@ imap.server.enabled=false
 alfresco.rmi.services.host=0.0.0.0
 smart.folders.enabled=true
 smart.folders.model=alfresco/model/smartfolder.xml
-    smart.folders.model.labels=alfresco/messages/smartfolder-model"
+smart.folders.model.labels=alfresco/messages/smartfolder-model
+    "
     
     
     #---------------------#
