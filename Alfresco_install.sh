@@ -273,7 +273,7 @@ then
     
     
     Alf_db="alfresco_db"
-    Alf_user="alfresco_user"
+    Alf_db_user="alfresco_user"
     Alf_db_password="alfresco_password"
     
     while true; do
@@ -583,7 +583,7 @@ then
             # MariaDB setup
             db.name=$Alf_db
             db.username=$Alf_db_user
-            db.password=$Alf_db_user_password
+            db.password=$Alf_db_password
             db.port=3306
             db.host=127.0.0.1
             db.pool.max=275
